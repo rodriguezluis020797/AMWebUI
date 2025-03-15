@@ -19,7 +19,7 @@ import { CommonModule } from '@angular/common';
 })
 export class AppComponent {
   title = 'AM';
-  loggedIn = true;
+  loggedIn = false;
 
   isLoggedIn() {
     return this.loggedIn; //eventually check for a user cookie and authenticate it
