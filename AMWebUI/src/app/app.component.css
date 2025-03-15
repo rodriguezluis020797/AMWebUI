@@ -1,0 +1,4 @@
+/* Add this CSS to add space between navbar and components */
+:host ::ng-deep .main-content {
+    margin-top: 2rem; /* Adjust as needed */
+  }

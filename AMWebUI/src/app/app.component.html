@@ -1,2 +1,9 @@
 <am-nav-bar></am-nav-bar>
-<am-home></am-home>
+
+<div *ngIf="isLoggedIn()" class="main-content">
+  <am-home></am-home>
+</div>
+
+<div *ngIf="!isLoggedIn()" class="main-content">
+  <am-log-in></am-log-in>
+</div>

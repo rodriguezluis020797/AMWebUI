@@ -1,0 +1,66 @@
+/* Ensure the component's navbar uses the correct colors */
+:host ::ng-deep .navbar {
+  background-color: #FFFFFF; /* White background */
+  color: #000000; /* Black text color */
+  border-bottom: 2px solid #000000; /* Black border at the bottom */
+}
+
+:host ::ng-deep .navbar .navbar-brand {
+  color: #000000; /* Black text */
+  font-weight: bold;
+  font-size: 1.5rem;
+}
+
+:host ::ng-deep .navbar .navbar-toggler {
+  border-color: #000000; /* Black border for the toggle button */
+}
+
+:host ::ng-deep .navbar .navbar-toggler-icon {
+  background-color: #000000; /* Black toggle icon */
+  border: none; /* Remove any borders */
+}
+
+:host ::ng-deep .navbar .navbar-nav .nav-item .nav-link {
+  color: #000000; /* Black text for links */
+  font-size: 1.1rem;
+  padding: 0.5rem 1rem;
+  text-decoration: none; /* Remove underline */
+}
+
+:host ::ng-deep .navbar .navbar-nav .nav-item .nav-link:hover {
+  background-color: #f1f1f1; /* Light gray background on hover */
+  color: #000000; /* Keep black text on hover */
+}
+
+:host ::ng-deep .navbar .navbar-nav .nav-item .nav-link.disabled {
+  color: #000000; /* Black text for disabled links */
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+/* Remove the default focus/active styles that add a blue background */
+:host ::ng-deep .navbar .navbar-nav .nav-item .nav-link:focus,
+:host ::ng-deep .navbar .navbar-nav .nav-item .nav-link:active {
+  outline: none; /* Remove the default outline */
+  background-color: transparent; /* Remove any background when focused/active */
+}
+
+:host ::ng-deep .navbar .navbar-collapse {
+  justify-content: flex-end;
+}
+
+/* For responsiveness on mobile */
+@media (max-width: 991px) {
+  :host ::ng-deep .navbar .navbar-nav {
+    background-color: #FFFFFF; /* Ensure background color is white on mobile */
+    width: 100%;
+  }
+
+  :host ::ng-deep .navbar .navbar-nav .nav-item {
+    text-align: center;
+  }
+
+  :host ::ng-deep .navbar .navbar-toggler-icon {
+    background-color: #FFFFFF; /* Black toggle icon */
+  }
+}

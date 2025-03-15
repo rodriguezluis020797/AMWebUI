@@ -2,13 +2,26 @@ import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
+import { LogInComponent } from './partials/log-in/log-in.component';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, HomeComponent, NavBarComponent],
+  imports: [
+    RouterOutlet,
+    CommonModule,
+    HomeComponent,
+    NavBarComponent,
+    LogInComponent,
+  ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  title = 'AMWebUI';
+  title = 'AM';
+  loggedIn = true;
+
+  isLoggedIn() {
+    return this.loggedIn; //eventually check for a user cookie and authenticate it
+  }
 }

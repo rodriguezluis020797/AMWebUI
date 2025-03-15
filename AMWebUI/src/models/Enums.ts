@@ -1,4 +1,4 @@
-enum RequestStatusEnum {
+export enum RequestStatusEnum {
   Unknown = 0,
   Success,
   BadRequest,

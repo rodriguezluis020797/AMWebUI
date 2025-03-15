@@ -1,8 +1,10 @@
+import { RequestStatusEnum } from './Enums';
+
 interface IBaseDTO {
   requestStatus: RequestStatusEnum;
   errorMessage: string;
 }
-class BaseDTO implements IBaseDTO {
+export class BaseDTO implements IBaseDTO {
   requestStatus: RequestStatusEnum;
   errorMessage: string;
 
