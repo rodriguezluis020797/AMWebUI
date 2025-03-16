@@ -9,6 +9,7 @@
   color: #000000; /* Black text */
   font-weight: bold;
   font-size: 1.5rem;
+  margin-left: 20px; /* Adjust as needed */
 }
 
 :host ::ng-deep .navbar .navbar-toggler {
