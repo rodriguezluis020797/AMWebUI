@@ -71,7 +71,8 @@
               "buildTarget": "AMWebUI:build:production"
             },
             "development": {
-              "buildTarget": "AMWebUI:build:development"
+              "buildTarget": "AMWebUI:build:development",
+              "proxyConfig": "src/proxy.conf.json"
             }
           },
           "defaultConfiguration": "development"
