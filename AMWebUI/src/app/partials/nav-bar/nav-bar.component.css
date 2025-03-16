@@ -14,6 +14,7 @@
 
 :host ::ng-deep .navbar .navbar-toggler {
   border-color: #000000; /* Black border for the toggle button */
+  margin-right: 20px; /* Adjust as needed */
 }
 
 :host ::ng-deep .navbar .navbar-toggler-icon {
