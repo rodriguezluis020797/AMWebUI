@@ -1,8 +1,8 @@
 import { BaseDTO } from './BaseDTO';
 
-export interface IUserDTO {
+export interface IUserDTO extends BaseDTO {
   userId: string;
-  firtName: string;
+  firstName: string;
   middleName: string | null;
   lastName: string;
   eMail: string;
@@ -11,7 +11,7 @@ export interface IUserDTO {
 
 export class UserDTO extends BaseDTO implements IUserDTO {
   userId: string;
-  firtName: string;
+  firstName: string;
   middleName: string | null;
   lastName: string;
   eMail: string;
@@ -19,7 +19,7 @@ export class UserDTO extends BaseDTO implements IUserDTO {
   constructor() {
     super();
     this.userId = '';
-    this.firtName = '';
+    this.firstName = '';
     this.middleName = '';
     this.lastName = '';
     this.eMail = '';

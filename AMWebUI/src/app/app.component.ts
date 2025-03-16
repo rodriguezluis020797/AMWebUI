@@ -5,6 +5,7 @@ import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
 import { LogInComponent } from './partials/log-in/log-in.component';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './partials/footer/footer.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-root',

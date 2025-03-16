@@ -1,5 +1,8 @@
 <div class="login-container">
   <h2>Login</h2>
+  <div *ngIf="dto.errorMessage" class="error-message">
+    <p>{{ dto.errorMessage }}</p>
+  </div>
   <div>
     <label for="username">E-Mail:</label>
     <input
@@ -20,6 +23,7 @@
       required
     />
   </div>
-  <button type="submit" (click)="submit()">Login</button>
+  <button *ngIf="!disableSubmit" type="submit" (click)="submit()">Login</button>
+  <button *ngIf="disableSubmit" disabled>Login</button>
   <a href="#">Request Access</a>
 </div>

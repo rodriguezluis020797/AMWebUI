@@ -15,7 +15,7 @@ export class HomeComponent {
     this.user = {
       eMail: 'jdoe@gmail.com',
       errorMessage: '',
-      firtName: 'John',
+      firstName: 'John',
       lastName: 'Doe',
       middleName: null,
       password: '',
