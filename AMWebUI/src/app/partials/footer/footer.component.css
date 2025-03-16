@@ -36,3 +36,22 @@ footer a:hover {
   background-color: #f0f0f0; /* Light gray hover effect */
   text-decoration: none;
 }
+
+/* Make sure the footer content is aligned side by side on medium and larger screens */
+footer .container .row {
+  display: flex;
+  flex-wrap: wrap; /* Ensure columns wrap on smaller screens */
+}
+
+footer .container .col-md-4 {
+  flex: 1; /* Make each column take equal width */
+  text-align: center;
+}
+
+/* Ensure footer content is responsive on small screens */
+@media (max-width: 767px) {
+  footer .container .col-md-4 {
+    text-align: center; /* Center text on small screens */
+    margin-bottom: 10px; /* Add space between the sections */
+  }
+}
