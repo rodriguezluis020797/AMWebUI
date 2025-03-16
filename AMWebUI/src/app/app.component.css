@@ -1,5 +1,26 @@
 /* Add this CSS to add space between navbar and components */
 :host ::ng-deep .main-content {
-    margin-top: 2rem; /* Adjust as needed */
-    margin-bottom: 2rem;
+    flex: 1;
+    display: flex;
+    align-items: center; /* Centers content vertically */
+    justify-content: center; /* Centers content horizontally */
+    padding: 2rem;
+  }
+  :host {
+    display: block;
+    height: 100vh; /* Full viewport height */
+  }
+  
+  .wrapper {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh; /* Ensures full height */
+  }
+  
+  footer {
+    background-color: #ffffff; /* Matches navbar */
+    color: #000000; /* Black text */
+    padding: 1rem 0;
+    text-align: center;
+    border-top: 1px solid #000; /* Consistent border */
   }

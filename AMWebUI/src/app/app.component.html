@@ -1,13 +1,14 @@
 <am-nav-bar [loggedIn]="loggedIn"></am-nav-bar>
 
-<div [ngSwitch]="isLoggedIn()" class="main-content">
-  <div *ngSwitchCase="true">
-    <am-home></am-home>
+<div class="wrapper">
+  <div [ngSwitch]="isLoggedIn()" class="main-content">
+    <div *ngSwitchCase="true">
+      <am-home></am-home>
+    </div>
+    <div *ngSwitchCase="false">
+      <am-log-in></am-log-in>
+    </div>
+    <div *ngSwitchDefault>Default</div>
   </div>
-  <div *ngSwitchCase="false">
-    <am-log-in></am-log-in>
-  </div>
-  <div *ngSwitchDefault>Default</div>
+  <am-footer></am-footer>
 </div>
-
-<am-footer></am-footer>
