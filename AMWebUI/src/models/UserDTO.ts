@@ -1,6 +1,6 @@
 import { BaseDTO } from './BaseDTO';
 
-interface IUserDTO {
+export interface IUserDTO {
   userId: string;
   firtName: string;
   middleName: string | null;

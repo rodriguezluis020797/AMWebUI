@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
-import { UserDTO } from '../../../models/UserDTO';
+import { IUserDTO, UserDTO } from '../../../models/UserDTO';
 import { FormsModule } from '@angular/forms';
+import { IdentityService } from '../../services/identity.service';
 
 @Component({
   selector: 'am-log-in',
@@ -9,15 +10,11 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './log-in.component.css',
 })
 export class LogInComponent {
-  dto: UserDTO = new UserDTO();
+  constructor(private identityService: IdentityService) {}
+
+  dto: IUserDTO = new UserDTO();
 
   submit() {
-    //reach out to authenticate
-    //if authenticated, redirected home
-    //else, display error message
-
-    console.log(
-      'username: ' + this.dto.eMail + ' | password: ' + this.dto.password
-    );
+    this.dto = this.identityService.loginAsync(this.dto);
   }
 }
