@@ -4,6 +4,7 @@ import { HomeComponent } from './home/home.component';
 import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
 import { LogInComponent } from './partials/log-in/log-in.component';
 import { CommonModule } from '@angular/common';
+import { FooterComponent } from './partials/footer/footer.component';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ import { CommonModule } from '@angular/common';
     CommonModule,
     HomeComponent,
     NavBarComponent,
+    FooterComponent,
     LogInComponent,
   ],
   templateUrl: './app.component.html',

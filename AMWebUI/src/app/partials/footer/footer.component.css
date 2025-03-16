@@ -1,0 +1,38 @@
+:host {
+  display: block;
+  width: 100%;
+}
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+.wrapper {
+  min-height: 100vh; /* Ensures full viewport height */
+  display: flex;
+  flex-direction: column;
+}
+
+.content {
+  flex: 1; /* Pushes the footer down when content is short */
+}
+
+footer {
+  background-color: #ffffff; /* White background */
+  color: #000000; /* Black text */
+  padding: 20px 0;
+  text-align: center;
+  border-top: 1px solid #000; /* Matches navbar border */
+}
+
+footer a {
+  color: #000000; /* Black text */
+  text-decoration: none;
+}
+
+footer a:hover {
+  color: #000000; /* Ensure text stays black */
+  background-color: #f0f0f0; /* Light gray hover effect */
+  text-decoration: none;
+}
