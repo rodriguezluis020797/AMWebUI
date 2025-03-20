@@ -5,10 +5,10 @@ import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
 import { LogInComponent } from './partials/log-in/log-in.component';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './partials/footer/footer.component';
-import { HttpClient } from '@angular/common/http';
 import { SystemstatusService } from './services/systemstatus.service';
 import { RequestStatusEnum } from '../models/Enums';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
+import { SystemUnavailableComponent } from './partials/system-unavailable/system-unavailable.component';
 
 @Component({
   selector: 'app-root',
@@ -20,6 +20,7 @@ import { LoadingScreenComponent } from './partials/loading-screen/loading-screen
     FooterComponent,
     LogInComponent,
     LoadingScreenComponent,
+    SystemUnavailableComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -29,17 +30,19 @@ export class AppComponent {
   title = 'AM';
   loggedIn = false;
   loading = true;
+  systemAvailable = false;
 
   ngOnInit() {
     this.isSystemAvailable();
   }
 
   isSystemAvailable() {
-    this.systemStatusService.fullSystemCheckAsyinc().subscribe((result) => {
+    this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
       if (result.requestStatus === RequestStatusEnum.Success) {
+        this.systemAvailable = true;
         this.isLoggedIn();
       } else {
-        //sytem down
+        this.loading = false;
       }
     });
   }

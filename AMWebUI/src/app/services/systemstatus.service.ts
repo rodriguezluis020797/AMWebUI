@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { ISystemStatusDTO } from '../../models/SystemCheckDTO';
+import { RequestStatusEnum } from '../../models/Enums';
 
 @Injectable({
   providedIn: 'root',
@@ -9,7 +10,16 @@ import { ISystemStatusDTO } from '../../models/SystemCheckDTO';
 export class SystemstatusService {
   constructor(private http: HttpClient) {}
 
-  fullSystemCheckAsyinc(): Observable<ISystemStatusDTO> {
-    return this.http.get<ISystemStatusDTO>('/api/SystemStatus/FullSystemCheck');
+  fullSystemCheckAsync(): Observable<ISystemStatusDTO> {
+    return this.http
+      .get<ISystemStatusDTO>('/api/SystemStatus/FullSystemCheck')
+      .pipe(
+        catchError((error) => {
+          const fallbackResponse: ISystemStatusDTO = {
+            requestStatus: RequestStatusEnum.Error,
+          };
+          return of(fallbackResponse);
+        })
+      );
   }
 }
