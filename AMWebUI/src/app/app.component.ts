@@ -8,6 +8,7 @@ import { FooterComponent } from './partials/footer/footer.component';
 import { HttpClient } from '@angular/common/http';
 import { SystemstatusService } from './services/systemstatus.service';
 import { RequestStatusEnum } from '../models/Enums';
+import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 
 @Component({
   selector: 'app-root',
@@ -18,6 +19,7 @@ import { RequestStatusEnum } from '../models/Enums';
     NavBarComponent,
     FooterComponent,
     LogInComponent,
+    LoadingScreenComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -26,6 +28,7 @@ export class AppComponent {
   constructor(private systemStatusService: SystemstatusService) {}
   title = 'AM';
   loggedIn = false;
+  loading = true;
 
   ngOnInit() {
     this.isSystemAvailable();
@@ -33,15 +36,16 @@ export class AppComponent {
 
   isSystemAvailable() {
     this.systemStatusService.fullSystemCheckAsyinc().subscribe((result) => {
-      if (result.requestStatus !== RequestStatusEnum.Success) {
-        //sytem down
-      } else {
+      if (result.requestStatus === RequestStatusEnum.Success) {
         this.isLoggedIn();
+      } else {
+        //sytem down
       }
     });
   }
 
   isLoggedIn() {
+    this.loading = false;
     return this.loggedIn; //eventually check for a user cookie and authenticate it
   }
 }

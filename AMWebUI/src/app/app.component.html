@@ -1,6 +1,5 @@
-<am-nav-bar [loggedIn]="loggedIn"></am-nav-bar>
-
-<div class="wrapper">
+<div *ngIf="!loading" class="wrapper">
+  <am-nav-bar [loggedIn]="loggedIn"></am-nav-bar>
   <div [ngSwitch]="isLoggedIn()" class="main-content">
     <div *ngSwitchCase="true">
       <am-home></am-home>
@@ -11,4 +10,10 @@
     <div *ngSwitchDefault>Error</div>
   </div>
   <am-footer></am-footer>
+</div>
+
+<div *ngIf="loading" class="wrapper">
+  <div class="main-content">
+    <am-loading-screen></am-loading-screen>
+  </div>
 </div>
