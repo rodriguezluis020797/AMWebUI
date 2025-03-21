@@ -1,1 +1,61 @@
-<p>sign-up works!</p>
+<div class="login-container">
+  <h2>Sign Up</h2>
+  <div *ngIf="dto.errorMessage" class="error-message">
+    <p>{{ dto.errorMessage }}</p>
+  </div>
+  <div>
+    <label for="username">E-Mail:</label>
+    <input
+      type="text"
+      id="username"
+      [(ngModel)]="dto.eMail"
+      name="username"
+      required
+    />
+  </div>
+  <div>
+    <label for="firstName">First Name:</label>
+    <input
+      type="text"
+      id="firstName"
+      [(ngModel)]="dto.firstName"
+      name="firstName"
+      required
+    />
+  </div>
+  <div>
+    <label for="lastName">Last Name:</label>
+    <input
+      type="text"
+      id="lastName"
+      [(ngModel)]="dto.lastName"
+      name="lastName"
+      required
+    />
+  </div>
+  <div>
+    <label for="password">Password:</label>
+    <input
+      type="password"
+      id="password"
+      [(ngModel)]="dto.password"
+      name="password"
+      required
+    />
+  </div>
+  <div>
+    <label for="confirmPassword">Confirm Password:</label>
+    <input
+      type="password"
+      id="confirmPassword"
+      [(ngModel)]="confirmPassword"
+      name="confirmPassword"
+      required
+    />
+  </div>
+  <button *ngIf="!disableSubmit" type="submit" (click)="submit()">
+    Sign Up
+  </button>
+  <button *ngIf="disableSubmit" disabled>Sign Up</button>
+  <a href="#">Already have an account? Login</a>
+</div>
