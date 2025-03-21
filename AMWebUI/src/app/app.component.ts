@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
 import { LogInComponent } from './partials/log-in/log-in.component';
@@ -9,6 +8,7 @@ import { SystemstatusService } from './services/systemstatus.service';
 import { RequestStatusEnum } from '../models/Enums';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 import { SystemUnavailableComponent } from './partials/system-unavailable/system-unavailable.component';
+import { RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-root',

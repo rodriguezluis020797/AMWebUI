@@ -6,6 +6,7 @@ import { UserService } from '../services/user.service';
 import { RequestStatusEnum } from '../../models/Enums';
 
 @Component({
+  standalone: true,
   selector: 'am-sign-up',
   imports: [CommonModule, FormsModule],
   templateUrl: './sign-up.component.html',

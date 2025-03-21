@@ -7,6 +7,7 @@ import { CookiesService } from '../../services/cookies.service';
 import { RequestStatusEnum } from '../../../models/Enums';
 
 @Component({
+  standalone: true,
   selector: 'am-log-in',
   imports: [FormsModule, CommonModule],
   templateUrl: './log-in.component.html',
@@ -18,7 +19,7 @@ export class LogInComponent {
     private cookieService: CookiesService
   ) {}
 
-  dto = new UserDTO();
+  dto: IUserDTO = new UserDTO();
   disableSubmit = false;
 
   ngOnInit() {
