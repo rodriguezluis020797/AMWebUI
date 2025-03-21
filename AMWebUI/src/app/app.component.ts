@@ -9,7 +9,6 @@ import { SystemstatusService } from './services/systemstatus.service';
 import { RequestStatusEnum } from '../models/Enums';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 import { SystemUnavailableComponent } from './partials/system-unavailable/system-unavailable.component';
-import { SignUpComponent } from './sign-up/sign-up.component';
 
 @Component({
   selector: 'app-root',
@@ -22,7 +21,6 @@ import { SignUpComponent } from './sign-up/sign-up.component';
     LogInComponent,
     LoadingScreenComponent,
     SystemUnavailableComponent,
-    SignUpComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

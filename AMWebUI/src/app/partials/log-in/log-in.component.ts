@@ -18,7 +18,7 @@ export class LogInComponent {
     private cookieService: CookiesService
   ) {}
 
-  dto: IUserDTO = new UserDTO();
+  dto = new UserDTO();
   disableSubmit = false;
 
   ngOnInit() {

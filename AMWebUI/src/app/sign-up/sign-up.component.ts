@@ -2,6 +2,8 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserDTO } from '../../models/UserDTO';
 import { FormsModule } from '@angular/forms';
+import { UserService } from '../services/user.service';
+import { RequestStatusEnum } from '../../models/Enums';
 
 @Component({
   selector: 'am-sign-up',
@@ -10,8 +12,20 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent {
-  dto: UserDTO = new UserDTO();
+  constructor(private userService: UserService) {}
+  dto = new UserDTO();
   confirmPassword: string = '';
   disableSubmit: boolean = false;
-  submit() {}
+  submit() {
+    this.disableSubmit = true;
+    this.userService.signupAsync(this.dto).subscribe((user) => {
+      this.dto = user;
+      if (this.dto.requestStatus == RequestStatusEnum.Success) {
+        //reroute to success page
+      }
+    });
+    setTimeout(() => {
+      this.disableSubmit = false;
+    }, 3000);
+  }
 }

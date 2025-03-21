@@ -9,7 +9,7 @@ import { Observable } from 'rxjs';
 export class UserService {
   constructor(private http: HttpClient) {}
 
-  loginAsync(user: IUserDTO): Observable<IUserDTO> {
+  signupAsync(user: IUserDTO): Observable<IUserDTO> {
     return this.http.post<IUserDTO>('/api/User/CreateUser', user);
   }
 }
