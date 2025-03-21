@@ -11,16 +11,5 @@ import { UserDTO } from '../../models/UserDTO';
 export class HomeComponent {
   user: UserDTO = new UserDTO();
 
-  ngOnInit() {
-    this.user = {
-      eMail: 'jdoe@gmail.com',
-      errorMessage: '',
-      firstName: 'John',
-      lastName: 'Doe',
-      middleName: null,
-      password: '',
-      requestStatus: RequestStatusEnum.Success,
-      userId: 'an id',
-    };
-  }
+  ngOnInit() {}
 }

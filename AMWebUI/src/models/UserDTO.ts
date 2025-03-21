@@ -7,6 +7,7 @@ export interface IUserDTO extends BaseDTO {
   lastName: string;
   eMail: string;
   password: string;
+  jwtToken: string;
 }
 
 export class UserDTO extends BaseDTO implements IUserDTO {
@@ -16,6 +17,7 @@ export class UserDTO extends BaseDTO implements IUserDTO {
   lastName: string;
   eMail: string;
   password: string;
+  jwtToken: string;
   constructor() {
     super();
     this.userId = '';
@@ -24,5 +26,6 @@ export class UserDTO extends BaseDTO implements IUserDTO {
     this.lastName = '';
     this.eMail = '';
     this.password = '';
+    this.jwtToken = '';
   }
 }
