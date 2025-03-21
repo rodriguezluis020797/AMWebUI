@@ -4,11 +4,12 @@ import { UserDTO } from '../../models/UserDTO';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { RequestStatusEnum } from '../../models/Enums';
+import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'am-sign-up',
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, RouterLink],
   templateUrl: './sign-up.component.html',
   styleUrl: './sign-up.component.css',
 })

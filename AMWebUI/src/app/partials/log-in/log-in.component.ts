@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { IdentityService } from '../../services/identity.service';
 import { CookiesService } from '../../services/cookies.service';
 import { RequestStatusEnum } from '../../../models/Enums';
+import { RouterLink } from '@angular/router';
 
 @Component({
   standalone: true,
   selector: 'am-log-in',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, RouterLink],
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.css',
 })
