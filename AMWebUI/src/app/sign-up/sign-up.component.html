@@ -1,4 +1,4 @@
-<div class="login-container">
+<div *ngIf="!signUpSuccessful" class="login-container">
   <h2>Sign Up</h2>
   <div *ngIf="dto.errorMessage" class="error-message">
     <p>{{ dto.errorMessage }}</p>
@@ -33,29 +33,18 @@
       required
     />
   </div>
-  <div>
-    <label for="password">Password:</label>
-    <input
-      type="password"
-      id="password"
-      [(ngModel)]="dto.password"
-      name="password"
-      required
-    />
-  </div>
-  <div>
-    <label for="confirmPassword">Confirm Password:</label>
-    <input
-      type="password"
-      id="confirmPassword"
-      [(ngModel)]="confirmPassword"
-      name="confirmPassword"
-      required
-    />
-  </div>
   <button *ngIf="!disableSubmit" type="submit" (click)="submit()">
     Sign Up
   </button>
   <button *ngIf="disableSubmit" disabled>Sign Up</button>
   <a routerLink="">Login Here</a>
+</div>
+
+<div *ngIf="signUpSuccessful" class="login-container">
+  <h2>Thank You!</h2>
+  <p class="message">
+    Thank you for requesting access! Please be on the lookout for when it is
+    your turn to use our platform.
+  </p>
+  <a routerLink="/">Home</a>
 </div>

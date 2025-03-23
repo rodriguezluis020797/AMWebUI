@@ -18,12 +18,27 @@ export class SignUpComponent {
   dto = new UserDTO();
   confirmPassword: string = '';
   disableSubmit: boolean = false;
+  signUpSuccessful: boolean = false;
+
+  ngOnInit() {
+    this.dto = {
+      eMail: 'jdoe@mail.com',
+      errorMessage: '',
+      firstName: 'Jon',
+      jwtToken: '',
+      lastName: 'Doe',
+      middleName: null,
+      password: '',
+      requestStatus: RequestStatusEnum.Unknown,
+      userId: '',
+    };
+  }
   submit() {
     this.disableSubmit = true;
     this.userService.signupAsync(this.dto).subscribe((user) => {
       this.dto = user;
       if (this.dto.requestStatus == RequestStatusEnum.Success) {
-        //reroute to success page
+        this.signUpSuccessful = true;
       }
     });
     setTimeout(() => {
