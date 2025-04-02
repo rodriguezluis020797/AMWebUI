@@ -6,6 +6,7 @@ import { IdentityService } from '../../services/identity.service';
 import { CookiesService } from '../../services/cookies.service';
 import { RequestStatusEnum } from '../../../models/Enums';
 import { RouterLink } from '@angular/router';
+import { Router } from '@angular/router';
 
 @Component({
   standalone: true,
@@ -17,7 +18,8 @@ import { RouterLink } from '@angular/router';
 export class LogInComponent {
   constructor(
     private identityService: IdentityService,
-    private cookieService: CookiesService
+    private cookieService: CookiesService,
+    private router: Router
   ) {}
 
   dto: IUserDTO = new UserDTO();
@@ -31,10 +33,13 @@ export class LogInComponent {
     this.disableSubmit = true;
     this.identityService.loginAsync(this.dto).subscribe((user) => {
       this.dto = user;
-
       if (this.dto.requestStatus === RequestStatusEnum.Success) {
         this.cookieService.setCookie('jwtToken', this.dto.jwtToken);
-        //reroute home
+        if (this.dto.isTempPassword) {
+          this.router.navigate(['/reset-password']);
+        } else {
+          //navigate home
+        }
       }
     });
     setTimeout(() => {

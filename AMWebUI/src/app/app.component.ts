@@ -9,6 +9,8 @@ import { RequestStatusEnum } from '../models/Enums';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 import { SystemUnavailableComponent } from './partials/system-unavailable/system-unavailable.component';
 import { RouterOutlet } from '@angular/router';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { CookiesService } from './services/cookies.service';
 
 @Component({
   selector: 'app-root',
@@ -18,7 +20,6 @@ import { RouterOutlet } from '@angular/router';
     HomeComponent,
     NavBarComponent,
     FooterComponent,
-    LogInComponent,
     LoadingScreenComponent,
     SystemUnavailableComponent,
   ],
@@ -26,7 +27,10 @@ import { RouterOutlet } from '@angular/router';
   styleUrl: './app.component.css',
 })
 export class AppComponent {
-  constructor(private systemStatusService: SystemstatusService) {}
+  constructor(
+    private systemStatusService: SystemstatusService,
+    private cookieService: CookiesService
+  ) {}
   title = 'AM';
   loggedIn = false;
   loading = true;
@@ -34,6 +38,7 @@ export class AppComponent {
 
   ngOnInit() {
     this.isSystemAvailable();
+    this.cookieService.deleteAllCookies();
   }
 
   isSystemAvailable() {

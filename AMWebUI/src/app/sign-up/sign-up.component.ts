@@ -16,7 +16,6 @@ import { RouterLink } from '@angular/router';
 export class SignUpComponent {
   constructor(private userService: UserService) {}
   dto = new UserDTO();
-  confirmPassword: string = '';
   disableSubmit: boolean = false;
   signUpSuccessful: boolean = false;
 
@@ -31,6 +30,7 @@ export class SignUpComponent {
       password: '',
       requestStatus: RequestStatusEnum.Unknown,
       userId: '',
+      isTempPassword: false,
     };
   }
   submit() {

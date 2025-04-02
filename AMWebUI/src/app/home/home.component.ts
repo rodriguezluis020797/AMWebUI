@@ -6,7 +6,7 @@ import { SignUpComponent } from '../sign-up/sign-up.component';
 @Component({
   standalone: true,
   selector: 'am-home',
-  imports: [LogInComponent, SignUpComponent],
+  imports: [LogInComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
 })
