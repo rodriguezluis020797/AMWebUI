@@ -38,7 +38,6 @@ export class AppComponent {
 
   ngOnInit() {
     this.isSystemAvailable();
-    this.cookieService.deleteAllCookies();
   }
 
   isSystemAvailable() {

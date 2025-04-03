@@ -1,16 +1,9 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
-import { CookiesService } from '../services/cookies.service';
-import { CookieEnum } from '../../models/Enums';
+import { AuthserviceService } from '../services/authservice.service';
 
 export const authorizationguardGuard: CanActivateFn = (route, state) => {
-  const cookieService = inject(CookiesService);
-  const routerService = inject(Router);
+  const authService = inject(AuthserviceService);
 
-  if (!cookieService.getCookie(CookieEnum.JWT.toString())) {
-    cookieService.deleteAllCookies();
-    routerService.navigate(['']);
-    return false;
-  }
-  return true;
+  return authService.isAuthenticated();
 };

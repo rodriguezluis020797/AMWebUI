@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   styleUrl: './reset-password.component.css',
 })
 export class ResetPasswordComponent {
-  constructor(private cookeService: CookiesService, private router: Router) {}
+  constructor(private router: Router) {}
   dto = new UserDTO();
   confirmPassword: string = '';
   disableSubmit: boolean = false;
@@ -25,7 +25,7 @@ export class ResetPasswordComponent {
       this.dto.errorMessage = "Passwords don't match";
     } else {
       this.disableSubmit = true;
-      //send to api for processing
+
       setTimeout(() => {
         this.disableSubmit = false;
       }, 3000);
