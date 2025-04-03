@@ -9,11 +9,7 @@ import { UserDTO } from '../../models/UserDTO';
   providedIn: 'root',
 })
 export class AuthserviceService {
-  constructor(
-    private cookieService: CookiesService,
-    private router: Router,
-    private identityService: IdentityService
-  ) {}
+  constructor(private cookieService: CookiesService, private router: Router) {}
 
   public isAuthenticated(): boolean {
     let token = this.cookieService.getCookie(CookieEnum.JWT.toString());
@@ -47,29 +43,6 @@ export class AuthserviceService {
   }
 
   tokenRefreshAttempt(): boolean {
-    const token = this.cookieService.getCookie(CookieEnum.JWT.toString());
-    let dto: UserDTO = {
-      eMail: '',
-      errorMessage: '',
-      firstName: '',
-      jwtToken: token,
-      lastName: '',
-      middleName: null,
-      password: '',
-      requestStatus: RequestStatusEnum.Unknown,
-      userId: '',
-      isTempPassword: false,
-    };
-
-    this.identityService.refreshTokenAsync(dto).subscribe((user) => {
-      dto = user;
-      if (dto.requestStatus === RequestStatusEnum.Success) {
-        this.cookieService.setCookie(CookieEnum.JWT.toString(), dto.jwtToken);
-        return true;
-      } else {
-        return false;
-      }
-    });
     return true;
   }
 }

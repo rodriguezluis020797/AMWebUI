@@ -37,6 +37,7 @@ export class AppComponent {
   systemAvailable = false;
 
   ngOnInit() {
+    this.cookieService.deleteAllCookies(); //Delete for stage/production
     this.isSystemAvailable();
   }
 
