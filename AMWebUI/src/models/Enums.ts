@@ -4,3 +4,8 @@ export enum RequestStatusEnum {
   BadRequest,
   Error,
 }
+
+export enum CookieEnum {
+  Unknown = 0,
+  JWT,
+}
