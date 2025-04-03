@@ -1,13 +1,19 @@
 import { Injectable } from '@angular/core';
 import { CanActivate, Router } from '@angular/router';
 import { CookiesService } from './cookies.service';
-import { CookieEnum } from '../../models/Enums';
+import { CookieEnum, RequestStatusEnum } from '../../models/Enums';
+import { IdentityService } from './identity.service';
+import { UserDTO } from '../../models/UserDTO';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AuthserviceService {
-  constructor(private cookieService: CookiesService, private router: Router) {}
+  constructor(
+    private cookieService: CookiesService,
+    private router: Router,
+    private identityService: IdentityService
+  ) {}
 
   public isAuthenticated(): boolean {
     let token = this.cookieService.getCookie(CookieEnum.JWT.toString());
@@ -18,14 +24,18 @@ export class AuthserviceService {
       return false;
     }
 
-    if (this.isTokenExpired(token)) {
-      //try to refresh it
+    if (this.isTokenExpired()) {
+      if (!this.tokenRefreshAttempt()) {
+        this.cookieService.deleteAllCookies();
+        this.router.navigate(['']);
+      }
     }
     return true;
   }
 
-  isTokenExpired(token: string): boolean {
+  isTokenExpired(): boolean {
     try {
+      const token = this.cookieService.getCookie(CookieEnum.JWT.toString());
       const payload = JSON.parse(atob(token.split('.')[1])); // Decode payload
       const expirationTimeUtc = new Date(payload.exp * 1000).getTime(); // Convert to UTC milliseconds
       const nowUtc = new Date().getTime(); // Current UTC time in milliseconds
@@ -34,5 +44,32 @@ export class AuthserviceService {
     } catch (error) {
       return true; // If decoding fails, consider it invalid
     }
+  }
+
+  tokenRefreshAttempt(): boolean {
+    const token = this.cookieService.getCookie(CookieEnum.JWT.toString());
+    let dto: UserDTO = {
+      eMail: '',
+      errorMessage: '',
+      firstName: '',
+      jwtToken: token,
+      lastName: '',
+      middleName: null,
+      password: '',
+      requestStatus: RequestStatusEnum.Unknown,
+      userId: '',
+      isTempPassword: false,
+    };
+
+    this.identityService.refreshTokenAsync(dto).subscribe((user) => {
+      dto = user;
+      if (dto.requestStatus === RequestStatusEnum.Success) {
+        this.cookieService.setCookie(CookieEnum.JWT.toString(), dto.jwtToken);
+        return true;
+      } else {
+        return false;
+      }
+    });
+    return true;
   }
 }
