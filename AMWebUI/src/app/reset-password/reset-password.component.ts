@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserDTO } from '../../models/UserDTO';
+import { UserDTO } from '../models/UserDTO';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';

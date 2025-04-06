@@ -2,7 +2,8 @@ import { HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
-import { HttpStatusCodeEnum } from '../../models/Enums';
+import { HttpStatusCodeEnum } from '../models/Enums';
+import { UserDTO } from '../models/UserDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -14,10 +15,13 @@ export class HttpErrorHandlerService {
     switch (error.status) {
       case HttpStatusCodeEnum.ServerError:
         this.router.navigate(['/error']);
-        break;
+        return of(null as unknown as T);
+
       case HttpStatusCodeEnum.BadCredentials:
-        break;
+        return of(new UserDTO() as unknown as T);
+
+      default:
+        return of(null as unknown as T);
     }
-    return of(null as unknown as T);
   }
 }

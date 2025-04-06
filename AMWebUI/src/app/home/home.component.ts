@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { UserDTO } from '../../models/UserDTO';
+import { UserDTO } from '../models/UserDTO';
 import { LogInComponent } from '../partials/log-in/log-in.component';
 import { SignUpComponent } from '../sign-up/sign-up.component';
 
