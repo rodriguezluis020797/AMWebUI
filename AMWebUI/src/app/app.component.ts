@@ -4,8 +4,7 @@ import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
 import { LogInComponent } from './partials/log-in/log-in.component';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './partials/footer/footer.component';
-import { SystemstatusService } from './services/systemstatus.service';
-import { RequestStatusEnum } from '../models/Enums';
+import { SystemStatusService } from './services/system-status.service';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 import { SystemUnavailableComponent } from './partials/system-unavailable/system-unavailable.component';
 import { RouterOutlet } from '@angular/router';
@@ -28,7 +27,7 @@ import { CookiesService } from './services/cookies.service';
 })
 export class AppComponent {
   constructor(
-    private systemStatusService: SystemstatusService,
+    private systemStatusService: SystemStatusService,
     private cookieService: CookiesService
   ) {}
   title = 'AM';
@@ -43,12 +42,8 @@ export class AppComponent {
 
   isSystemAvailable() {
     this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
-      if (result.requestStatus === RequestStatusEnum.Success) {
-        this.systemAvailable = true;
-        this.isLoggedIn();
-      } else {
-        this.loading = false;
-      }
+      this.systemAvailable = true;
+      this.loading = false;
     });
   }
 

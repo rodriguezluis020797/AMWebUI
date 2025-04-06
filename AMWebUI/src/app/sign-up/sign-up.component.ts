@@ -3,7 +3,6 @@ import { CommonModule } from '@angular/common';
 import { UserDTO } from '../../models/UserDTO';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
-import { RequestStatusEnum } from '../../models/Enums';
 import { RouterLink } from '@angular/router';
 
 @Component({
@@ -24,23 +23,15 @@ export class SignUpComponent {
       eMail: 'jdoe@mail.com',
       errorMessage: '',
       firstName: 'Jon',
-      jwtToken: '',
       lastName: 'Doe',
       middleName: null,
       password: '',
-      requestStatus: RequestStatusEnum.Unknown,
-      userId: '',
       isTempPassword: false,
     };
   }
   submit() {
     this.disableSubmit = true;
-    this.userService.signupAsync(this.dto).subscribe((user) => {
-      this.dto = user;
-      if (this.dto.requestStatus == RequestStatusEnum.Success) {
-        this.signUpSuccessful = true;
-      }
-    });
+    this.userService.signupAsync(this.dto).subscribe((user) => {});
     setTimeout(() => {
       this.disableSubmit = false;
     }, 3000);

@@ -1,10 +1,10 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { IUserDTO, UserDTO } from '../../../models/UserDTO';
+import { UserDTO } from '../../../models/UserDTO';
 import { FormsModule } from '@angular/forms';
 import { IdentityService } from '../../services/identity.service';
 import { CookiesService } from '../../services/cookies.service';
-import { CookieEnum, RequestStatusEnum } from '../../../models/Enums';
+import { CookieEnum } from '../../../models/Enums';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 
@@ -22,7 +22,7 @@ export class LogInComponent {
     private router: Router
   ) {}
 
-  dto: IUserDTO = new UserDTO();
+  dto: UserDTO = new UserDTO();
   disableSubmit = false;
 
   ngOnInit() {
@@ -32,18 +32,7 @@ export class LogInComponent {
   submit() {
     this.disableSubmit = true;
     this.identityService.loginAsync(this.dto).subscribe((user) => {
-      this.dto = user;
-      if (this.dto.requestStatus === RequestStatusEnum.Success) {
-        this.cookieService.setCookie(
-          CookieEnum.JWT.toString(),
-          this.dto.jwtToken
-        );
-        if (this.dto.isTempPassword) {
-          this.router.navigate(['/reset-password']);
-        } else {
-          //navigate home
-        }
-      }
+      //add new response logic
     });
     setTimeout(() => {
       this.disableSubmit = false;

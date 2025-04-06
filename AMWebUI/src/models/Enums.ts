@@ -1,11 +1,10 @@
-export enum RequestStatusEnum {
+export enum HttpStatusCodeEnum {
   Unknown = 0,
-  Success,
-  BadRequest,
-  Error,
+  Success = 200,
+  ServerError = 500,
+  BadCredentials = 400,
 }
 
 export enum CookieEnum {
   Unknown = 0,
-  JWT,
 }

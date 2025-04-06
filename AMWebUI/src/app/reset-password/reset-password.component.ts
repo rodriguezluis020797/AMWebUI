@@ -4,7 +4,6 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { IdentityService } from '../services/identity.service';
-import { RequestStatusEnum } from '../../models/Enums';
 
 @Component({
   standalone: true,
@@ -29,12 +28,6 @@ export class ResetPasswordComponent {
       this.dto.errorMessage = "Passwords don't match";
     } else {
       this.disableSubmit = true;
-      this.identityService.resetPasswordAsync(this.dto).subscribe((user) => {
-        this.dto = user;
-        if (this.dto.requestStatus === RequestStatusEnum.Success) {
-          this.router.navigate(['dashboard']);
-        }
-      });
       setTimeout(() => {
         this.disableSubmit = false;
       }, 3000);
