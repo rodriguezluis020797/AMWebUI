@@ -3,6 +3,7 @@ import { IdentityService } from '../services/identity.service';
 
 @Directive({
   selector: '[amIdentityPing]',
+  standalone: true,
 })
 export class IdentityPingDirective {
   constructor(private identityService: IdentityService) {}

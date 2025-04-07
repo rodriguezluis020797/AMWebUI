@@ -10,6 +10,7 @@ import { SystemUnavailableComponent } from './partials/system-unavailable/system
 import { RouterOutlet } from '@angular/router';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CookiesService } from './services/cookies.service';
+import { IdentityPingDirective } from './directives/identity-ping.directive';
 
 @Component({
   selector: 'app-root',
@@ -21,6 +22,7 @@ import { CookiesService } from './services/cookies.service';
     FooterComponent,
     LoadingScreenComponent,
     SystemUnavailableComponent,
+    IdentityPingDirective,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
