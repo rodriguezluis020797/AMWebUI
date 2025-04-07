@@ -22,8 +22,9 @@ export class IdentityService {
   }
 
   pingAsync() {
-    return this.http
+    var response = this.http
       .get('/api/Identity/Ping')
       .pipe(catchError((error) => this.httpErrorHandler.handleError(error)));
+    return response;
   }
 }
