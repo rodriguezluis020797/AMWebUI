@@ -4,11 +4,12 @@ import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { IdentityService } from '../services/identity.service';
+import { IdentityPingDirective } from '../directives/identity-ping.directive';
 
 @Component({
   standalone: true,
   selector: 'am-reset-password',
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, IdentityPingDirective],
   templateUrl: './reset-password.component.html',
   styleUrl: './reset-password.component.css',
 })
