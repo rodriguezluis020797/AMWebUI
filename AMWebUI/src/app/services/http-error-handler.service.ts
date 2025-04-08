@@ -14,6 +14,7 @@ export class HttpErrorHandlerService {
   handleError<T>(error: HttpErrorResponse): Observable<T> {
     switch (error.status) {
       case HttpStatusCodeEnum.ServerError:
+      case HttpStatusCodeEnum.SystemUnavailable:
         this.router.navigate(['/error']);
         return of(null as unknown as T);
 
