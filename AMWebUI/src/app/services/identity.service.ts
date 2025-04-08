@@ -14,27 +14,11 @@ export class IdentityService {
   ) {}
 
   loginAsync(user: UserDTO): Observable<UserDTO> {
-    // Temporary cast to bypass TypeScript checks (needed due to newer User-Agent API)
-    const nav = navigator as any;
-
-    // Define the fingerprint object with necessary information
-    const fingerprint = {
-      userAgent: navigator.userAgent,
-      platform: nav.userAgentData?.platform || navigator.platform || '',
-      language: navigator.language,
-      languages: navigator.languages.join(','),
-    };
-
-    // Set the headers with the fingerprint data
-    const headers = new HttpHeaders({
-      'X-Fingerprint-UA': fingerprint.userAgent,
-      'X-Fingerprint-Platform': fingerprint.platform,
-      'X-Fingerprint-Language': fingerprint.language,
-    });
-
     // Make the POST request with headers
     return this.http
-      .post<UserDTO>('/api/Identity/Login', user, { headers }) // POST request with fingerprint headers
+      .post<UserDTO>('/api/Identity/Login', user, {
+        headers: this.getFingerprintHeaders(),
+      }) // POST request with fingerprint headers
       .pipe(
         catchError((error) => {
           // Handle the error properly and return an observable of UserDTO
@@ -44,25 +28,25 @@ export class IdentityService {
       );
   }
 
-  pingAsync() {
+  pingAsync(): Observable<any> {
+    return this.http
+      .get('/api/Identity/Ping', { headers: this.getFingerprintHeaders() }) // Pass headers directly
+      .pipe(catchError((error) => this.httpErrorHandler.handleError(error)));
+  }
+
+  private getFingerprintHeaders(): HttpHeaders {
     const nav = navigator as any; // Temporary cast to bypass TS check
 
     const fingerprint = {
       userAgent: navigator.userAgent,
       platform: nav.userAgentData?.platform || navigator.platform || '',
       language: navigator.language,
-      languages: navigator.languages.join(','),
     };
 
-    const headers = new HttpHeaders({
+    return new HttpHeaders({
       'X-Fingerprint-UA': fingerprint.userAgent,
       'X-Fingerprint-Platform': fingerprint.platform,
       'X-Fingerprint-Language': fingerprint.language,
-      'X-Fingerprint-Languages': fingerprint.languages,
     });
-
-    return this.http
-      .get('/api/Identity/Ping', { headers })
-      .pipe(catchError((error) => this.httpErrorHandler.handleError(error)));
   }
 }
