@@ -12,16 +12,10 @@ export class SystemUnavailableComponent {
   constructor(private router: Router) {}
   ngAfterViewInit() {
     // This will trigger after the view has been rendered
-    //setTimeout(() => this.reRouteHome(), 0);
+    // setTimeout(() => this.reRouteHome(), 0);
   }
 
   reRouteHome() {
-    setTimeout(
-      () =>
-        this.router.navigate(['']).then(() => {
-          window.location.reload();
-        }),
-      10000
-    );
+    setTimeout(() => this.router.navigate(['']).then(() => {}), 2000);
   }
 }

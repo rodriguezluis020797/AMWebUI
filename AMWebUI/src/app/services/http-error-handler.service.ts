@@ -21,6 +21,10 @@ export class HttpErrorHandlerService {
       case HttpStatusCodeEnum.BadCredentials:
         return of(new UserDTO() as unknown as T);
 
+      case HttpStatusCodeEnum.Unauthorized:
+        this.router.navigate(['']);
+        return of(null as unknown as T);
+
       default:
         return of(null as unknown as T);
     }

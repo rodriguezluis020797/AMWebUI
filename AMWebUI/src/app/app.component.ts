@@ -22,7 +22,6 @@ import { IdentityPingDirective } from './directives/identity-ping.directive';
     FooterComponent,
     LoadingScreenComponent,
     SystemUnavailableComponent,
-    IdentityPingDirective,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',

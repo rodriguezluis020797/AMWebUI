@@ -17,21 +17,23 @@ export class ResetPasswordComponent {
   constructor(
     private identityService: IdentityService,
     private router: Router
-  ) {}
+  ) {
+    this.dto.password = 'a password';
+    this.confirmPassword = 'a password';
+  }
   dto = new UserDTO();
   confirmPassword: string = '';
   disableSubmit: boolean = false;
 
   submit() {
-    if (!this.dto.password || this.dto.password.trim() === '') {
-      this.dto.errorMessage = 'Please enter password';
-    } else if (this.dto.password !== this.confirmPassword) {
-      this.dto.errorMessage = "Passwords don't match";
-    } else {
-      this.disableSubmit = true;
-      setTimeout(() => {
-        this.disableSubmit = false;
-      }, 3000);
-    }
+    this.disableSubmit = true;
+    this.identityService.resetPasswordAsync(this.dto).subscribe((user) => {
+      if (user !== null) {
+        this.router.navigate(['dashboard']);
+      }
+    });
+    setTimeout(() => {
+      this.disableSubmit = false;
+    }, 3000);
   }
 }
