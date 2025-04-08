@@ -22,7 +22,7 @@ export class HttpErrorHandlerService {
         return of(new UserDTO() as unknown as T);
 
       case HttpStatusCodeEnum.Unauthorized:
-        this.router.navigate(['']);
+        this.router.navigate(['unauthorized']);
         return of(null as unknown as T);
 
       default:
