@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'am-unauthorized',
@@ -8,5 +9,27 @@ import { Component } from '@angular/core';
   standalone: true,
 })
 export class UnauthorizedComponent {
-  constructor() {}
+  countdown: number;
+  constructor(private router: Router) {
+    this.countdown = 20;
+  }
+
+  ngOnInit() {
+    this.countdownTicker();
+  }
+
+  countdownTicker() {
+    setTimeout(() => {
+      if (this.countdown <= 0) {
+        this.router.navigate(['']);
+      } else {
+        this.countdown = this.countdown - 1;
+        this.countdownTicker();
+      }
+    }, 1000);
+  }
+
+  redirectNow() {
+    this.router.navigate(['']);
+  }
 }
