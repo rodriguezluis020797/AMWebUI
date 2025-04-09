@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 export class UnauthorizedComponent {
   countdown: number;
   constructor(private router: Router) {
-    this.countdown = 20;
+    this.countdown = 5;
   }
 
   ngOnInit() {

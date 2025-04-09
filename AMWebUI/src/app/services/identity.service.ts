@@ -29,7 +29,7 @@ export class IdentityService {
   resetPasswordAsync(user: UserDTO): Observable<UserDTO> {
     return this.http
       .post<UserDTO>('/api/Identity/ResetPassword', user, {
-        headers: this.getFingerprintHeaders(),
+        withCredentials: true,
       })
       .pipe(
         catchError((error) => this.httpErrorHandler.handleError<UserDTO>(error))
