@@ -17,10 +17,7 @@ export class ResetPasswordComponent {
   constructor(
     private identityService: IdentityService,
     private router: Router
-  ) {
-    this.dto.password = 'a password';
-    this.confirmPassword = 'a password';
-  }
+  ) {}
   dto = new UserDTO();
   confirmPassword: string = '';
   disableSubmit: boolean = false;
@@ -28,8 +25,11 @@ export class ResetPasswordComponent {
   submit() {
     this.disableSubmit = true;
     this.identityService.resetPasswordAsync(this.dto).subscribe((user) => {
-      if (user !== null) {
+      this.dto = user;
+      if (this.dto.firstName !== '') {
         this.router.navigate(['dashboard']);
+      } else {
+        this.confirmPassword = '';
       }
     });
     setTimeout(() => {

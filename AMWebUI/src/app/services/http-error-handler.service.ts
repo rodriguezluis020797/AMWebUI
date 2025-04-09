@@ -12,6 +12,7 @@ export class HttpErrorHandlerService {
   constructor(private router: Router) {}
 
   handleError<T>(error: HttpErrorResponse): Observable<T> {
+    let dto = new UserDTO();
     switch (error.status) {
       case HttpStatusCodeEnum.ServerError:
       case HttpStatusCodeEnum.SystemUnavailable:
@@ -19,7 +20,11 @@ export class HttpErrorHandlerService {
         return of(null as unknown as T);
 
       case HttpStatusCodeEnum.BadCredentials:
-        return of(new UserDTO() as unknown as T);
+        return of(dto as unknown as T);
+
+      case HttpStatusCodeEnum.BadPassword:
+        dto.errorMessage = 'Password does not meet requirements.';
+        return of(dto as unknown as T);
 
       case HttpStatusCodeEnum.Unauthorized:
         this.router.navigate(['unauthorized']);

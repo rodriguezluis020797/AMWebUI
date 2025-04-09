@@ -1,26 +1,50 @@
-/* Add this CSS to add space between navbar and components */
+/* This will ensure the main content is centered and responsive */
 :host ::ng-deep .main-content {
-    flex: 1;
-    display: flex;
-    align-items: center; /* Centers content vertically */
-    justify-content: center; /* Centers content horizontally */
-    padding: 2rem;
+  flex: 1;
+  display: flex;
+  align-items: center; /* Centers content vertically */
+  justify-content: center; /* Centers content horizontally */
+  padding: 2rem;
+}
+
+/* Make sure the whole app takes up the full screen */
+:host {
+  display: block;
+  height: 100vh; /* Full viewport height */
+}
+
+/* This will keep the wrapper always at least the height of the viewport */
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+/* Footer styles */
+footer {
+  background-color: #ffffff;
+  color: #000000;
+  padding: 1rem 0;
+  text-align: center;
+  border-top: 1px solid #000;
+}
+
+/* The following is to ensure the login container is responsive */
+:host ::ng-deep .login-container {
+  background-color: #FFFFFF;
+  color: #000000;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 2px solid #000000; /* Wider border */
+  width: 66%; /* 2/3 of the screen */
+  max-width: 500px; /* Maximum width for larger screens */
+  margin: 0 auto; /* Center the container */
+  text-align: center;
+}
+
+/* Mobile-friendly: on smaller screens, container takes up 90% of width */
+@media (max-width: 768px) {
+  :host ::ng-deep .login-container {
+      width: 90%;
   }
-  :host {
-    display: block;
-    height: 100vh; /* Full viewport height */
-  }
-  
-  .wrapper {
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh; /* Ensures full height */
-  }
-  
-  footer {
-    background-color: #ffffff; /* Matches navbar */
-    color: #000000; /* Black text */
-    padding: 1rem 0;
-    text-align: center;
-    border-top: 1px solid #000; /* Consistent border */
-  }
+}
