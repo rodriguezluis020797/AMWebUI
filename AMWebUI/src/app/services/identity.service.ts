@@ -26,6 +26,15 @@ export class IdentityService {
       );
   }
 
+  logoutAsync(): Observable<boolean> {
+    console.log('calling logout method');
+    return this.http
+      .get<boolean>('/api/Identity/LogOut')
+      .pipe(
+        catchError((error) => this.httpErrorHandler.handleError<boolean>(error))
+      );
+  }
+
   resetPasswordAsync(user: UserDTO): Observable<UserDTO> {
     return this.http
       .post<UserDTO>('/api/Identity/ResetPassword', user, {

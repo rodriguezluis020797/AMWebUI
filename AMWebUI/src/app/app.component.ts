@@ -7,11 +7,12 @@ import { FooterComponent } from './partials/footer/footer.component';
 import { SystemStatusService } from './services/system-status.service';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 import { SystemUnavailableComponent } from './partials/system-unavailable/system-unavailable.component';
-import { RouterOutlet } from '@angular/router';
+import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CookiesService } from './services/cookies.service';
 import { IdentityPingDirective } from './directives/identity-ping.directive';
 import { CurrentStateService } from './services/current-state.service';
+import { filter } from 'rxjs';
 
 @Component({
   selector: 'app-root',
@@ -31,21 +32,41 @@ export class AppComponent {
   constructor(
     private systemStatusService: SystemStatusService,
     private cookieService: CookiesService,
-    private currentStateService: CurrentStateService
+    private currentStateService: CurrentStateService,
+    private router: Router
   ) {}
   title = 'AM';
   loggedIn = false;
   loading = true;
   systemAvailable = false;
-
   ngOnInit() {
-    this.cookieService.deleteAllCookies(); //Delete for stage/production
+    if (Boolean(this.cookieService.getCookie('loggedIn'))) {
+      this.currentStateService.setLoggedIn(true);
+    }
+    const lastRoute = this.currentStateService.getLastUrl();
+
+    // Use timeout to defer navigation until after initial render cycle
+    setTimeout(() => {
+      if (lastRoute && !this.currentStateService.shouldIgnoreUrl(lastRoute)) {
+        this.router.navigateByUrl(lastRoute);
+      } else {
+        this.router.navigate(['']);
+      }
+    });
+
+    // Save each successful route change
+    this.router.events
+      .pipe(filter((event) => event instanceof NavigationEnd))
+      .subscribe((event: NavigationEnd) => {
+        this.currentStateService.setLastUrl(event.urlAfterRedirects);
+      });
+
     this.isSystemAvailable();
+
     this.currentStateService.isLoggedIn$.subscribe((status) => {
       this.loggedIn = status;
     });
   }
-
   isSystemAvailable() {
     this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
       this.systemAvailable = true;

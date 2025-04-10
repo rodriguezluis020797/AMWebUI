@@ -11,6 +11,8 @@ export class CookiesService {
     this.cookieService.set(key, value, {
       path: '/',
       sameSite: 'Strict',
+      secure: true,
+      expires: 28,
     });
   }
 
