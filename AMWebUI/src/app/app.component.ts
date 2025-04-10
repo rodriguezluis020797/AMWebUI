@@ -11,6 +11,7 @@ import { RouterOutlet } from '@angular/router';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CookiesService } from './services/cookies.service';
 import { IdentityPingDirective } from './directives/identity-ping.directive';
+import { CurrentStateService } from './services/current-state.service';
 
 @Component({
   selector: 'app-root',
@@ -29,7 +30,8 @@ import { IdentityPingDirective } from './directives/identity-ping.directive';
 export class AppComponent {
   constructor(
     private systemStatusService: SystemStatusService,
-    private cookieService: CookiesService
+    private cookieService: CookiesService,
+    private currentStateService: CurrentStateService
   ) {}
   title = 'AM';
   loggedIn = false;
@@ -39,6 +41,9 @@ export class AppComponent {
   ngOnInit() {
     this.cookieService.deleteAllCookies(); //Delete for stage/production
     this.isSystemAvailable();
+    this.currentStateService.isLoggedIn$.subscribe((status) => {
+      this.loggedIn = status;
+    });
   }
 
   isSystemAvailable() {
@@ -49,7 +54,6 @@ export class AppComponent {
   }
 
   isLoggedIn() {
-    this.loading = false;
-    return this.loggedIn; //eventually check for a user cookie and authenticate it
+    return this.currentStateService.getLoggedIn();
   }
 }

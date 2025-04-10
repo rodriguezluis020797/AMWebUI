@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IdentityService } from '../../services/identity.service';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
+import { CurrentStateService } from '../../services/current-state.service';
 
 @Component({
   standalone: true,
@@ -16,7 +17,8 @@ import { Router } from '@angular/router';
 export class LogInComponent {
   constructor(
     private identityService: IdentityService,
-    private router: Router
+    private router: Router,
+    private currentStateService: CurrentStateService
   ) {}
 
   dto: UserDTO = new UserDTO();
@@ -34,6 +36,7 @@ export class LogInComponent {
         this.dto = user;
         this.dto.errorMessage = 'Invalid Credentials';
       } else {
+        this.currentStateService.setLoggedIn(true);
         if (user.isTempPassword === true) {
           this.router.navigate(['reset-password']);
         } else {
@@ -41,7 +44,6 @@ export class LogInComponent {
         }
       }
     });
-    //this.ngOnInit();
     setTimeout(() => {
       this.disableSubmit = false;
     }, 3000);
