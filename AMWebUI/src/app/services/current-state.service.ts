@@ -17,7 +17,11 @@ export class CurrentStateService {
   constructor(private router: Router, private cookieService: CookiesService) {}
 
   setLoggedIn(value: boolean) {
-    this.cookieService.setCookie('loggedIn', String(value));
+    if (!value) {
+      this.cookieService.deleteAllCookies();
+    } else {
+      this.cookieService.setCookie('loggedIn', String(value));
+    }
     this.loggedInSubject.next(value);
   }
 

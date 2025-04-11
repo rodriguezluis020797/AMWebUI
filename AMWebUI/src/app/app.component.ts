@@ -40,16 +40,24 @@ export class AppComponent {
   loading = true;
   systemAvailable = false;
   ngOnInit() {
+    let lastRoute = '';
     if (Boolean(this.cookieService.getCookie('loggedIn'))) {
+      lastRoute = this.currentStateService.getLastUrl();
       this.currentStateService.setLoggedIn(true);
+    } else {
+      this.cookieService.deleteAllCookies();
+      this.currentStateService.setLoggedIn(false);
     }
-    const lastRoute = this.currentStateService.getLastUrl();
 
-    // Use timeout to defer navigation until after initial render cycle
     setTimeout(() => {
-      if (lastRoute && !this.currentStateService.shouldIgnoreUrl(lastRoute)) {
+      if (
+        lastRoute &&
+        lastRoute !== '' &&
+        !this.currentStateService.shouldIgnoreUrl(lastRoute)
+      ) {
         this.router.navigateByUrl(lastRoute);
       } else {
+        this.cookieService.deleteAllCookies();
         this.router.navigate(['']);
       }
     });

@@ -4,12 +4,16 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { HttpStatusCodeEnum } from '../models/Enums';
 import { UserDTO } from '../models/UserDTO';
+import { CurrentStateService } from './current-state.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class HttpErrorHandlerService {
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private currentStateService: CurrentStateService
+  ) {}
 
   handleError<T>(error: HttpErrorResponse): Observable<T> {
     let dto = new UserDTO();
@@ -23,10 +27,12 @@ export class HttpErrorHandlerService {
         return of(dto as unknown as T);
 
       case HttpStatusCodeEnum.BadPassword:
-        dto.errorMessage = 'Password does not meet requirements.';
+        dto.errorMessage =
+          'Password does not meet requirements or has been used recently.';
         return of(dto as unknown as T);
 
       case HttpStatusCodeEnum.Unauthorized:
+        this.currentStateService.setLoggedIn(false);
         this.router.navigate(['unauthorized']);
         return of(null as unknown as T);
 

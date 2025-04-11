@@ -26,7 +26,7 @@ export class LogInComponent {
 
   ngOnInit() {
     this.dto.eMail = 'jdoe@gmail.com';
-    this.dto.password = 'N-5=SG+bW5JM';
+    this.dto.password = 'P@ssw0rd_2025';
   }
 
   submit() {
