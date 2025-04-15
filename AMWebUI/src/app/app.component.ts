@@ -1,14 +1,11 @@
 import { Component } from '@angular/core';
-import { HomeComponent } from './home/home.component';
 import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
-import { LogInComponent } from './partials/log-in/log-in.component';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './partials/footer/footer.component';
 import { SystemStatusService } from './services/system-status.service';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 import { SystemUnavailableComponent } from './partials/system-unavailable/system-unavailable.component';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CookiesService } from './services/cookies.service';
 import { CurrentStateService } from './services/current-state.service';
 import { filter } from 'rxjs';
@@ -19,7 +16,6 @@ import { IdentityService } from './services/identity.service';
   imports: [
     RouterOutlet,
     CommonModule,
-    HomeComponent,
     NavBarComponent,
     FooterComponent,
     LoadingScreenComponent,
@@ -41,45 +37,49 @@ export class AppComponent {
   loading = true;
   systemAvailable = false;
   ngOnInit() {
-    let lastRoute = '';
-    if (Boolean(this.cookieService.getCookie('loggedIn'))) {
-      lastRoute = this.currentStateService.getLastUrl();
-      this.currentStateService.setLoggedIn(true);
-    } else {
-      this.cookieService.deleteAllCookies();
-      this.currentStateService.setLoggedIn(false);
-    }
-
-    setTimeout(() => {
-      if (
-        lastRoute &&
-        lastRoute !== '' &&
-        !this.currentStateService.shouldIgnoreUrl(lastRoute)
-      ) {
-        this.router.navigateByUrl(lastRoute);
+    if (this.isSystemAvailable()) {
+      let lastRoute = '';
+      if (Boolean(this.cookieService.getCookie('loggedIn'))) {
+        lastRoute = this.currentStateService.getLastUrl();
+        this.currentStateService.setLoggedIn(true);
       } else {
         this.cookieService.deleteAllCookies();
-        this.router.navigate(['']);
+        this.identityService.logoutAsync().subscribe((result) => {});
+        this.currentStateService.setLoggedIn(false);
       }
-    });
 
-    this.router.events
-      .pipe(filter((event) => event instanceof NavigationEnd))
-      .subscribe((event: NavigationEnd) => {
-        this.currentStateService.setLastUrl(event.urlAfterRedirects);
+      setTimeout(() => {
+        if (
+          lastRoute &&
+          lastRoute !== '' &&
+          !this.currentStateService.shouldIgnoreUrl(lastRoute)
+        ) {
+          this.router.navigateByUrl(lastRoute);
+        } else {
+          this.cookieService.deleteAllCookies();
+          this.router.navigate(['']);
+        }
       });
 
-    this.isSystemAvailable();
+      this.router.events
+        .pipe(filter((event) => event instanceof NavigationEnd))
+        .subscribe((event: NavigationEnd) => {
+          this.currentStateService.setLastUrl(event.urlAfterRedirects);
+        });
 
-    this.currentStateService.isLoggedIn$.subscribe((status) => {
-      this.loggedIn = status;
-    });
+      this.currentStateService.isLoggedIn$.subscribe((status) => {
+        this.loggedIn = status;
+      });
+    }
   }
-  isSystemAvailable() {
+
+  isSystemAvailable(): boolean {
     this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
       this.systemAvailable = true;
       this.loading = false;
+      return result;
     });
+    return false;
   }
 
   ping(): void {
