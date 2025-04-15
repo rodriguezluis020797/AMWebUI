@@ -10,9 +10,9 @@ import { SystemUnavailableComponent } from './partials/system-unavailable/system
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CookiesService } from './services/cookies.service';
-import { IdentityPingDirective } from './directives/identity-ping.directive';
 import { CurrentStateService } from './services/current-state.service';
 import { filter } from 'rxjs';
+import { IdentityService } from './services/identity.service';
 
 @Component({
   selector: 'app-root',
@@ -33,7 +33,8 @@ export class AppComponent {
     private systemStatusService: SystemStatusService,
     private cookieService: CookiesService,
     private currentStateService: CurrentStateService,
-    private router: Router
+    private router: Router,
+    private identityService: IdentityService
   ) {}
   title = 'AM';
   loggedIn = false;
@@ -62,7 +63,6 @@ export class AppComponent {
       }
     });
 
-    // Save each successful route change
     this.router.events
       .pipe(filter((event) => event instanceof NavigationEnd))
       .subscribe((event: NavigationEnd) => {
@@ -80,6 +80,25 @@ export class AppComponent {
       this.systemAvailable = true;
       this.loading = false;
     });
+  }
+
+  ping(): void {
+    const now = new Date();
+    const lastPinged = this.cookieService.getCookie('lastPing');
+
+    if (!lastPinged) {
+      this.cookieService.setCookie('lastPing', now.toISOString());
+      return;
+    }
+
+    const lastPingDate = new Date(lastPinged);
+    const fiveMinutesInMs = 5 * 60 * 1000;
+
+    const timeSinceLastPing = now.getTime() - lastPingDate.getTime();
+
+    if (timeSinceLastPing > fiveMinutesInMs) {
+      this.identityService.pingAsync().subscribe((result) => {});
+    }
   }
 
   isLoggedIn() {

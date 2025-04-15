@@ -1,20 +1,22 @@
-<div *ngIf="!loading" class="wrapper">
-  <div *ngIf="systemAvailable">
-    <am-nav-bar [loggedIn]="loggedIn"></am-nav-bar>
+<div (click)="ping()">
+  <div *ngIf="!loading" class="wrapper">
+    <div *ngIf="systemAvailable">
+      <am-nav-bar [loggedIn]="loggedIn"></am-nav-bar>
 
-    <div class="main-content">
-      <router-outlet></router-outlet>
+      <div class="main-content">
+        <router-outlet></router-outlet>
+      </div>
+      <am-footer></am-footer>
     </div>
-    <am-footer></am-footer>
+
+    <div *ngIf="!systemAvailable">
+      <am-system-unavailable></am-system-unavailable>
+    </div>
   </div>
 
-  <div *ngIf="!systemAvailable">
-    <am-system-unavailable></am-system-unavailable>
-  </div>
-</div>
-
-<div *ngIf="loading" class="wrapper">
-  <div class="main-content">
-    <am-loading-screen></am-loading-screen>
+  <div *ngIf="loading" class="wrapper">
+    <div class="main-content">
+      <am-loading-screen></am-loading-screen>
+    </div>
   </div>
 </div>

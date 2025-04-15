@@ -1,14 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { IdentityPingDirective } from '../../directives/identity-ping.directive';
 import { IdentityService } from '../../services/identity.service';
 import { CurrentStateService } from '../../services/current-state.service';
 
 @Component({
   standalone: true,
   selector: 'am-nav-bar',
-  imports: [CommonModule, RouterLink, IdentityPingDirective],
+  imports: [CommonModule, RouterLink],
   templateUrl: './nav-bar.component.html',
   styleUrl: './nav-bar.component.css',
 })
