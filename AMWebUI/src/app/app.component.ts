@@ -33,7 +33,6 @@ export class AppComponent {
     private identityService: IdentityService
   ) {}
   title = 'AM';
-  loggedIn = false;
   loading = true;
   systemAvailable = false;
   ngOnInit() {
@@ -66,10 +65,6 @@ export class AppComponent {
         .subscribe((event: NavigationEnd) => {
           this.currentStateService.setLastUrl(event.urlAfterRedirects);
         });
-
-      this.currentStateService.isLoggedIn$.subscribe((status) => {
-        this.loggedIn = status;
-      });
     }
   }
 

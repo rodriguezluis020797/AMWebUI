@@ -1,7 +1,7 @@
 <div (click)="ping()">
   <div *ngIf="!loading" class="wrapper">
     <div *ngIf="systemAvailable">
-      <am-nav-bar [loggedIn]="loggedIn"></am-nav-bar>
+      <am-nav-bar></am-nav-bar>
 
       <div class="main-content">
         <router-outlet></router-outlet>

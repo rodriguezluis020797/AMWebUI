@@ -14,7 +14,14 @@ export class CurrentStateService {
   private lastUrl: string = '';
   private currentUrl: string = '';
 
-  constructor(private router: Router, private cookieService: CookiesService) {}
+  constructor(private router: Router, private cookieService: CookiesService) {
+    this.initializeLoggedInState();
+  }
+
+  private initializeLoggedInState(): void {
+    const isLoggedIn = this.cookieService.getCookie('loggedIn') === 'true';
+    this.loggedInSubject.next(isLoggedIn);
+  }
 
   setLoggedIn(value: boolean) {
     if (!value) {
