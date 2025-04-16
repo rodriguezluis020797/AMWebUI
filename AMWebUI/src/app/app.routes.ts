@@ -5,6 +5,7 @@ import { SystemUnavailableComponent } from './partials/system-unavailable/system
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { UnauthorizedComponent } from './partials/unauthorized/unauthorized.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
+import { authorizationGuard } from './guards/authorization.guard';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -12,5 +13,9 @@ export const routes: Routes = [
   { path: 'error', component: SystemUnavailableComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
-  { path: 'dashboard', component: DashboardComponent },
+  {
+    path: 'dashboard',
+    component: DashboardComponent,
+    canActivate: [authorizationGuard],
+  },
 ];
