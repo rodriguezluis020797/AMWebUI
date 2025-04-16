@@ -32,18 +32,30 @@ export class AppComponent {
     private router: Router,
     private identityService: IdentityService
   ) {}
+
   title = 'AM';
   loading = true;
   systemAvailable = false;
+
   ngOnInit() {
-    if (this.isSystemAvailable()) {
+    this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
+      this.systemAvailable = result;
+      this.loading = false;
+
+      if (!result) {
+        this.router.navigate(['/error']);
+        return;
+      }
+
+      // Only runs if system is available
       let lastRoute = '';
+
       if (Boolean(this.cookieService.getCookie('loggedIn'))) {
         lastRoute = this.currentStateService.getLastUrl();
         this.currentStateService.setLoggedIn(true);
       } else {
         this.cookieService.deleteAllCookies();
-        this.identityService.logoutAsync().subscribe((result) => {});
+        this.identityService.logoutAsync().subscribe();
         this.currentStateService.setLoggedIn(false);
       }
 
@@ -60,12 +72,15 @@ export class AppComponent {
         }
       });
 
+      // ✅ Router events will now fire correctly
       this.router.events
         .pipe(filter((event) => event instanceof NavigationEnd))
         .subscribe((event: NavigationEnd) => {
-          this.currentStateService.setLastUrl(event.urlAfterRedirects);
+          const previousUrl = this.currentStateService.getCurrentUrl();
+          this.currentStateService.setLastUrl(previousUrl);
+          this.currentStateService.setCurrentUrl(event.urlAfterRedirects);
         });
-    }
+    });
   }
 
   isSystemAvailable(): boolean {
@@ -81,14 +96,12 @@ export class AppComponent {
   }
 
   ping(): void {
-    console.log('+ ping');
-    const nowUtc = new Date(); // UTC time by default in JS
+    console.log('ping');
+    const nowUtc = new Date();
     const lastPinged = this.cookieService.getCookie('lastPing');
 
     if (!lastPinged) {
-      console.log('!lastPinged');
       this.performPing(nowUtc);
-      console.log('- ping');
       return;
     }
 
@@ -96,23 +109,15 @@ export class AppComponent {
     const fiveMinutesInMs = 5 * 60 * 1000;
     const timeSinceLastPing = nowUtc.getTime() - lastPingDateUtc.getTime();
 
-    console.log('nowUtc: ' + nowUtc);
-    console.log('lastPingDateUtc: ' + lastPingDateUtc);
-    console.log('timeSinceLastPing: ' + timeSinceLastPing);
     if (timeSinceLastPing > fiveMinutesInMs) {
-      console.log('timeSinceLastPing > fiveMinutesInMs');
       this.performPing(nowUtc);
     }
-    console.log('- ping');
-    console.log('|');
   }
 
   performPing(nowUtc: Date) {
-    console.log('+ performPing()');
     this.identityService.pingAsync().subscribe(() => {
       this.cookieService.setCookie('lastPing', nowUtc.toISOString());
     });
-    console.log('- performPing()');
   }
 
   isLoggedIn() {

@@ -36,6 +36,8 @@ export class NavBarComponent implements OnInit {
       if (result) {
         this.currentStateService.setLoggedIn(false);
         this.router.navigate(['']);
+      } else {
+        this.router.navigate(['error']);
       }
     });
   }
