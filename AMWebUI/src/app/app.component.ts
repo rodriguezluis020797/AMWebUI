@@ -96,7 +96,6 @@ export class AppComponent {
   }
 
   ping(): void {
-    console.log('ping');
     const nowUtc = new Date();
     const lastPinged = this.cookieService.getCookie('lastPing');
 

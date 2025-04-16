@@ -37,25 +37,19 @@ export class CurrentStateService {
   }
 
   setCurrentUrl(url: string): void {
-    console.log('setCurrentUrl: ' + url);
     this.currentUrl = url;
     this.cookieService.setCookie('currentUrl', url);
   }
 
   setLastUrl(url: string): void {
-    console.log('setLastUrl: ' + url);
     this.cookieService.setCookie('lastUrl', url);
   }
 
   getLastUrl(): string {
-    console.log(
-      'getLastUrl: ' + this.cookieService.getCookie('lastUrl') || '/'
-    );
     return this.cookieService.getCookie('lastUrl') || '/';
   }
 
   getCurrentUrl(): string {
-    console.log('getCurrentUrl: ' + this.currentUrl);
     return this.currentUrl;
   }
 
