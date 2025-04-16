@@ -1,4 +1,4 @@
-<div class="login-container">
+<div class="login-container" *ngIf="!loading">
   <h2>Login</h2>
   <div *ngIf="dto.errorMessage" class="error-message">
     <p>{{ dto.errorMessage }}</p>
@@ -26,4 +26,8 @@
   <button *ngIf="!disableSubmit" type="submit" (click)="submit()">Login</button>
   <button *ngIf="disableSubmit" disabled>Login</button>
   <a routerLink="/sign-up">Request Access Here</a>
+</div>
+
+<div class="login-container" *ngIf="loading">
+  <am-loading-screen></am-loading-screen>
 </div>

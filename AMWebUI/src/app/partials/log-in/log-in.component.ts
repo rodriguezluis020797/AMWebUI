@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserDTO } from '../../models/UserDTO';
 import { FormsModule } from '@angular/forms';
@@ -6,15 +6,16 @@ import { IdentityService } from '../../services/identity.service';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import { CurrentStateService } from '../../services/current-state.service';
+import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
 
 @Component({
   standalone: true,
   selector: 'am-log-in',
-  imports: [FormsModule, CommonModule, RouterLink],
+  imports: [FormsModule, CommonModule, RouterLink, LoadingScreenComponent],
   templateUrl: './log-in.component.html',
   styleUrl: './log-in.component.css',
 })
-export class LogInComponent {
+export class LogInComponent implements OnInit {
   constructor(
     private identityService: IdentityService,
     private router: Router,
@@ -23,6 +24,7 @@ export class LogInComponent {
 
   dto: UserDTO = new UserDTO();
   disableSubmit = false;
+  loading = false;
 
   ngOnInit() {
     this.dto.eMail = 'jdoe@gmail.com';
@@ -31,19 +33,30 @@ export class LogInComponent {
 
   submit() {
     this.disableSubmit = true;
+    this.loading = true;
     this.identityService.loginAsync(this.dto).subscribe((user) => {
-      if (user.firstName === '') {
-        this.dto = user;
+      if (user === false || user == null) {
+        this.loading = false;
+        this.router.navigate(['error']);
+        return;
+      }
+
+      this.dto = user;
+
+      if (this.dto.firstName === '') {
         this.dto.errorMessage = 'Invalid Credentials';
       } else {
         this.currentStateService.setLoggedIn(true);
-        if (user.isTempPassword === true) {
+        if (this.dto.isTempPassword === true) {
           this.router.navigate(['reset-password']);
         } else {
           this.router.navigate(['dashboard']);
         }
       }
+
+      this.loading = false;
     });
+
     setTimeout(() => {
       this.disableSubmit = false;
     }, 3000);

@@ -12,9 +12,11 @@ export class SystemStatusService {
     private httpErrorHandler: HttpErrorHandlerService
   ) {}
 
-  fullSystemCheckAsync() {
-    return this.http
-      .get('/api/SystemStatus/FullSystemCheck')
-      .pipe(catchError((error) => this.httpErrorHandler.handleError(error)));
+  fullSystemCheckAsync(): Observable<boolean> {
+    return this.http.get<boolean>('/api/SystemStatus/FullSystemCheck').pipe(
+      catchError((error) => {
+        return this.httpErrorHandler.handleError<boolean>(error);
+      })
+    );
   }
 }

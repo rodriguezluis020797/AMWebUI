@@ -17,11 +17,15 @@ export class HttpErrorHandlerService {
 
   handleError<T>(error: HttpErrorResponse): Observable<T> {
     let dto = new UserDTO();
+    if (error.status === 0) {
+      // Network error or server unreachable
+      return of(false as unknown as T);
+    }
+
     switch (error.status) {
       case HttpStatusCodeEnum.ServerError:
       case HttpStatusCodeEnum.SystemUnavailable:
-        this.router.navigate(['/error']);
-        return of(null as unknown as T);
+        return of(false as unknown as T);
 
       case HttpStatusCodeEnum.BadCredentials:
         return of(dto as unknown as T);

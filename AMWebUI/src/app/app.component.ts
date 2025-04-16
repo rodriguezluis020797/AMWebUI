@@ -75,30 +75,49 @@ export class AppComponent {
 
   isSystemAvailable(): boolean {
     this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
-      this.systemAvailable = true;
+      this.systemAvailable = result;
       this.loading = false;
-      return result;
+
+      if (!result) {
+        this.router.navigate(['/error']);
+      }
     });
     return false;
   }
 
   ping(): void {
-    const now = new Date();
+    console.log('+ ping');
+    const nowUtc = new Date(); // UTC time by default in JS
     const lastPinged = this.cookieService.getCookie('lastPing');
 
     if (!lastPinged) {
-      this.cookieService.setCookie('lastPing', now.toISOString());
+      console.log('!lastPinged');
+      this.performPing(nowUtc);
+      console.log('- ping');
       return;
     }
 
-    const lastPingDate = new Date(lastPinged);
+    const lastPingDateUtc = new Date(lastPinged);
     const fiveMinutesInMs = 5 * 60 * 1000;
+    const timeSinceLastPing = nowUtc.getTime() - lastPingDateUtc.getTime();
 
-    const timeSinceLastPing = now.getTime() - lastPingDate.getTime();
-
+    console.log('nowUtc: ' + nowUtc);
+    console.log('lastPingDateUtc: ' + lastPingDateUtc);
+    console.log('timeSinceLastPing: ' + timeSinceLastPing);
     if (timeSinceLastPing > fiveMinutesInMs) {
-      this.identityService.pingAsync().subscribe((result) => {});
+      console.log('timeSinceLastPing > fiveMinutesInMs');
+      this.performPing(nowUtc);
     }
+    console.log('- ping');
+    console.log('|');
+  }
+
+  performPing(nowUtc: Date) {
+    console.log('+ performPing()');
+    this.identityService.pingAsync().subscribe(() => {
+      this.cookieService.setCookie('lastPing', nowUtc.toISOString());
+    });
+    console.log('- performPing()');
   }
 
   isLoggedIn() {

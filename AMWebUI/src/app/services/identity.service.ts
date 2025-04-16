@@ -13,21 +13,17 @@ export class IdentityService {
     private httpErrorHandler: HttpErrorHandlerService
   ) {}
 
-  loginAsync(user: UserDTO): Observable<UserDTO> {
+  loginAsync(user: UserDTO): Observable<UserDTO | false> {
     return this.http
       .post<UserDTO>('/api/Identity/Login', user, {
         headers: this.getFingerprintHeaders(),
       })
       .pipe(
-        catchError((error) => {
-          const userDTO = new UserDTO();
-          return of(userDTO);
-        })
+        catchError((error) => this.httpErrorHandler.handleError<UserDTO>(error))
       );
   }
 
   logoutAsync(): Observable<boolean> {
-    console.log('calling logout method');
     return this.http
       .get<boolean>('/api/Identity/LogOut')
       .pipe(
