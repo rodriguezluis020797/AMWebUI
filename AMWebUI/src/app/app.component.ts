@@ -50,10 +50,11 @@ export class AppComponent {
       // Only runs if system is available
       let lastRoute = '';
 
-      if (Boolean(this.cookieService.getCookie('loggedIn'))) {
+      if (this.currentStateService.getLoggedIn()) {
         lastRoute = this.currentStateService.getLastUrl();
         this.currentStateService.setLoggedIn(true);
         this.router.navigate(['dashboard']);
+        return;
       } else {
         this.cookieService.deleteAllCookies();
         this.identityService.logoutAsync().subscribe();
