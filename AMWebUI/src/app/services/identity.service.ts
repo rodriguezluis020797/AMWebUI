@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { UserDTO } from '../models/UserDTO';
+import { ProviderDTO } from '../models/UserDTO';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
@@ -13,13 +13,15 @@ export class IdentityService {
     private httpErrorHandler: HttpErrorHandlerService
   ) {}
 
-  loginAsync(user: UserDTO): Observable<UserDTO | false> {
+  loginAsync(user: ProviderDTO): Observable<ProviderDTO | false> {
     return this.http
-      .post<UserDTO>('/api/Identity/Login', user, {
+      .post<ProviderDTO>('/api/Identity/Login', user, {
         headers: this.getFingerprintHeaders(),
       })
       .pipe(
-        catchError((error) => this.httpErrorHandler.handleError<UserDTO>(error))
+        catchError((error) =>
+          this.httpErrorHandler.handleError<ProviderDTO>(error)
+        )
       );
   }
 
@@ -31,13 +33,15 @@ export class IdentityService {
       );
   }
 
-  resetPasswordAsync(user: UserDTO): Observable<UserDTO> {
+  resetPasswordAsync(user: ProviderDTO): Observable<ProviderDTO> {
     return this.http
-      .post<UserDTO>('/api/Identity/ResetPassword', user, {
+      .post<ProviderDTO>('/api/Identity/ResetPassword', user, {
         withCredentials: true,
       })
       .pipe(
-        catchError((error) => this.httpErrorHandler.handleError<UserDTO>(error))
+        catchError((error) =>
+          this.httpErrorHandler.handleError<ProviderDTO>(error)
+        )
       );
   }
 

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserDTO } from '../models/UserDTO';
+import { ProviderDTO } from '../models/UserDTO';
 import { UserService } from '../services/user.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 
@@ -12,7 +12,7 @@ import { LoadingScreenComponent } from '../partials/loading-screen/loading-scree
 })
 export class DashboardComponent implements OnInit {
   constructor(private userService: UserService) {}
-  user: UserDTO = new UserDTO();
+  user: ProviderDTO = new ProviderDTO();
   loadingUser = true;
 
   ngOnInit() {

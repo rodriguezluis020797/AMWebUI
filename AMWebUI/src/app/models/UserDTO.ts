@@ -1,6 +1,6 @@
 import { BaseDTO } from './BaseDTO';
 
-export class UserDTO extends BaseDTO {
+export class ProviderDTO extends BaseDTO {
   firstName: string;
   middleName: string | null;
   lastName: string;

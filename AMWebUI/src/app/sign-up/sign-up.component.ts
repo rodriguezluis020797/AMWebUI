@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserDTO } from '../models/UserDTO';
+import { ProviderDTO } from '../models/UserDTO';
 import { FormsModule } from '@angular/forms';
 import { UserService } from '../services/user.service';
 import { RouterLink } from '@angular/router';
@@ -14,7 +14,7 @@ import { RouterLink } from '@angular/router';
 })
 export class SignUpComponent {
   constructor(private userService: UserService) {}
-  dto = new UserDTO();
+  dto = new ProviderDTO();
   disableSubmit: boolean = false;
   signUpSuccessful: boolean = false;
 

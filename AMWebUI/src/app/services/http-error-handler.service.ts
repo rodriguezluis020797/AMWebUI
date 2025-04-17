@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { HttpStatusCodeEnum } from '../models/Enums';
-import { UserDTO } from '../models/UserDTO';
+import { ProviderDTO } from '../models/UserDTO';
 import { CurrentStateService } from './current-state.service';
 
 @Injectable({
@@ -16,7 +16,7 @@ export class HttpErrorHandlerService {
   ) {}
 
   handleError<T>(error: HttpErrorResponse): Observable<T> {
-    let dto = new UserDTO();
+    let dto = new ProviderDTO();
     if (error.status === 0) {
       // Network error or server unreachable
       return of(false as unknown as T);

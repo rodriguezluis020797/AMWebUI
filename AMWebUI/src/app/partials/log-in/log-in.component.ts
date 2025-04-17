@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { UserDTO } from '../../models/UserDTO';
+import { ProviderDTO } from '../../models/UserDTO';
 import { FormsModule } from '@angular/forms';
 import { IdentityService } from '../../services/identity.service';
 import { RouterLink } from '@angular/router';
@@ -22,7 +22,7 @@ export class LogInComponent implements OnInit {
     private currentStateService: CurrentStateService
   ) {}
 
-  dto: UserDTO = new UserDTO();
+  dto: ProviderDTO = new ProviderDTO();
   disableSubmit = false;
   loading = false;
 
