@@ -54,7 +54,12 @@ export class CurrentStateService {
   }
 
   shouldIgnoreUrl(url: string): boolean {
-    const ignoredRoutes = ['/sign-up', '/error', '/unauthorized'];
+    const ignoredRoutes = [
+      '/sign-up',
+      '/error',
+      '/unauthorized',
+      '/reset-password',
+    ];
     return ignoredRoutes.includes(url);
   }
 }

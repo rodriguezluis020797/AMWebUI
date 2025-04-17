@@ -31,9 +31,11 @@ export class SignUpComponent {
   }
   submit() {
     this.disableSubmit = true;
-    this.providerService.signupAsync(this.dto).subscribe((provider) => {});
-    setTimeout(() => {
-      this.disableSubmit = false;
-    }, 3000);
+    this.providerService.signupAsync(this.dto).subscribe((provider) => {
+      this.dto = provider;
+      setTimeout(() => {
+        this.disableSubmit = false;
+      }, 3000);
+    });
   }
 }

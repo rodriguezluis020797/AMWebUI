@@ -115,6 +115,7 @@ export class AppComponent {
   }
 
   performPing(nowUtc: Date) {
+    console.log('ping at ' + nowUtc);
     this.identityService.pingAsync().subscribe(() => {
       this.cookieService.setCookie('lastPing', nowUtc.toISOString());
     });
