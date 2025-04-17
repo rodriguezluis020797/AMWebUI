@@ -1,1 +1,20 @@
-<p>dashboard works!</p>
+<div class="dashboard-container" *ngIf="!loadingUser">
+  <h2>Welcome, {{ user.firstName }}!</h2>
+
+  <div class="user-info">
+    <label>First Name:</label>
+    <p>{{ user.firstName }}</p>
+
+    <label>Middle Name:</label>
+    <p>{{ user.middleName || "—" }}</p>
+
+    <label>Last Name:</label>
+    <p>{{ user.lastName }}</p>
+
+    <label>Email:</label>
+    <p>{{ user.eMail }}</p>
+  </div>
+</div>
+<div class="dashboard-container" *ngIf="loadingUser">
+  <am-loading-screen></am-loading-screen>
+</div>

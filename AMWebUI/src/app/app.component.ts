@@ -53,6 +53,7 @@ export class AppComponent {
       if (Boolean(this.cookieService.getCookie('loggedIn'))) {
         lastRoute = this.currentStateService.getLastUrl();
         this.currentStateService.setLoggedIn(true);
+        this.router.navigate(['dashboard']);
       } else {
         this.cookieService.deleteAllCookies();
         this.identityService.logoutAsync().subscribe();
