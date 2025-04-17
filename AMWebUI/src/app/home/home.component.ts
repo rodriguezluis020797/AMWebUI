@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
-import { ProviderDTO } from '../models/UserDTO';
 import { LogInComponent } from '../partials/log-in/log-in.component';
 import { SignUpComponent } from '../sign-up/sign-up.component';
+import { ProviderDTO } from '../models/ProviderDTO';
 
 @Component({
   standalone: true,
@@ -11,7 +11,7 @@ import { SignUpComponent } from '../sign-up/sign-up.component';
   styleUrl: './home.component.css',
 })
 export class HomeComponent {
-  user: ProviderDTO = new ProviderDTO();
+  provider: ProviderDTO = new ProviderDTO();
   loggedIn: any;
 
   ngOnInit() {}

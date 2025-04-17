@@ -3,8 +3,8 @@ import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { HttpStatusCodeEnum } from '../models/Enums';
-import { ProviderDTO } from '../models/UserDTO';
 import { CurrentStateService } from './current-state.service';
+import { ProviderDTO } from '../models/ProviderDTO';
 
 @Injectable({
   providedIn: 'root',

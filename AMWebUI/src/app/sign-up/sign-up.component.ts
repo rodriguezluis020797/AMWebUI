@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProviderDTO } from '../models/UserDTO';
 import { FormsModule } from '@angular/forms';
-import { UserService } from '../services/user.service';
+import { ProviderService } from '../services/provider.service';
 import { RouterLink } from '@angular/router';
+import { ProviderDTO } from '../models/ProviderDTO';
 
 @Component({
   standalone: true,
@@ -13,7 +13,7 @@ import { RouterLink } from '@angular/router';
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent {
-  constructor(private userService: UserService) {}
+  constructor(private providerService: ProviderService) {}
   dto = new ProviderDTO();
   disableSubmit: boolean = false;
   signUpSuccessful: boolean = false;
@@ -31,7 +31,7 @@ export class SignUpComponent {
   }
   submit() {
     this.disableSubmit = true;
-    this.userService.signupAsync(this.dto).subscribe((user) => {});
+    this.providerService.signupAsync(this.dto).subscribe((provider) => {});
     setTimeout(() => {
       this.disableSubmit = false;
     }, 3000);

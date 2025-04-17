@@ -1,9 +1,9 @@
 import { Component } from '@angular/core';
-import { ProviderDTO } from '../models/UserDTO';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { IdentityService } from '../services/identity.service';
+import { ProviderDTO } from '../models/ProviderDTO';
 
 @Component({
   standalone: true,
@@ -23,8 +23,8 @@ export class ResetPasswordComponent {
 
   submit() {
     this.disableSubmit = true;
-    this.identityService.resetPasswordAsync(this.dto).subscribe((user) => {
-      this.dto = user;
+    this.identityService.resetPasswordAsync(this.dto).subscribe((provider) => {
+      this.dto = provider;
       if (this.dto.firstName !== '') {
         this.router.navigate(['dashboard']);
       } else {

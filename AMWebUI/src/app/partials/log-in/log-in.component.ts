@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProviderDTO } from '../../models/UserDTO';
 import { FormsModule } from '@angular/forms';
 import { IdentityService } from '../../services/identity.service';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
 import { CurrentStateService } from '../../services/current-state.service';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
+import { ProviderDTO } from '../../models/ProviderDTO';
 
 @Component({
   standalone: true,
@@ -34,14 +34,14 @@ export class LogInComponent implements OnInit {
   submit() {
     this.disableSubmit = true;
     this.loading = true;
-    this.identityService.loginAsync(this.dto).subscribe((user) => {
-      if (user === false || user == null) {
+    this.identityService.loginAsync(this.dto).subscribe((provider) => {
+      if (provider === false || provider == null) {
         this.loading = false;
         this.router.navigate(['error']);
         return;
       }
 
-      this.dto = user;
+      this.dto = provider;
 
       if (this.dto.firstName === '') {
         this.dto.errorMessage = 'Invalid Credentials';

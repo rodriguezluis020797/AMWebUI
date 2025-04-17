@@ -1,21 +1,21 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
-import { ProviderDTO } from '../models/UserDTO';
 import { HttpErrorHandlerService } from './http-error-handler.service';
+import { ProviderDTO } from '../models/ProviderDTO';
 
 @Injectable({
   providedIn: 'root',
 })
-export class UserService {
+export class ProviderService {
   constructor(
     private http: HttpClient,
     private httpErrorHandler: HttpErrorHandlerService
   ) {}
 
-  getUserAsync(): Observable<ProviderDTO> {
+  getProviderAsync(): Observable<ProviderDTO> {
     return this.http
-      .get<ProviderDTO>('/api/User/GetUser')
+      .get<ProviderDTO>('/api/Provider/GetProvider')
       .pipe(
         catchError((error) =>
           this.httpErrorHandler.handleError<ProviderDTO>(error)
@@ -23,7 +23,9 @@ export class UserService {
       );
   }
 
-  signupAsync(user: ProviderDTO): Observable<ProviderDTO> {
-    return this.http.post<ProviderDTO>('/api/User/CreateUser', user).pipe();
+  signupAsync(provider: ProviderDTO): Observable<ProviderDTO> {
+    return this.http
+      .post<ProviderDTO>('/api/Provider/CreateProvider', provider)
+      .pipe();
   }
 }

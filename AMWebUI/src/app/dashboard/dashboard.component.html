@@ -1,20 +1,20 @@
-<div class="dashboard-container" *ngIf="!loadingUser">
-  <h2>Welcome, {{ user.firstName }}!</h2>
+<div class="dashboard-container" *ngIf="!loadingProvider">
+  <h2>Welcome, {{ provider.firstName }}!</h2>
 
   <div class="user-info">
     <label>First Name:</label>
-    <p>{{ user.firstName }}</p>
+    <p>{{ provider.firstName }}</p>
 
     <label>Middle Name:</label>
-    <p>{{ user.middleName || "—" }}</p>
+    <p>{{ provider.middleName || "—" }}</p>
 
     <label>Last Name:</label>
-    <p>{{ user.lastName }}</p>
+    <p>{{ provider.lastName }}</p>
 
     <label>Email:</label>
-    <p>{{ user.eMail }}</p>
+    <p>{{ provider.eMail }}</p>
   </div>
 </div>
-<div class="dashboard-container" *ngIf="loadingUser">
+<div class="dashboard-container" *ngIf="loadingProvider">
   <am-loading-screen></am-loading-screen>
 </div>

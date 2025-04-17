@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { ProviderDTO } from '../models/UserDTO';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
+import { ProviderDTO } from '../models/ProviderDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -13,9 +13,9 @@ export class IdentityService {
     private httpErrorHandler: HttpErrorHandlerService
   ) {}
 
-  loginAsync(user: ProviderDTO): Observable<ProviderDTO | false> {
+  loginAsync(provider: ProviderDTO): Observable<ProviderDTO | false> {
     return this.http
-      .post<ProviderDTO>('/api/Identity/Login', user, {
+      .post<ProviderDTO>('/api/Identity/Login', provider, {
         headers: this.getFingerprintHeaders(),
       })
       .pipe(
@@ -33,9 +33,9 @@ export class IdentityService {
       );
   }
 
-  resetPasswordAsync(user: ProviderDTO): Observable<ProviderDTO> {
+  resetPasswordAsync(provider: ProviderDTO): Observable<ProviderDTO> {
     return this.http
-      .post<ProviderDTO>('/api/Identity/ResetPassword', user, {
+      .post<ProviderDTO>('/api/Identity/ResetPassword', provider, {
         withCredentials: true,
       })
       .pipe(

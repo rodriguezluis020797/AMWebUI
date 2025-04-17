@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProviderDTO } from '../models/UserDTO';
-import { UserService } from '../services/user.service';
+import { ProviderService } from '../services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
+import { ProviderDTO } from '../models/ProviderDTO';
 
 @Component({
   selector: 'am-dashboard',
@@ -11,18 +11,18 @@ import { LoadingScreenComponent } from '../partials/loading-screen/loading-scree
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
-  constructor(private userService: UserService) {}
-  user: ProviderDTO = new ProviderDTO();
-  loadingUser = true;
+  constructor(private providerService: ProviderService) {}
+  provider: ProviderDTO = new ProviderDTO();
+  loadingProvider = true;
 
   ngOnInit() {
-    this.getUser();
+    this.getProvider();
   }
 
-  getUser() {
-    this.userService.getUserAsync().subscribe((result) => {
-      this.user = result;
-      this.loadingUser = false;
+  getProvider() {
+    this.providerService.getProviderAsync().subscribe((result) => {
+      this.provider = result;
+      this.loadingProvider = false;
     });
   }
 }
