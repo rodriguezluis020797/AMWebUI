@@ -5,7 +5,8 @@ export class ProviderDTO extends BaseDTO {
   middleName: string | null;
   lastName: string;
   eMail: string;
-  password: string;
+  currentPassword: String;
+  newPassword: string;
   isTempPassword: boolean;
 
   constructor() {
@@ -14,7 +15,8 @@ export class ProviderDTO extends BaseDTO {
     this.middleName = null;
     this.lastName = '';
     this.eMail = '';
-    this.password = '';
+    this.currentPassword = '';
+    this.newPassword = '';
     this.isTempPassword = false;
   }
 }
