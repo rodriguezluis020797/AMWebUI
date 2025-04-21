@@ -25,7 +25,8 @@ export class SignUpComponent {
       firstName: 'Jon',
       lastName: 'Doe',
       middleName: null,
-      password: '',
+      currentPassword: '',
+      newPassword: '',
       isTempPassword: false,
     };
   }

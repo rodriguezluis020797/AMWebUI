@@ -23,6 +23,16 @@ export class ProviderService {
       );
   }
 
+  updateProviderAsync(provider: ProviderDTO): Observable<ProviderDTO> {
+    return this.http
+      .post<ProviderDTO>('/api/Provider/UpdateProvider', provider)
+      .pipe(
+        catchError((error) =>
+          this.httpErrorHandler.handleError<ProviderDTO>(error)
+        )
+      );
+  }
+
   signupAsync(provider: ProviderDTO): Observable<ProviderDTO> {
     return this.http
       .post<ProviderDTO>('/api/Provider/CreateProvider', provider)

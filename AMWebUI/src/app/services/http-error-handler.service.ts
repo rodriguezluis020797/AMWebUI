@@ -31,8 +31,7 @@ export class HttpErrorHandlerService {
         return of(dto as unknown as T);
 
       case HttpStatusCodeEnum.BadPassword:
-        dto.errorMessage =
-          'Password does not meet requirements or has been used recently.';
+        dto.errorMessage = 'error';
         return of(dto as unknown as T);
 
       case HttpStatusCodeEnum.Unauthorized:

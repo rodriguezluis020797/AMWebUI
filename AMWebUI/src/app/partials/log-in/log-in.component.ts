@@ -28,7 +28,7 @@ export class LogInComponent implements OnInit {
 
   ngOnInit() {
     this.dto.eMail = 'jdoe@mail.com';
-    this.dto.password = 'Abcdef1#G';
+    this.dto.currentPassword = 'abcdef1#G';
   }
 
   submit() {
@@ -48,6 +48,9 @@ export class LogInComponent implements OnInit {
       } else {
         this.currentStateService.setLoggedIn(true);
         if (this.dto.isTempPassword === true) {
+          this.currentStateService.setTemporaryPassword(
+            this.dto.isTempPassword
+          );
           this.router.navigate(['reset-password']);
         } else {
           this.router.navigate(['dashboard']);

@@ -1,1 +1,34 @@
-<p>provider-profile works!</p>
+<div *ngIf="!loading" class="provider-container">
+  <h2 *ngIf="!editProvider">Details</h2>
+  <h2 *ngIf="editProvider">Edit Details</h2>
+
+  <!-- Display Mode -->
+  <div *ngIf="!editProvider">
+    <div><strong>First Name:</strong> {{ dto.firstName }}</div>
+    <div><strong>Middle Name:</strong> {{ dto.middleName || "—" }}</div>
+    <div><strong>Last Name:</strong> {{ dto.lastName }}</div>
+    <div><strong>E-Mail:</strong> {{ dto.eMail }}</div>
+    <button (click)="edit()">Edit</button>
+  </div>
+
+  <!-- Edit Mode -->
+  <div *ngIf="editProvider">
+    <label for="firstName">First Name</label>
+    <input type="text" id="firstName" [(ngModel)]="editDTO.firstName" />
+
+    <label for="middleName">Middle Name</label>
+    <input type="text" id="middleName" [(ngModel)]="editDTO.middleName" />
+
+    <label for="lastName">Last Name</label>
+    <input type="text" id="lastName" [(ngModel)]="editDTO.lastName" />
+
+    <a routerLink="#">Reset E-Mail</a>
+    <a routerLink="/reset-password">Reset Password</a>
+    <button (click)="editSave()">Save</button>
+    <button (click)="cancelEdit()">Cancel</button>
+  </div>
+</div>
+
+<div *ngIf="loading">
+  <am-loading-screen></am-loading-screen>
+</div>

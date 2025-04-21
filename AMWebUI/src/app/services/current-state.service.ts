@@ -11,6 +11,9 @@ export class CurrentStateService {
   private loggedInSubject = new BehaviorSubject<boolean>(false);
   isLoggedIn$ = this.loggedInSubject.asObservable();
 
+  private temporaryPasswordSubject = new BehaviorSubject<boolean>(false);
+  temporaryPassword$ = this.temporaryPasswordSubject.asObservable();
+
   private lastUrl: string = '';
   private currentUrl: string = '';
 
@@ -33,6 +36,13 @@ export class CurrentStateService {
   }
 
   getLoggedIn(): boolean {
+    return this.loggedInSubject.value;
+  }
+
+  setTemporaryPassword(value: boolean) {
+    this.temporaryPasswordSubject.next(value);
+  }
+  getTemporaryPassword(): boolean {
     return this.loggedInSubject.value;
   }
 
