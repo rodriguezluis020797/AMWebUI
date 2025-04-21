@@ -1,20 +1,7 @@
 <div class="dashboard-container" *ngIf="!loadingProvider">
   <h2>Welcome, {{ provider.firstName }}!</h2>
-
-  <div class="user-info">
-    <label>First Name:</label>
-    <p>{{ provider.firstName }}</p>
-
-    <label>Middle Name:</label>
-    <p>{{ provider.middleName || "—" }}</p>
-
-    <label>Last Name:</label>
-    <p>{{ provider.lastName }}</p>
-
-    <label>Email:</label>
-    <p>{{ provider.eMail }}</p>
+  <h3>Replace with daily appointment report...</h3>
+  <div class="dashboard-container" *ngIf="loadingProvider">
+    <am-loading-screen></am-loading-screen>
   </div>
-</div>
-<div class="dashboard-container" *ngIf="loadingProvider">
-  <am-loading-screen></am-loading-screen>
 </div>

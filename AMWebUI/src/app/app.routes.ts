@@ -6,6 +6,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { UnauthorizedComponent } from './partials/unauthorized/unauthorized.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { authorizationGuard } from './guards/authorization.guard';
+import { ProviderProfileComponent } from './provider-profile/provider-profile.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -16,6 +17,11 @@ export const routes: Routes = [
   {
     path: 'dashboard',
     component: DashboardComponent,
+    canActivate: [authorizationGuard],
+  },
+  {
+    path: 'provider-profile',
+    component: ProviderProfileComponent,
     canActivate: [authorizationGuard],
   },
 ];
