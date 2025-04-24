@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
+import { ProviderService } from '../../services/provider.service';
 
 @Component({
   standalone: true,
@@ -11,7 +12,10 @@ import { LoadingScreenComponent } from '../loading-screen/loading-screen.compone
   styleUrls: ['./verify-email.component.css'],
 })
 export class VerifyEMailComponent implements OnInit {
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private providerService: ProviderService
+  ) {}
 
   guid: string | null = null;
   isNew: boolean | null = null;
@@ -25,10 +29,10 @@ export class VerifyEMailComponent implements OnInit {
     this.guid = guidParam && guidRegex.test(guidParam) ? guidParam : null;
 
     switch (this.route.snapshot.queryParamMap.get('isNew')) {
-      case 'true':
+      case 'True':
         this.isNew = true;
         break;
-      case 'false':
+      case 'False':
         this.isNew = false;
         break;
       default:
@@ -39,6 +43,16 @@ export class VerifyEMailComponent implements OnInit {
       this.message = 'URL link is broken. Unable to process transaction.';
       this.loading = false;
     } else {
+      this.providerService
+        .verifyUpdateEMailAsync(this.guid)
+        .subscribe((result) => {
+          if (result.errorMessage !== '') {
+            this.message = result.errorMessage;
+          } else {
+            this.message = 'E-Mail successfully updated.';
+          }
+          this.loading = false;
+        });
     }
   }
 }

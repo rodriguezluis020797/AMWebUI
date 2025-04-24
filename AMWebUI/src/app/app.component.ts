@@ -4,11 +4,9 @@ import { CommonModule } from '@angular/common';
 import { FooterComponent } from './partials/footer/footer.component';
 import { SystemStatusService } from './services/system-status.service';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
-import { SystemUnavailableComponent } from './partials/system-unavailable/system-unavailable.component';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { CookiesService } from './services/cookies.service';
 import { CurrentStateService } from './services/current-state.service';
-import { filter, of, switchMap } from 'rxjs';
+import { filter, of, switchMap, take } from 'rxjs';
 import { IdentityService } from './services/identity.service';
 import { HttpStatusCodeEnum } from './models/Enums';
 
@@ -35,28 +33,52 @@ export class AppComponent implements OnInit {
   title = 'AM';
   loading = true;
 
+  private readonly allowlistedRoutes = [
+    '/',
+    '/verify-email',
+    '/unauthorized',
+    '/error',
+  ];
+
   ngOnInit(): void {
-    this.systemStatusService
-      .fullSystemCheckAsync()
+    this.router.events
       .pipe(
-        switchMap((systemOk) => {
-          if (!systemOk) {
-            this.router.navigate(['/error']);
-            return of(null); // stop the chain
-          }
-          return this.identityService.isLoggedInAsync();
+        filter((event) => event instanceof NavigationEnd),
+        take(1),
+        switchMap((event) => {
+          const currentUrl = (event as NavigationEnd).urlAfterRedirects.split(
+            '?'
+          )[0];
+          const shouldCheckLogin = !this.allowlistedRoutes.includes(currentUrl);
+
+          return this.systemStatusService.fullSystemCheckAsync().pipe(
+            switchMap((systemOk) => {
+              if (!systemOk) {
+                this.router.navigate(['/error']);
+                return of(null);
+              }
+
+              // Only perform login check if route is not allowlisted
+              return shouldCheckLogin
+                ? this.identityService.isLoggedInAsync()
+                : of(null);
+            })
+          );
         })
       )
       .subscribe((isLoggedIn) => {
+        const currentUrl = this.router.url.split('?')[0];
+
         if (isLoggedIn === null) {
           this.loading = false;
           return;
         }
 
-        if (isLoggedIn) {
-          this.currentStateService.loggedInSubject.next(true);
+        this.currentStateService.loggedInSubject.next(isLoggedIn);
+
+        if (isLoggedIn && (currentUrl === '/' || currentUrl === '/login')) {
           this.router.navigate(['dashboard']);
-        } else {
+        } else if (!isLoggedIn) {
           this.router.navigate(['']);
         }
 
@@ -68,18 +90,13 @@ export class AppComponent implements OnInit {
     const nowUtc = this.currentStateService.getUTCDate(new Date());
     const lastPinged = this.currentStateService.lastPingSubject.value;
 
-    console.log('Now UTC: ' + nowUtc);
-    console.log('Last Pinged: ' + lastPinged);
-
     const shouldPing =
       !lastPinged || nowUtc.getTime() - lastPinged.getTime() > 5 * 60 * 1000;
 
     if (!shouldPing) return;
 
-    console.log('Ping at ' + nowUtc);
     this.identityService.pingAsync().subscribe((result) => {
       this.currentStateService.lastPingSubject.next(nowUtc);
-      console.log('result.status: ' + result.status);
       if (result.status === HttpStatusCodeEnum.Unauthorized) {
         this.router.navigate(['/unauthorized']);
       }

@@ -43,6 +43,20 @@ export class ProviderService {
       );
   }
 
+  verifyUpdateEMailAsync(guid: string): Observable<ProviderDTO> {
+    return this.http
+      .get<ProviderDTO>('/api/Provider/VerifyUpdateEMail', {
+        params: {
+          guid: guid,
+        },
+      })
+      .pipe(
+        catchError((error) =>
+          this.httpErrorHandler.handleError<ProviderDTO>(error)
+        )
+      );
+  }
+
   signupAsync(provider: ProviderDTO): Observable<ProviderDTO> {
     return this.http
       .post<ProviderDTO>('/api/Provider/CreateProvider', provider)

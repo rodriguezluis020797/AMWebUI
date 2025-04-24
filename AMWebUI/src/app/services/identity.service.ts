@@ -1,8 +1,14 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
+import {
+  HttpClient,
+  HttpErrorResponse,
+  HttpHeaders,
+  HttpResponse,
+} from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { ProviderDTO } from '../models/ProviderDTO';
+import { HttpStatusCodeEnum } from '../models/Enums';
 
 @Injectable({
   providedIn: 'root',
@@ -14,11 +20,14 @@ export class IdentityService {
   ) {}
 
   isLoggedInAsync() {
-    return this.http
-      .get<boolean>('/api/Identity/IsLoggedIn')
-      .pipe(
-        catchError((error) => this.httpErrorHandler.handleError<boolean>(error))
-      );
+    return this.http.get<boolean>('/api/Identity/IsLoggedIn').pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.status === HttpStatusCodeEnum.Unauthorized) {
+          return of(false); // Not logged in
+        }
+        return this.httpErrorHandler.handleError<boolean>(error);
+      })
+    );
   }
   loginAsync(provider: ProviderDTO): Observable<ProviderDTO | false> {
     return this.http
