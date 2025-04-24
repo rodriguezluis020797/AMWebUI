@@ -58,7 +58,7 @@ export class AppComponent implements OnInit {
       this.performPing(nowUtc);
       return;
     }
-    const fiveMinutesInMs = 0; //5 * 60 * 1000;
+    const fiveMinutesInMs = 5 * 60 * 1000;
     const timeSinceLastPing = nowUtc.getTime() - lastPinged.getTime();
 
     if (timeSinceLastPing > fiveMinutesInMs) {

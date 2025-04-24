@@ -1,0 +1,39 @@
+:host ::ng-deep .message-container {
+    background-color: #FFFFFF;
+    color: #000000;
+    padding: 2rem;
+    border-radius: 8px;
+    border: 1px solid #000000;
+    width: 400px;
+    margin: 100px auto; /* Center with margin */
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  :host ::ng-deep .message-container h2 {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    color: #000000;
+  }
+  
+  :host ::ng-deep .message-container p {
+    font-size: 1rem;
+    margin-bottom: 2rem;
+    color: #000000;
+  }
+  
+  :host ::ng-deep .message-container a {
+    color: #000000;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    border: 1px solid #000000;
+    border-radius: 4px;
+    transition: background-color 0.3s;
+  }
+  
+  :host ::ng-deep .message-container a:hover {
+    background-color: #f0f0f0;
+    text-decoration: underline;
+  }

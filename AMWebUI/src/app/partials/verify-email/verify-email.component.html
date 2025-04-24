@@ -1,1 +1,9 @@
-<p>verify-email works!</p>
+<div *ngIf="!loading" class="message-container">
+  <h2>Verification</h2>
+  <p>{{ message }}</p>
+  <a routerLink="/">Home</a>
+</div>
+
+<div *ngIf="loading" class="message-container">
+  <am-loading-screen></am-loading-screen>
+</div>

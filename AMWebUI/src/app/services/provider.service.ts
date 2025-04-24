@@ -33,6 +33,16 @@ export class ProviderService {
       );
   }
 
+  updateEMailAsync(provider: ProviderDTO): Observable<ProviderDTO> {
+    return this.http
+      .post<ProviderDTO>('/api/Provider/UpdateEMail', provider)
+      .pipe(
+        catchError((error) =>
+          this.httpErrorHandler.handleError<ProviderDTO>(error)
+        )
+      );
+  }
+
   signupAsync(provider: ProviderDTO): Observable<ProviderDTO> {
     return this.http
       .post<ProviderDTO>('/api/Provider/CreateProvider', provider)

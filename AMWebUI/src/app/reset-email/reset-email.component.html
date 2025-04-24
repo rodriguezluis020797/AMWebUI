@@ -1,0 +1,31 @@
+<div class="reset-email" *ngIf="!loading && !success">
+  <h2>Update E-Mail</h2>
+  <div *ngIf="dto.errorMessage" class="error-message">
+    <p>{{ dto.errorMessage }}</p>
+  </div>
+  <div>
+    <label for="username">E-Mail:</label>
+    <input
+      type="text"
+      id="username"
+      [(ngModel)]="dto.eMail"
+      name="username"
+      required
+    />
+  </div>
+  <button *ngIf="!disableSubmit" type="submit" (click)="submit()">
+    Update E-Mail
+  </button>
+  <button *ngIf="disableSubmit" disabled>Update E-Mail</button>
+  <a routerLink="/provider-profile">Cancel</a>
+</div>
+
+<div class="reset-email" *ngIf="!loading && success">
+  <h2>Update E-Mail</h2>
+  <p>Please check your new e-mail's inbox to verify your new e-mail.</p>
+  <a routerLink="/provider-profile">Back To Profile</a>
+</div>
+
+<div class="reset-email" *ngIf="loading && !success">
+  <am-loading-screen></am-loading-screen>
+</div>
