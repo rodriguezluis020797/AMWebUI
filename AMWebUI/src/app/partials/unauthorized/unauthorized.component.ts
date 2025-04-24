@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
+import { IdentityService } from '../../services/identity.service';
 
 @Component({
   selector: 'am-unauthorized',
@@ -10,12 +11,17 @@ import { Router } from '@angular/router';
 })
 export class UnauthorizedComponent {
   countdown: number;
-  constructor(private router: Router) {
+  constructor(
+    private router: Router,
+    private identityService: IdentityService
+  ) {
     this.countdown = 20;
   }
 
   ngOnInit() {
-    this.countdownTicker();
+    this.identityService.logoutAsync().subscribe((result) => {
+      this.countdownTicker();
+    });
   }
 
   countdownTicker() {

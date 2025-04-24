@@ -21,7 +21,7 @@ export class ResetPasswordComponent implements OnInit {
     private currentStateService: CurrentStateService
   ) {}
   ngOnInit(): void {
-    this.currentStateService.temporaryPassword$.subscribe((result) => {
+    this.currentStateService.isTemporaryPassword$.subscribe((result) => {
       this.dto.isTempPassword = result;
     });
   }
@@ -43,7 +43,7 @@ export class ResetPasswordComponent implements OnInit {
       }
       if (this.dto.firstName !== '') {
         if (this.dto.isTempPassword) {
-          this.currentStateService.setTemporaryPassword(false);
+          this.currentStateService.temporaryPasswordSubject.next(false);
           this.router.navigate(['dashboard']);
         } else {
           this.router.navigate(['provider-profile']);

@@ -1,4 +1,4 @@
-import { HttpErrorResponse } from '@angular/common/http';
+import { HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
@@ -35,8 +35,8 @@ export class HttpErrorHandlerService {
         return of(dto as unknown as T);
 
       case HttpStatusCodeEnum.Unauthorized:
-        this.currentStateService.setLoggedIn(false);
-        this.router.navigate(['unauthorized']);
+        this.currentStateService.loggedInSubject.next(false);
+        this.router.navigate(['/unauthorized']);
         return of(null as unknown as T);
 
       default:

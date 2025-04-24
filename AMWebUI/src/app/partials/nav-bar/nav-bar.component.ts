@@ -34,7 +34,7 @@ export class NavBarComponent implements OnInit {
   logOut() {
     this.identityService.logoutAsync().subscribe((result) => {
       if (result) {
-        this.currentStateService.setLoggedIn(false);
+        this.currentStateService.loggedInSubject.next(false);
         this.router.navigate(['']);
       } else {
         this.router.navigate(['error']);

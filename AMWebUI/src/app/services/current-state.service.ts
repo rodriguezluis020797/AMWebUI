@@ -1,75 +1,39 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Router, NavigationEnd } from '@angular/router';
-import { filter } from 'rxjs/operators';
+import { Router } from '@angular/router';
 import { CookiesService } from './cookies.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CurrentStateService {
-  private loggedInSubject = new BehaviorSubject<boolean>(false);
-  isLoggedIn$ = this.loggedInSubject.asObservable();
+  //#region Logged In Subject
+  readonly loggedInSubject = new BehaviorSubject<boolean>(false);
+  readonly isLoggedIn$ = this.loggedInSubject.asObservable();
+  //#endregion
 
-  private temporaryPasswordSubject = new BehaviorSubject<boolean>(false);
-  temporaryPassword$ = this.temporaryPasswordSubject.asObservable();
+  //#region Temporary Password Subject
+  readonly temporaryPasswordSubject = new BehaviorSubject<boolean>(false);
+  readonly isTemporaryPassword$ = this.temporaryPasswordSubject.asObservable();
+  //#endregion
 
-  private lastUrl: string = '';
-  private currentUrl: string = '';
+  //#region Should Ping Subject
+  readonly lastPingSubject = new BehaviorSubject<Date>(new Date());
+  readonly lastPingSubject$ = this.lastPingSubject.asObservable();
+  //#endregion
 
-  constructor(private router: Router, private cookieService: CookiesService) {
-    this.initializeLoggedInState();
+  getUTCDate(localDate: Date) {
+    return new Date(
+      localDate.getUTCFullYear(),
+      localDate.getUTCMonth(),
+      localDate.getUTCDate(),
+      localDate.getUTCHours(),
+      localDate.getUTCMinutes(),
+      localDate.getUTCSeconds()
+    );
   }
 
-  private initializeLoggedInState(): void {
-    const isLoggedIn = this.cookieService.getCookie('loggedIn') === 'true';
-    this.loggedInSubject.next(isLoggedIn);
-  }
+  private currentUrl = '';
 
-  setLoggedIn(value: boolean) {
-    if (!value) {
-      this.cookieService.deleteAllCookies();
-    } else {
-      this.cookieService.setCookie('loggedIn', String(value));
-    }
-    this.loggedInSubject.next(value);
-  }
-
-  getLoggedIn(): boolean {
-    return this.loggedInSubject.value;
-  }
-
-  setTemporaryPassword(value: boolean) {
-    this.temporaryPasswordSubject.next(value);
-  }
-  getTemporaryPassword(): boolean {
-    return this.loggedInSubject.value;
-  }
-
-  setCurrentUrl(url: string): void {
-    this.currentUrl = url;
-    this.cookieService.setCookie('currentUrl', url);
-  }
-
-  setLastUrl(url: string): void {
-    this.cookieService.setCookie('lastUrl', url);
-  }
-
-  getLastUrl(): string {
-    return this.cookieService.getCookie('lastUrl') || '/';
-  }
-
-  getCurrentUrl(): string {
-    return this.currentUrl;
-  }
-
-  shouldIgnoreUrl(url: string): boolean {
-    const ignoredRoutes = [
-      '/sign-up',
-      '/error',
-      '/unauthorized',
-      '/reset-password',
-    ];
-    return ignoredRoutes.includes(url);
-  }
+  constructor(private readonly router: Router) {}
 }

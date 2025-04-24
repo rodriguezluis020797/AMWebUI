@@ -1,6 +1,7 @@
 export enum HttpStatusCodeEnum {
   Unknown = 0,
   Success = 200,
+  LoggedIn = 201,
   BadCredentials = 400,
   Unauthorized = 401,
   BadPassword = 402,

@@ -46,9 +46,9 @@ export class LogInComponent implements OnInit {
       if (this.dto.firstName === '') {
         this.dto.errorMessage = 'Invalid Credentials';
       } else {
-        this.currentStateService.setLoggedIn(true);
+        this.currentStateService.loggedInSubject.next(true);
         if (this.dto.isTempPassword === true) {
-          this.currentStateService.setTemporaryPassword(
+          this.currentStateService.temporaryPasswordSubject.next(
             this.dto.isTempPassword
           );
           this.router.navigate(['reset-password']);

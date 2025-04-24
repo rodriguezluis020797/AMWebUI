@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './partials/footer/footer.component';
@@ -10,6 +10,7 @@ import { CookiesService } from './services/cookies.service';
 import { CurrentStateService } from './services/current-state.service';
 import { filter } from 'rxjs';
 import { IdentityService } from './services/identity.service';
+import { HttpStatusCodeEnum } from './models/Enums';
 
 @Component({
   selector: 'app-root',
@@ -24,10 +25,9 @@ import { IdentityService } from './services/identity.service';
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
 })
-export class AppComponent {
+export class AppComponent implements OnInit {
   constructor(
     private systemStatusService: SystemStatusService,
-    private cookieService: CookiesService,
     private currentStateService: CurrentStateService,
     private router: Router,
     private identityService: IdentityService
@@ -37,78 +37,29 @@ export class AppComponent {
   loading = true;
   systemAvailable = false;
 
-  ngOnInit() {
+  ngOnInit(): void {
     this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
       this.systemAvailable = result;
-      this.loading = false;
-
-      if (!result) {
+      if (!this.systemAvailable) {
         this.router.navigate(['/error']);
-        return;
       }
-
-      // Only runs if system is available
-      let lastRoute = '';
-
-      if (this.currentStateService.getLoggedIn()) {
-        lastRoute = this.currentStateService.getLastUrl();
-        this.currentStateService.setLoggedIn(true);
-        this.router.navigate(['dashboard']);
-        return;
-      } else {
-        this.cookieService.deleteAllCookies();
-        this.identityService.logoutAsync().subscribe();
-        this.currentStateService.setLoggedIn(false);
-      }
-
-      setTimeout(() => {
-        if (
-          lastRoute &&
-          lastRoute !== '' &&
-          !this.currentStateService.shouldIgnoreUrl(lastRoute)
-        ) {
-          this.router.navigateByUrl(lastRoute);
-        } else {
-          this.cookieService.deleteAllCookies();
-          this.router.navigate(['']);
-        }
-      });
-
-      // ✅ Router events will now fire correctly
-      this.router.events
-        .pipe(filter((event) => event instanceof NavigationEnd))
-        .subscribe((event: NavigationEnd) => {
-          const previousUrl = this.currentStateService.getCurrentUrl();
-          this.currentStateService.setLastUrl(previousUrl);
-          this.currentStateService.setCurrentUrl(event.urlAfterRedirects);
-        });
+      this.loading = false;
     });
   }
 
-  isSystemAvailable(): boolean {
-    this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
-      this.systemAvailable = result;
-      this.loading = false;
+  shouldPing(): void {
+    const nowUtc = this.currentStateService.getUTCDate(new Date());
+    const lastPinged = this.currentStateService.lastPingSubject.value;
 
-      if (!result) {
-        this.router.navigate(['/error']);
-      }
-    });
-    return false;
-  }
-
-  ping(): void {
-    const nowUtc = new Date();
-    const lastPinged = this.cookieService.getCookie('lastPing');
+    console.log('Now UTC: ' + nowUtc);
+    console.log('Last Pinged: ' + lastPinged);
 
     if (!lastPinged) {
       this.performPing(nowUtc);
       return;
     }
-
-    const lastPingDateUtc = new Date(lastPinged);
-    const fiveMinutesInMs = 5 * 60 * 1000;
-    const timeSinceLastPing = nowUtc.getTime() - lastPingDateUtc.getTime();
+    const fiveMinutesInMs = 0; //5 * 60 * 1000;
+    const timeSinceLastPing = nowUtc.getTime() - lastPinged.getTime();
 
     if (timeSinceLastPing > fiveMinutesInMs) {
       this.performPing(nowUtc);
@@ -116,13 +67,13 @@ export class AppComponent {
   }
 
   performPing(nowUtc: Date) {
-    console.log('ping at ' + nowUtc);
-    this.identityService.pingAsync().subscribe(() => {
-      this.cookieService.setCookie('lastPing', nowUtc.toISOString());
+    console.log('Ping at ' + nowUtc);
+    this.identityService.pingAsync().subscribe((result) => {
+      this.currentStateService.lastPingSubject.next(nowUtc);
+      console.log('result.status: ' + result.status);
+      if (result.status === HttpStatusCodeEnum.Unauthorized) {
+        this.router.navigate(['/unauthorized']);
+      }
     });
-  }
-
-  isLoggedIn() {
-    return this.currentStateService.getLoggedIn();
   }
 }

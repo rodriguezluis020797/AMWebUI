@@ -20,7 +20,7 @@ export class SystemUnavailableComponent implements OnInit {
   ) {}
   ngOnInit(): void {
     this.cookieService.deleteAllCookies();
-    this.currentStateService.setLoggedIn(false);
+    this.currentStateService.loggedInSubject.next(false);
   }
 
   time = new Date();

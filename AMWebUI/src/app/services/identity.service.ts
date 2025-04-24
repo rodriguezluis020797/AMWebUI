@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpResponse } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { ProviderDTO } from '../models/ProviderDTO';
@@ -45,10 +45,18 @@ export class IdentityService {
       );
   }
 
-  pingAsync(): Observable<any> {
+  pingAsync(): Observable<HttpResponse<any>> {
     return this.http
-      .get('/api/Identity/Ping', { headers: this.getFingerprintHeaders() })
-      .pipe(catchError((error) => this.httpErrorHandler.handleError(error)));
+      .get('/api/Identity/Ping', {
+        withCredentials: true,
+        headers: this.getFingerprintHeaders(),
+        observe: 'response',
+      })
+      .pipe(
+        catchError((error) =>
+          this.httpErrorHandler.handleError<HttpResponse<any>>(error)
+        )
+      );
   }
 
   private getFingerprintHeaders(): HttpHeaders {
