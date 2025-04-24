@@ -1,6 +1,6 @@
-<div (click)="shouldPing()">
+<div (click)="pingIfNeeded()">
   <div *ngIf="!loading" class="wrapper">
-    <div *ngIf="systemAvailable">
+    <div>
       <am-nav-bar></am-nav-bar>
 
       <div class="main-content">
@@ -9,14 +9,10 @@
       <am-footer></am-footer>
     </div>
 
-    <div *ngIf="!systemAvailable">
-      <am-system-unavailable></am-system-unavailable>
-    </div>
-  </div>
-
-  <div *ngIf="loading" class="wrapper">
-    <div class="main-content">
-      <am-loading-screen></am-loading-screen>
+    <div *ngIf="loading" class="wrapper">
+      <div class="main-content">
+        <am-loading-screen></am-loading-screen>
+      </div>
     </div>
   </div>
 </div>

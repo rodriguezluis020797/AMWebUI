@@ -8,7 +8,7 @@ import { SystemUnavailableComponent } from './partials/system-unavailable/system
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { CookiesService } from './services/cookies.service';
 import { CurrentStateService } from './services/current-state.service';
-import { filter } from 'rxjs';
+import { filter, of, switchMap } from 'rxjs';
 import { IdentityService } from './services/identity.service';
 import { HttpStatusCodeEnum } from './models/Enums';
 
@@ -20,7 +20,6 @@ import { HttpStatusCodeEnum } from './models/Enums';
     NavBarComponent,
     FooterComponent,
     LoadingScreenComponent,
-    SystemUnavailableComponent,
   ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css',
@@ -35,38 +34,48 @@ export class AppComponent implements OnInit {
 
   title = 'AM';
   loading = true;
-  systemAvailable = false;
 
   ngOnInit(): void {
-    this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
-      this.systemAvailable = result;
-      if (!this.systemAvailable) {
-        this.router.navigate(['/error']);
-      }
-      this.loading = false;
-    });
+    this.systemStatusService
+      .fullSystemCheckAsync()
+      .pipe(
+        switchMap((systemOk) => {
+          if (!systemOk) {
+            this.router.navigate(['/error']);
+            return of(null); // stop the chain
+          }
+          return this.identityService.isLoggedInAsync();
+        })
+      )
+      .subscribe((isLoggedIn) => {
+        if (isLoggedIn === null) {
+          this.loading = false;
+          return;
+        }
+
+        if (isLoggedIn) {
+          this.currentStateService.loggedInSubject.next(true);
+          this.router.navigate(['dashboard']);
+        } else {
+          this.router.navigate(['']);
+        }
+
+        this.loading = false;
+      });
   }
 
-  shouldPing(): void {
+  pingIfNeeded(): void {
     const nowUtc = this.currentStateService.getUTCDate(new Date());
     const lastPinged = this.currentStateService.lastPingSubject.value;
 
     console.log('Now UTC: ' + nowUtc);
     console.log('Last Pinged: ' + lastPinged);
 
-    if (!lastPinged) {
-      this.performPing(nowUtc);
-      return;
-    }
-    const fiveMinutesInMs = 5 * 60 * 1000;
-    const timeSinceLastPing = nowUtc.getTime() - lastPinged.getTime();
+    const shouldPing =
+      !lastPinged || nowUtc.getTime() - lastPinged.getTime() > 5 * 60 * 1000;
 
-    if (timeSinceLastPing > fiveMinutesInMs) {
-      this.performPing(nowUtc);
-    }
-  }
+    if (!shouldPing) return;
 
-  performPing(nowUtc: Date) {
     console.log('Ping at ' + nowUtc);
     this.identityService.pingAsync().subscribe((result) => {
       this.currentStateService.lastPingSubject.next(nowUtc);

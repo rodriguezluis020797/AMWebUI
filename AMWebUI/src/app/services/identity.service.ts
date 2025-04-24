@@ -13,6 +13,13 @@ export class IdentityService {
     private httpErrorHandler: HttpErrorHandlerService
   ) {}
 
+  isLoggedInAsync() {
+    return this.http
+      .get<boolean>('/api/Identity/IsLoggedIn')
+      .pipe(
+        catchError((error) => this.httpErrorHandler.handleError<boolean>(error))
+      );
+  }
   loginAsync(provider: ProviderDTO): Observable<ProviderDTO | false> {
     return this.http
       .post<ProviderDTO>('/api/Identity/Login', provider, {
