@@ -1,7 +1,7 @@
 export class BaseDTO {
-  errorMessage: string;
+  errorMessage: string | null;
 
   constructor() {
-    this.errorMessage = '';
+    this.errorMessage = null;
   }
 }

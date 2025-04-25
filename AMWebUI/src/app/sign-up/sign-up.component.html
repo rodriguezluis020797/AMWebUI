@@ -1,53 +1,56 @@
-<div *ngIf="!signUpSuccessful" class="login-container">
-  <h2>Sign Up</h2>
-  <div *ngIf="dto.errorMessage" class="error-message">
-    <p>{{ dto.errorMessage }}</p>
+<div *ngIf="!loading">
+  <div *ngIf="!signUpSuccessful" class="login-container">
+    <h2>Sign Up</h2>
+    <div *ngIf="result.errorMessage" class="error-message">
+      <p>{{ result.errorMessage }}</p>
+    </div>
+    <div>
+      <label for="username">E-Mail:</label>
+      <input
+        type="text"
+        id="username"
+        [(ngModel)]="dto.eMail"
+        name="username"
+        required
+      />
+    </div>
+    <div>
+      <label for="firstName">First Name:</label>
+      <input
+        type="text"
+        id="firstName"
+        [(ngModel)]="dto.firstName"
+        name="firstName"
+        required
+      />
+    </div>
+    <div>
+      <label for="lastName">Last Name:</label>
+      <input
+        type="text"
+        id="lastName"
+        [(ngModel)]="dto.lastName"
+        name="lastName"
+        required
+      />
+    </div>
+    <button type="submit" (click)="submit()">Sign Up</button>
+    <a routerLink="">Login Here</a>
   </div>
-  <div>
-    <label for="username">E-Mail:</label>
-    <input
-      type="text"
-      id="username"
-      [(ngModel)]="dto.eMail"
-      name="username"
-      required
-    />
+
+  <div *ngIf="signUpSuccessful" class="login-container">
+    <h2>Thank You!</h2>
+    <p class="message">
+      Thank you for requesting access!
+      <br />
+      Please verify your email using the link sent to your inbox. Once verified,
+      you’ll receive a follow-up email letting you know when you’re ready to
+      start using our system!
+    </p>
+    <a routerLink="/">Home</a>
   </div>
-  <div>
-    <label for="firstName">First Name:</label>
-    <input
-      type="text"
-      id="firstName"
-      [(ngModel)]="dto.firstName"
-      name="firstName"
-      required
-    />
-  </div>
-  <div>
-    <label for="lastName">Last Name:</label>
-    <input
-      type="text"
-      id="lastName"
-      [(ngModel)]="dto.lastName"
-      name="lastName"
-      required
-    />
-  </div>
-  <button *ngIf="!disableSubmit" type="submit" (click)="submit()">
-    Sign Up
-  </button>
-  <button *ngIf="disableSubmit" disabled>Sign Up</button>
-  <a routerLink="">Login Here</a>
 </div>
 
-<div *ngIf="signUpSuccessful" class="login-container">
-  <h2>Thank You!</h2>
-  <p class="message">
-    Thank you for requesting access!
-    <br />
-    Please verify your email using the link sent to your inbox. Once verified,
-    you’ll receive a follow-up email letting you know when you’re ready to start
-    using our system!
-  </p>
-  <a routerLink="/">Home</a>
+<div *ngIf="loading" class="login-container">
+  <am-loading-screen></am-loading-screen>
 </div>
