@@ -25,6 +25,7 @@ export class SignUpComponent {
     this.dto = {
       eMail: 'jdoe@gmail.com',
       errorMessage: '',
+      isSpecialCase: false,
       firstName: 'Jon',
       lastName: 'Doe',
       middleName: null,

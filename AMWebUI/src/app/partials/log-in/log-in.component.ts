@@ -36,7 +36,8 @@ export class LogInComponent implements OnInit {
     this.identityService.loginAsync(this.dto).subscribe((result) => {
       if (result.errorMessage !== null) {
         this.message = result.errorMessage;
-        this.loading = false;
+        this.dto.currentPassword = '';
+        this.setTimeout();
         return;
       }
 
@@ -47,10 +48,13 @@ export class LogInComponent implements OnInit {
       } else {
         this.router.navigate(['dashboard']);
       }
-
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
+      this.setTimeout();
     });
+  }
+
+  private setTimeout() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000);
   }
 }
