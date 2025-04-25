@@ -23,8 +23,8 @@ export class LogInComponent implements OnInit {
   ) {}
 
   dto: ProviderDTO = new ProviderDTO();
-  disableSubmit = false;
   loading = false;
+  message: string | null = null;
 
   ngOnInit() {
     this.dto.eMail = 'jdoe@gmail.com';
@@ -32,36 +32,25 @@ export class LogInComponent implements OnInit {
   }
 
   submit() {
-    this.disableSubmit = true;
     this.loading = true;
-    this.identityService.loginAsync(this.dto).subscribe((provider) => {
-      if (provider === false || provider == null) {
+    this.identityService.loginAsync(this.dto).subscribe((result) => {
+      if (result.errorMessage !== null) {
+        this.message = result.errorMessage;
         this.loading = false;
-        this.router.navigate(['error']);
         return;
       }
 
-      this.dto = provider;
-
-      if (this.dto.firstName === '') {
-        this.dto.errorMessage = 'Invalid Credentials';
+      this.currentStateService.loggedInSubject.next(true);
+      if (result.isSpecialCase === true) {
+        this.currentStateService.temporaryPasswordSubject.next(true);
+        this.router.navigate(['reset-password']);
       } else {
-        this.currentStateService.loggedInSubject.next(true);
-        if (this.dto.isTempPassword === true) {
-          this.currentStateService.temporaryPasswordSubject.next(
-            this.dto.isTempPassword
-          );
-          this.router.navigate(['reset-password']);
-        } else {
-          this.router.navigate(['dashboard']);
-        }
+        this.router.navigate(['dashboard']);
       }
 
-      this.loading = false;
+      setTimeout(() => {
+        this.loading = false;
+      }, 2000);
     });
-
-    setTimeout(() => {
-      this.disableSubmit = false;
-    }, 3000);
   }
 }

@@ -9,6 +9,7 @@ import { catchError, Observable, of } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { HttpStatusCodeEnum } from '../models/Enums';
+import { BaseDTO } from '../models/BaseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -29,15 +30,13 @@ export class IdentityService {
       })
     );
   }
-  loginAsync(provider: ProviderDTO): Observable<ProviderDTO | false> {
+  loginAsync(provider: ProviderDTO): Observable<BaseDTO> {
     return this.http
-      .post<ProviderDTO>('/api/Identity/Login', provider, {
+      .post<BaseDTO>('/api/Identity/Login', provider, {
         headers: this.getFingerprintHeaders(),
       })
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<ProviderDTO>(error)
-        )
+        catchError((error) => this.httpErrorHandler.handleError<BaseDTO>(error))
       );
   }
 

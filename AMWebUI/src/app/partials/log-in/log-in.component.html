@@ -23,8 +23,7 @@
       required
     />
   </div>
-  <button *ngIf="!disableSubmit" type="submit" (click)="submit()">Login</button>
-  <button *ngIf="disableSubmit" disabled>Login</button>
+  <button type="submit" (click)="submit()">Login</button>
   <a routerLink="/sign-up">Request Access Here</a>
 </div>
 
