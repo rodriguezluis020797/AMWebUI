@@ -49,7 +49,7 @@ export class VerifyEMailComponent implements OnInit {
           if (result.errorMessage !== '') {
             this.message = result.errorMessage;
           } else {
-            this.message = 'E-Mail successfully updated.';
+            this.message = 'E-Mail successfully verified.';
           }
           this.loading = false;
         });

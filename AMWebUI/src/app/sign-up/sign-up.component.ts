@@ -34,6 +34,10 @@ export class SignUpComponent {
     this.disableSubmit = true;
     this.providerService.signupAsync(this.dto).subscribe((provider) => {
       this.dto = provider;
+      if (this.dto.errorMessage === '') {
+        this.signUpSuccessful = true;
+      }
+
       setTimeout(() => {
         this.disableSubmit = false;
       }, 3000);
