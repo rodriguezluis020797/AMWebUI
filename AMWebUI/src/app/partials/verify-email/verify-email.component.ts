@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
 import { ProviderService } from '../../services/provider.service';
+import { BaseDTO } from '../../models/BaseDTO';
 
 @Component({
   standalone: true,
@@ -29,10 +30,10 @@ export class VerifyEMailComponent implements OnInit {
     this.guid = guidParam && guidRegex.test(guidParam) ? guidParam : null;
 
     switch (this.route.snapshot.queryParamMap.get('isNew')) {
-      case 'True':
+      case 'true':
         this.isNew = true;
         break;
-      case 'False':
+      case 'false':
         this.isNew = false;
         break;
       default:
@@ -46,7 +47,7 @@ export class VerifyEMailComponent implements OnInit {
       this.providerService
         .verifyUpdateEMailAsync(this.guid)
         .subscribe((result) => {
-          if (result.errorMessage !== '') {
+          if (result.errorMessage !== null) {
             this.message = result.errorMessage;
           } else {
             this.message = 'E-Mail successfully verified.';

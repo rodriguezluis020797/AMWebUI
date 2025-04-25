@@ -37,7 +37,7 @@ export class SignUpComponent {
   }
   submit() {
     this.loading = true;
-    this.providerService.signupAsync(this.dto).subscribe((result) => {
+    this.providerService.createProviderAsync(this.dto).subscribe((result) => {
       this.result = result;
       if (this.result.errorMessage === null) {
         this.signUpSuccessful = true;

@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { ProviderDTO } from '../models/ProviderDTO';
+import { BaseDTO } from '../models/BaseDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -43,21 +44,19 @@ export class ProviderService {
       );
   }
 
-  verifyUpdateEMailAsync(guid: string): Observable<ProviderDTO> {
+  verifyUpdateEMailAsync(guid: string): Observable<BaseDTO> {
     return this.http
-      .get<ProviderDTO>('/api/Provider/VerifyUpdateEMail', {
+      .get<BaseDTO>('/api/Provider/VerifyUpdateEMail', {
         params: {
           guid: guid,
         },
       })
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<ProviderDTO>(error)
-        )
+        catchError((error) => this.httpErrorHandler.handleError<BaseDTO>(error))
       );
   }
 
-  signupAsync(provider: ProviderDTO): Observable<ProviderDTO> {
+  createProviderAsync(provider: ProviderDTO): Observable<ProviderDTO> {
     return this.http
       .post<ProviderDTO>('/api/Provider/CreateProvider', provider)
       .pipe(
