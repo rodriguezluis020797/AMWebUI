@@ -4,6 +4,8 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
 import { ProviderService } from '../../services/provider.service';
 import { BaseDTO } from '../../models/BaseDTO';
+import { of, switchMap } from 'rxjs';
+import { IdentityService } from '../../services/identity.service';
 
 @Component({
   standalone: true,
@@ -15,7 +17,8 @@ import { BaseDTO } from '../../models/BaseDTO';
 export class VerifyEMailComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
-    private providerService: ProviderService
+    private providerService: ProviderService,
+    private identityService: IdentityService
   ) {}
 
   guid: string | null = null;
@@ -46,12 +49,20 @@ export class VerifyEMailComponent implements OnInit {
     } else {
       this.providerService
         .verifyUpdateEMailAsync(this.guid)
+        .pipe(
+          switchMap((result) => {
+            if (result.errorMessage !== null) {
+              this.message = result.errorMessage;
+              this.loading = false;
+              return of(null);
+            } else {
+              this.message = 'E-Mail successfully verified.';
+              return this.identityService.logoutAsync();
+            }
+          })
+        )
         .subscribe((result) => {
-          if (result.errorMessage !== null) {
-            this.message = result.errorMessage;
-          } else {
-            this.message = 'E-Mail successfully verified.';
-          }
+          console.log('subscribed');
           this.loading = false;
         });
     }

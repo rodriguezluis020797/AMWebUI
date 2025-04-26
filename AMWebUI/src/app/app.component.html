@@ -2,17 +2,16 @@
   <div *ngIf="!loading" class="wrapper">
     <div>
       <am-nav-bar></am-nav-bar>
-
       <div class="main-content">
         <router-outlet></router-outlet>
       </div>
       <am-footer></am-footer>
     </div>
+  </div>
 
-    <div *ngIf="loading" class="wrapper">
-      <div class="main-content">
-        <am-loading-screen></am-loading-screen>
-      </div>
+  <div *ngIf="loading" class="wrapper">
+    <div class="main-content">
+      <am-loading-screen></am-loading-screen>
     </div>
   </div>
 </div>

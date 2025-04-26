@@ -1,4 +1,4 @@
-<div class="system-unavailable">
+<div *ngIf="!loading" class="system-unavailable">
   <h1 class="brand">AM Tech</h1>
   <h2>System Unavailable</h2>
   <p>
@@ -10,4 +10,8 @@
   <button type="button" (click)="reCheckSytemstatus()">
     Check System Status
   </button>
+</div>
+
+<div *ngIf="loading" class="system-unavailable">
+  <am-loading-screen></am-loading-screen>
 </div>

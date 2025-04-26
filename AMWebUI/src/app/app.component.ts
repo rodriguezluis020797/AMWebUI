@@ -34,18 +34,20 @@ export class AppComponent implements OnInit {
   loading: Boolean = true;
 
   ngOnInit(): void {
-    this.loading = true; // Start by setting loading to true
-
     // Handle system status check
     this.systemStatusService
       .fullSystemCheckAsync()
       .pipe(
         switchMap((result) => {
-          if (result) {
-            return this.getCurrentPath(); // Get the current path and continue with the flow
-          } else {
+          console.log(result);
+          if (
+            Number(result) === HttpStatusCodeEnum.ServerError ||
+            Number(result) === HttpStatusCodeEnum.SystemUnavailable
+          ) {
             this.loading = false;
             return of(null); // Skip login check if system check failed
+          } else {
+            return this.getCurrentPath(); // Get the current path and continue with the flow
           }
         }),
         switchMap((currentPath) => {
@@ -61,7 +63,10 @@ export class AppComponent implements OnInit {
         })
       )
       .subscribe((result) => {
-        if (result === null) {
+        if (
+          Number(result) === HttpStatusCodeEnum.ServerError ||
+          Number(result) === HttpStatusCodeEnum.SystemUnavailable
+        ) {
           //do nothing
         }
         // If we received a response from isLoggedInAsync

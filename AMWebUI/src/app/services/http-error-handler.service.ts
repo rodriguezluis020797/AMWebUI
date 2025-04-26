@@ -26,7 +26,7 @@ export class HttpErrorHandlerService {
       case HttpStatusCodeEnum.ServerError:
       case HttpStatusCodeEnum.SystemUnavailable:
         this.router.navigate(['/error']);
-        return of(false as unknown as T);
+        return of(HttpStatusCodeEnum.ServerError as unknown as T);
 
       case HttpStatusCodeEnum.BadCredentials:
         return of(dto as unknown as T);
