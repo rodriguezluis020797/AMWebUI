@@ -6,7 +6,7 @@ import { SystemStatusService } from './services/system-status.service';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { CurrentStateService } from './services/current-state.service';
-import { filter, of, switchMap, take } from 'rxjs';
+import { filter, of, switchMap, take, map, Observable } from 'rxjs';
 import { IdentityService } from './services/identity.service';
 import { HttpStatusCodeEnum } from './models/Enums';
 
@@ -30,76 +30,102 @@ export class AppComponent implements OnInit {
     private identityService: IdentityService
   ) {}
 
-  title = 'AM';
-  loading = true;
+  title: String = 'AM';
+  loading: Boolean = true;
+
+  ngOnInit(): void {
+    this.loading = true; // Start by setting loading to true
+
+    // Handle system status check
+    this.systemStatusService
+      .fullSystemCheckAsync()
+      .pipe(
+        switchMap((result) => {
+          if (result) {
+            return this.getCurrentPath(); // Get the current path and continue with the flow
+          } else {
+            this.loading = false;
+            return of(null); // Skip login check if system check failed
+          }
+        }),
+        switchMap((currentPath) => {
+          // Ensure we do not pass `null` to isCurrentPathAllowlisted
+          const validPath = currentPath ?? ''; // Default to empty string if null
+          if (!this.isCurrentPathAllowlisted(validPath)) {
+            // Only check if logged in if the path is not allowlisted
+            return this.identityService.isLoggedInAsync();
+          } else {
+            this.loading = false; // No need to check login if path is allowlisted
+            return of(null); // Skip login check
+          }
+        })
+      )
+      .subscribe((result) => {
+        if (result === null) {
+          //do nothing
+        }
+        // If we received a response from isLoggedInAsync
+        else if (result?.status === HttpStatusCodeEnum.LoggedIn) {
+          this.currentStateService.loggedInSubject.next(true);
+          this.router.navigate(['dashboard']);
+        } else {
+          this.router.navigate(['']);
+        }
+
+        this.loading = false; // Ensure loading is set to false once everything is done
+      });
+  }
+
+  isCurrentPathAllowlisted(currentPath: string): boolean {
+    return this.allowlistedRoutes.includes(currentPath);
+  }
+
+  // Get the current path from the router
+  getCurrentPath(): Observable<string> {
+    return this.router.events.pipe(
+      filter((event) => event instanceof NavigationEnd), // Ensure navigation is completed
+      take(1), // Only take the first NavigationEnd event
+      map(() => {
+        const currentPath = this.router.url.split('?')[0].split('#')[0]; // Strip query and fragment
+        console.log('Current path:', currentPath); // Log for debugging
+        return currentPath;
+      })
+    );
+  }
 
   private readonly allowlistedRoutes = [
-    '/',
     '/verify-email',
     '/unauthorized',
     '/error',
   ];
 
-  ngOnInit(): void {
-    this.router.events
-      .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        take(1),
-        switchMap((event) => {
-          const currentUrl = (event as NavigationEnd).urlAfterRedirects.split(
-            '?'
-          )[0];
-          const shouldCheckLogin = !this.allowlistedRoutes.includes(currentUrl);
-
-          return this.systemStatusService.fullSystemCheckAsync().pipe(
-            switchMap((systemOk) => {
-              if (!systemOk) {
-                this.router.navigate(['/error']);
-                return of(null);
-              }
-
-              // Only perform login check if route is not allowlisted
-              return shouldCheckLogin
-                ? this.identityService.isLoggedInAsync()
-                : of(null);
-            })
-          );
-        })
-      )
-      .subscribe((isLoggedIn) => {
-        const currentUrl = this.router.url.split('?')[0];
-
-        if (isLoggedIn === null) {
-          this.loading = false;
-          return;
-        }
-
-        this.currentStateService.loggedInSubject.next(isLoggedIn);
-
-        if (isLoggedIn && (currentUrl === '/' || currentUrl === '/login')) {
-          this.router.navigate(['dashboard']);
-        } else if (!isLoggedIn) {
-          this.router.navigate(['']);
-        }
-
-        this.loading = false;
-      });
-  }
-
   pingIfNeeded(): void {
-    const nowUtc = this.currentStateService.getUTCDate(new Date());
-    const lastPinged = this.currentStateService.lastPingSubject.value;
+    if (!this.currentStateService.loggedInSubject.value) {
+      console.log('Not logged in.. ping not needed');
+      this.currentStateService.lastPingSubject.next(new Date());
+      return;
+    }
 
-    const shouldPing =
-      !lastPinged || nowUtc.getTime() - lastPinged.getTime() > 5 * 60 * 1000;
+    const timeNow = new Date();
+    console.log('timeNow: ' + timeNow);
 
-    if (!shouldPing) return;
+    const timeLastPinged = this.currentStateService.lastPingSubject.value;
+    console.log('timeLastPinged: ' + timeLastPinged);
 
-    this.identityService.pingAsync().subscribe((result) => {
-      this.currentStateService.lastPingSubject.next(nowUtc);
-      if (result.status === HttpStatusCodeEnum.Unauthorized) {
-        this.router.navigate(['/unauthorized']);
-      }
-    });
+    const timeDifferenceInMs = timeNow.getTime() - timeLastPinged.getTime();
+    console.log('timeDifferenceInMs: ' + timeDifferenceInMs);
+
+    const timeDifferenceInMin = timeDifferenceInMs / 60000;
+    console.log('timeDifferenceInMin: ' + timeDifferenceInMin);
+
+    if (0 < timeDifferenceInMin) {
+      console.log('Ping performed...');
+      this.identityService.pingAsync().subscribe((result) => {
+        this.currentStateService.lastPingSubject.next(new Date());
+      });
+    } else {
+      console.log('Not time yet... ping not needed');
+    }
+    console.log('');
   }
 }

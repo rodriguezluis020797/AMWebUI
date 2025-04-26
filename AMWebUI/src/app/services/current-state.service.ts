@@ -14,26 +14,11 @@ export class CurrentStateService {
 
   //#region Temporary Password Subject
   readonly temporaryPasswordSubject = new BehaviorSubject<boolean>(false);
-  readonly isTemporaryPassword$ = this.temporaryPasswordSubject.asObservable();
   //#endregion
 
   //#region Should Ping Subject
   readonly lastPingSubject = new BehaviorSubject<Date>(new Date());
-  readonly lastPingSubject$ = this.lastPingSubject.asObservable();
   //#endregion
-
-  getUTCDate(localDate: Date) {
-    return new Date(
-      localDate.getUTCFullYear(),
-      localDate.getUTCMonth(),
-      localDate.getUTCDate(),
-      localDate.getUTCHours(),
-      localDate.getUTCMinutes(),
-      localDate.getUTCSeconds()
-    );
-  }
-
-  private currentUrl = '';
 
   constructor(private readonly router: Router) {}
 }

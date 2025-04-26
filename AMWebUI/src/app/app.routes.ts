@@ -2,7 +2,7 @@ import { Routes } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { SignUpComponent } from './sign-up/sign-up.component';
 import { SystemUnavailableComponent } from './partials/system-unavailable/system-unavailable.component';
-import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { UpdatePasswordComponent } from './update-password/update-password.component';
 import { UnauthorizedComponent } from './partials/unauthorized/unauthorized.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { authorizationGuard } from './guards/authorization.guard';
@@ -14,7 +14,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'error', component: SystemUnavailableComponent },
-  { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'reset-password', component: UpdatePasswordComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'verify-email', component: VerifyEMailComponent },
   {

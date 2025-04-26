@@ -28,10 +28,11 @@ export class LogInComponent implements OnInit {
 
   ngOnInit() {
     this.dto.eMail = 'jdoe@gmail.com';
-    this.dto.currentPassword = 'abcdef1#G';
+    this.dto.currentPassword = 'e9K0hKExOi#r';
   }
 
-  submit() {
+  submit(event: MouseEvent) {
+    event.stopPropagation();
     this.loading = true;
     this.identityService.loginAsync(this.dto).subscribe((result) => {
       if (result.errorMessage !== null) {
@@ -42,6 +43,7 @@ export class LogInComponent implements OnInit {
       }
 
       this.currentStateService.loggedInSubject.next(true);
+      this.currentStateService.lastPingSubject.next(new Date());
       if (result.isSpecialCase === true) {
         this.currentStateService.temporaryPasswordSubject.next(true);
         this.router.navigate(['reset-password']);

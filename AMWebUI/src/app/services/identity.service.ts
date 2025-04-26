@@ -20,15 +20,17 @@ export class IdentityService {
     private httpErrorHandler: HttpErrorHandlerService
   ) {}
 
-  isLoggedInAsync() {
-    return this.http.get<boolean>('/api/Identity/IsLoggedIn').pipe(
-      catchError((error: HttpErrorResponse) => {
-        if (error.status === HttpStatusCodeEnum.Unauthorized) {
-          return of(false); // Not logged in
-        }
-        return this.httpErrorHandler.handleError<boolean>(error);
+  isLoggedInAsync(): Observable<HttpResponse<any>> {
+    return this.http
+      .get<HttpResponse<any>>('/api/Identity/IsLoggedIn', {
+        observe: 'response',
+        headers: this.getFingerprintHeaders(),
       })
-    );
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return this.httpErrorHandler.handleError<HttpResponse<any>>(error);
+        })
+      );
   }
   loginAsync(provider: ProviderDTO): Observable<BaseDTO> {
     return this.http
@@ -48,15 +50,13 @@ export class IdentityService {
       );
   }
 
-  resetPasswordAsync(provider: ProviderDTO): Observable<ProviderDTO> {
+  updatePasswordAsync(provider: ProviderDTO): Observable<BaseDTO> {
     return this.http
-      .post<ProviderDTO>('/api/Identity/ResetPassword', provider, {
+      .post<BaseDTO>('/api/Identity/UpdatePassword', provider, {
         withCredentials: true,
       })
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<ProviderDTO>(error)
-        )
+        catchError((error) => this.httpErrorHandler.handleError<BaseDTO>(error))
       );
   }
 
