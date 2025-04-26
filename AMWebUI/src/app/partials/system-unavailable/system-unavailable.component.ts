@@ -21,10 +21,7 @@ export class SystemUnavailableComponent implements OnInit {
     private currentStateService: CurrentStateService,
     private cookieService: CookiesService
   ) {}
-  ngOnInit(): void {
-    this.cookieService.deleteAllCookies();
-    this.currentStateService.loggedInSubject.next(false);
-  }
+  ngOnInit(): void {}
 
   loading: Boolean = false;
   time = new Date();

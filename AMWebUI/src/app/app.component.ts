@@ -6,7 +6,7 @@ import { SystemStatusService } from './services/system-status.service';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
 import { CurrentStateService } from './services/current-state.service';
-import { filter, of, switchMap, take, map, Observable } from 'rxjs';
+import { filter, of, switchMap, take, map, Observable, EMPTY } from 'rxjs';
 import { IdentityService } from './services/identity.service';
 import { HttpStatusCodeEnum } from './models/Enums';
 
@@ -39,13 +39,18 @@ export class AppComponent implements OnInit {
       .fullSystemCheckAsync()
       .pipe(
         switchMap((result) => {
-          console.log(result);
           if (
             Number(result) === HttpStatusCodeEnum.ServerError ||
             Number(result) === HttpStatusCodeEnum.SystemUnavailable
           ) {
             this.loading = false;
-            return of(null); // Skip login check if system check failed
+            return EMPTY;
+          } else if (
+            result.status === HttpStatusCodeEnum.ServerError ||
+            result.status === HttpStatusCodeEnum.SystemUnavailable
+          ) {
+            this.loading = false;
+            return EMPTY; // Skip login check if system check failed
           } else {
             return this.getCurrentPath(); // Get the current path and continue with the flow
           }
@@ -58,19 +63,12 @@ export class AppComponent implements OnInit {
             return this.identityService.isLoggedInAsync();
           } else {
             this.loading = false; // No need to check login if path is allowlisted
-            return of(null); // Skip login check
+            return EMPTY; // Skip login check
           }
         })
       )
       .subscribe((result) => {
-        if (
-          Number(result) === HttpStatusCodeEnum.ServerError ||
-          Number(result) === HttpStatusCodeEnum.SystemUnavailable
-        ) {
-          //do nothing
-        }
-        // If we received a response from isLoggedInAsync
-        else if (result?.status === HttpStatusCodeEnum.LoggedIn) {
+        if (result.status === HttpStatusCodeEnum.LoggedIn) {
           this.currentStateService.loggedInSubject.next(true);
           this.router.navigate(['dashboard']);
         } else {
@@ -98,11 +96,7 @@ export class AppComponent implements OnInit {
     );
   }
 
-  private readonly allowlistedRoutes = [
-    '/verify-email',
-    '/unauthorized',
-    '/error',
-  ];
+  private readonly allowlistedRoutes = ['/verify-email'];
 
   pingIfNeeded(): void {
     if (!this.currentStateService.loggedInSubject.value) {
@@ -117,13 +111,19 @@ export class AppComponent implements OnInit {
     const timeLastPinged = this.currentStateService.lastPingSubject.value;
     console.log('timeLastPinged: ' + timeLastPinged);
 
+    const msNeededToPing = 300000;
+    console.log('msNeededToPing: ' + msNeededToPing);
+
     const timeDifferenceInMs = timeNow.getTime() - timeLastPinged.getTime();
     console.log('timeDifferenceInMs: ' + timeDifferenceInMs);
+
+    const minutesNeededToPing = msNeededToPing / (1000 * 60);
+    console.log('minutesNeededToPing: ' + minutesNeededToPing);
 
     const timeDifferenceInMin = timeDifferenceInMs / 60000;
     console.log('timeDifferenceInMin: ' + timeDifferenceInMin);
 
-    if (0 < timeDifferenceInMin) {
+    if (minutesNeededToPing < timeDifferenceInMin) {
       console.log('Ping performed...');
       this.identityService.pingAsync().subscribe((result) => {
         this.currentStateService.lastPingSubject.next(new Date());

@@ -14,7 +14,7 @@ export class SystemStatusService {
 
   fullSystemCheckAsync(): Observable<HttpResponse<any>> {
     return this.http
-      .get<boolean>('/api/SystemStatus/FullSystemCheck', {
+      .get<HttpResponse<any>>('/api/SystemStatus/FullSystemCheck', {
         observe: 'response',
       })
       .pipe(
