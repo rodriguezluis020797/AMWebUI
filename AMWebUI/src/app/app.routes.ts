@@ -15,7 +15,7 @@ export const routes: Routes = [
   { path: '', component: HomeComponent },
   { path: 'sign-up', component: SignUpComponent },
   { path: 'error', component: SystemUnavailableComponent },
-  { path: 'reset-password', component: UpdatePasswordComponent },
+  { path: 'update-password', component: UpdatePasswordComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'verify-email', component: VerifyEMailComponent },
   { path: 'reset-password', component: ResetPasswordComponent },

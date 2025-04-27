@@ -38,4 +38,5 @@ export class ResetEMailComponent implements OnInit {
       this.disableSubmit = false;
     });
   }
+  //add timeout
 }

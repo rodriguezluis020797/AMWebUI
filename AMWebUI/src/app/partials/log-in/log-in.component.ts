@@ -28,7 +28,7 @@ export class LogInComponent implements OnInit {
 
   ngOnInit() {
     this.dto.eMail = 'jdoe@gmail.com';
-    this.dto.currentPassword = 'e9K0hKExOi#r';
+    this.dto.currentPassword = 'UIYaSIDrSMFV';
   }
 
   submit(event: MouseEvent) {
@@ -46,7 +46,7 @@ export class LogInComponent implements OnInit {
       this.currentStateService.lastPingSubject.next(new Date());
       if (result.isSpecialCase === true) {
         this.currentStateService.temporaryPasswordSubject.next(true);
-        this.router.navigate(['reset-password']);
+        this.router.navigate(['update-password']);
       } else {
         this.router.navigate(['dashboard']);
       }

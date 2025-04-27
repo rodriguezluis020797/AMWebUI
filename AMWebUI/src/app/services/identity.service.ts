@@ -8,7 +8,6 @@ import {
 import { catchError, Observable, of } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { ProviderDTO } from '../models/ProviderDTO';
-import { HttpStatusCodeEnum } from '../models/Enums';
 import { BaseDTO } from '../models/BaseDTO';
 
 @Injectable({
@@ -63,6 +62,20 @@ export class IdentityService {
   pingAsync(): Observable<HttpResponse<any>> {
     return this.http
       .get('/api/Identity/Ping', {
+        withCredentials: true,
+        headers: this.getFingerprintHeaders(),
+        observe: 'response',
+      })
+      .pipe(
+        catchError((error) =>
+          this.httpErrorHandler.handleError<HttpResponse<any>>(error)
+        )
+      );
+  }
+
+  resetPasswordAsync(dto: ProviderDTO): Observable<HttpResponse<any>> {
+    return this.http
+      .post('/api/Identity/ResetPassword', dto, {
         withCredentials: true,
         headers: this.getFingerprintHeaders(),
         observe: 'response',
