@@ -9,6 +9,7 @@ import { authorizationGuard } from './guards/authorization.guard';
 import { ProviderProfileComponent } from './provider-profile/provider-profile.component';
 import { VerifyEMailComponent } from './partials/verify-email/verify-email.component';
 import { ResetEMailComponent } from './reset-email/reset-email.component';
+import { ResetPasswordComponent } from './reset-password/reset-password.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -17,6 +18,7 @@ export const routes: Routes = [
   { path: 'reset-password', component: UpdatePasswordComponent },
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'verify-email', component: VerifyEMailComponent },
+  { path: 'reset-password', component: ResetPasswordComponent },
   {
     path: 'dashboard',
     component: DashboardComponent,
