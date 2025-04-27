@@ -20,5 +20,9 @@ export class CurrentStateService {
   readonly lastPingSubject = new BehaviorSubject<Date>(new Date());
   //#endregion
 
+  //#region Should Ping Subject
+  readonly hasLoggedInBefore = new BehaviorSubject<boolean>(false);
+  //#endregion
+
   constructor(private readonly router: Router) {}
 }

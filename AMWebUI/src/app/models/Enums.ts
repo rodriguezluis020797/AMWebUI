@@ -10,14 +10,105 @@ export enum HttpStatusCodeEnum {
   SystemUnavailable = 501,
 }
 
-export enum TimeZoneEnum {
-  Uknown,
+export enum CountryCodeEnum {
+  Select,
+  United_States,
+  Mexico,
+}
+export enum TimeZoneCodeEnum {
+  Select,
   PST, // United States and Mexico
   MST, // United States and Mexico
   CST, // United States and Mexico
   EST, // United States and Mexico
   AKST, // United States
   HST, // United States
+}
+export enum StateCodeEnum {
+  Select,
+  Aguascalientes, // Mexico
+  Alabama, // USA
+  Alaska, // USA
+  Arizona, // USA
+  Arkansas, // USA
+  Baja_California, // Mexico
+  Baja_California_Sur, // Mexico
+  Campeche, // Mexico
+  California, // USA
+  Chiapas, // Mexico
+  Chihuahua, // Mexico
+  Ciudad_de_México, // Mexico
+  Coahuila, // Mexico
+  Colima, // Mexico
+  Colorado, // USA
+  Connecticut, // USA
+  Delaware, // USA
+  District_of_Columbia, // USA
+  Durango, // Mexico
+  Florida, // USA
+  Georgia, // USA
+  Guanajuato, // Mexico
+  Guerrero, // Mexico
+  Hawaii, // USA
+  Hidalgo, // Mexico
+  Idaho, // USA
+  Illinois, // USA
+  Indiana, // USA
+  Iowa, // USA
+  Jalisco, // Mexico
+  Kansas, // USA
+  Kentucky, // USA
+  Louisiana, // USA
+  Maine, // USA
+  Maryland, // USA
+  Massachusetts, // USA
+  Michigan, // USA
+  Minnesota, // USA
+  Mississippi, // USA
+  Missouri, // USA
+  Montana, // USA
+  México, // Mexico
+  Michoacán, // Mexico
+  Morelos, // Mexico
+  Nayarit, // Mexico
+  Nebraska, // USA
+  Nevada, // USA
+  New_Hampshire, // USA
+  New_Jersey, // USA
+  New_Mexico, // USA
+  New_York, // USA
+  North_Carolina, // USA
+  North_Dakota, // USA
+  Nuevo_León, // Mexico
+  Oaxaca, // Mexico
+  Ohio, // USA
+  Oklahoma, // USA
+  Oregon, // USA
+  Pennsylvania, // USA
+  Puebla, // Mexico
+  Querétaro, // Mexico
+  Quintana_Roo, // Mexico
+  Rhode_Island, // USA
+  San_Luis_Potosí, // Mexico
+  Sinaloa, // Mexico
+  Sonora, // Mexico
+  South_Carolina, // USA
+  South_Dakota, // USA
+  Tabasco, // Mexico
+  Tamaulipas, // Mexico
+  Tennessee, // USA
+  Texas, // USA
+  Tlaxcala, // Mexico
+  Utah, // USA
+  Vermont, // USA
+  Veracruz, // Mexico
+  Virginia, // USA
+  Washington, // USA
+  West_Virginia, // USA
+  Wisconsin, // USA
+  Wyoming, // USA
+  Yucatán, // Mexico
+  Zacatecas, // Mexico
 }
 
 export enum CookieEnum {

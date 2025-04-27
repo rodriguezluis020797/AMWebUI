@@ -4,6 +4,7 @@ import { catchError, Observable } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { BaseDTO } from '../models/BaseDTO';
+import { CountryCodeEnum } from '../models/Enums';
 
 @Injectable({
   providedIn: 'root',
@@ -64,5 +65,13 @@ export class ProviderService {
           this.httpErrorHandler.handleError<ProviderDTO>(error)
         )
       );
+  }
+
+  getCountryCodes(): CountryCodeEnum[] {
+    return [
+      CountryCodeEnum.Select,
+      CountryCodeEnum.UnitedStates,
+      CountryCodeEnum.Mexico,
+    ];
   }
 }

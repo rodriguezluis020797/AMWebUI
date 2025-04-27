@@ -6,7 +6,11 @@ import { RouterLink } from '@angular/router';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { BaseDTO } from '../models/BaseDTO';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
-import { TimeZoneEnum } from '../models/Enums';
+import {
+  CountryCodeEnum,
+  StateCodeEnum,
+  TimeZoneCodeEnum,
+} from '../models/Enums';
 
 @Component({
   standalone: true,
@@ -24,7 +28,10 @@ export class SignUpComponent {
 
   ngOnInit() {
     this.dto = {
-      timeZone: TimeZoneEnum.PST,
+      countryCode: CountryCodeEnum.UnitedStates,
+      hasLoggedIn: false,
+      stateCode: StateCodeEnum.California,
+      timeZoneCode: TimeZoneCodeEnum.PST,
       eMail: 'jdoe@gmail.com',
       errorMessage: '',
       isSpecialCase: false,

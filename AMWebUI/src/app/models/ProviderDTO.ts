@@ -1,13 +1,16 @@
 import { BaseDTO } from './BaseDTO';
-import { TimeZoneEnum } from './Enums';
+import { CountryCodeEnum, StateCodeEnum, TimeZoneCodeEnum } from './Enums';
 
 export class ProviderDTO extends BaseDTO {
   firstName: string;
   middleName: string | null;
   lastName: string;
   eMail: string;
-  timeZone: TimeZoneEnum;
-  currentPassword: String;
+  countryCode: CountryCodeEnum;
+  stateCode: StateCodeEnum;
+  timeZoneCode: TimeZoneCodeEnum;
+  hasLoggedIn: boolean;
+  currentPassword: string;
   newPassword: string;
   isTempPassword: boolean;
 
@@ -17,7 +20,10 @@ export class ProviderDTO extends BaseDTO {
     this.middleName = null;
     this.lastName = '';
     this.eMail = '';
-    this.timeZone = TimeZoneEnum.Uknown;
+    this.countryCode = CountryCodeEnum.Select;
+    this.stateCode = StateCodeEnum.Select;
+    this.timeZoneCode = TimeZoneCodeEnum.Select;
+    this.hasLoggedIn = false;
     this.currentPassword = '';
     this.newPassword = '';
     this.isTempPassword = false;

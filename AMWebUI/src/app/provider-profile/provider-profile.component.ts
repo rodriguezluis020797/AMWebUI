@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ProviderService } from '../services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { RouterLink } from '@angular/router';
+import { CountryCodeEnum } from '../models/Enums';
 
 @Component({
   selector: 'am-provider-profile',
@@ -13,10 +14,12 @@ import { RouterLink } from '@angular/router';
   styleUrl: './provider-profile.component.css',
 })
 export class ProviderProfileComponent implements OnInit {
-  dto = new ProviderDTO();
-  editDTO = new ProviderDTO();
-  editProvider = false;
-  loading = true;
+  dto: ProviderDTO = new ProviderDTO();
+  editDTO: ProviderDTO = new ProviderDTO();
+  editProvider: boolean = false;
+  loading: boolean = true;
+  countryCodes: CountryCodeEnum[] = [];
+
   constructor(private providerService: ProviderService) {}
   ngOnInit(): void {
     this.getProvider();
@@ -32,6 +35,7 @@ export class ProviderProfileComponent implements OnInit {
 
   edit() {
     this.editDTO = JSON.parse(JSON.stringify(this.dto));
+    this.countryCodes = this.providerService.getCountryCodes();
     this.editProvider = true;
   }
 

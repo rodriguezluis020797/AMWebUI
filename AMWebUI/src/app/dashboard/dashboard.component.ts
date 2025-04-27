@@ -3,6 +3,8 @@ import { CommonModule } from '@angular/common';
 import { ProviderService } from '../services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { ProviderDTO } from '../models/ProviderDTO';
+import { Router } from '@angular/router';
+import { CurrentStateService } from '../services/current-state.service';
 
 @Component({
   selector: 'am-dashboard',
@@ -11,9 +13,12 @@ import { ProviderDTO } from '../models/ProviderDTO';
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
-  constructor(private providerService: ProviderService) {}
+  constructor(
+    private providerService: ProviderService,
+    private router: Router
+  ) {}
   provider: ProviderDTO = new ProviderDTO();
-  loadingProvider = true;
+  loading = true;
 
   ngOnInit() {
     this.getProvider();
@@ -22,7 +27,16 @@ export class DashboardComponent implements OnInit {
   getProvider() {
     this.providerService.getProviderAsync().subscribe((result) => {
       this.provider = result;
-      this.loadingProvider = false;
+      if (!this.provider.hasLoggedIn) {
+        this.router.navigate(['complete-sign-up']);
+      }
+      this.setTimeOut();
     });
+  }
+
+  setTimeOut() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000);
   }
 }

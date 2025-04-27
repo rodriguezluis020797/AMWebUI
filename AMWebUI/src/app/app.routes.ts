@@ -10,6 +10,7 @@ import { ProviderProfileComponent } from './provider-profile/provider-profile.co
 import { VerifyEMailComponent } from './partials/verify-email/verify-email.component';
 import { ResetEMailComponent } from './reset-email/reset-email.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
+import { CompleteSignUpComponentn } from './complete-sign-up/complete-sign-up.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -32,6 +33,11 @@ export const routes: Routes = [
   {
     path: 'provider-profile',
     component: ProviderProfileComponent,
+    canActivate: [authorizationGuard],
+  },
+  {
+    path: 'complete-sign-up',
+    component: CompleteSignUpComponentn,
     canActivate: [authorizationGuard],
   },
 ];
