@@ -10,6 +10,16 @@ export enum HttpStatusCodeEnum {
   SystemUnavailable = 501,
 }
 
+export enum TimeZoneEnum {
+  Uknown,
+  PST, // United States and Mexico
+  MST, // United States and Mexico
+  CST, // United States and Mexico
+  EST, // United States and Mexico
+  AKST, // United States
+  HST, // United States
+}
+
 export enum CookieEnum {
   Unknown = 0,
 }

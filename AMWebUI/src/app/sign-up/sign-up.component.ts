@@ -6,6 +6,7 @@ import { RouterLink } from '@angular/router';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { BaseDTO } from '../models/BaseDTO';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
+import { TimeZoneEnum } from '../models/Enums';
 
 @Component({
   standalone: true,
@@ -23,6 +24,7 @@ export class SignUpComponent {
 
   ngOnInit() {
     this.dto = {
+      timeZone: TimeZoneEnum.PST,
       eMail: 'jdoe@gmail.com',
       errorMessage: '',
       isSpecialCase: false,
