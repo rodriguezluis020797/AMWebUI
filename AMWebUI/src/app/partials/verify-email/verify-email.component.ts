@@ -62,7 +62,6 @@ export class VerifyEMailComponent implements OnInit {
           })
         )
         .subscribe((result) => {
-          console.log('subscribed');
           this.loading = false;
         });
     }

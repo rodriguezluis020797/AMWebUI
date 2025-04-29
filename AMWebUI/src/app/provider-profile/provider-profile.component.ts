@@ -22,9 +22,7 @@ export class ProviderProfileComponent implements OnInit {
   get countryCodeOptions(): { key: CountryCodeEnum; label: string }[] {
     return this.toolsService.getCountryCodes();
   }
-  get stateCodeOptions(): { key: StateCodeEnum; label: string }[] {
-    return this.toolsService.getStateCodes(this.dto.countryCode);
-  }
+  stateOptions: { key: StateCodeEnum; label: string }[] = [];
 
   constructor(
     private providerService: ProviderService,
@@ -45,6 +43,16 @@ export class ProviderProfileComponent implements OnInit {
   edit() {
     this.editDTO = JSON.parse(JSON.stringify(this.dto));
     this.editProvider = true;
+    this.stateOptions = this.toolsService.getStateCodes(
+      this.editDTO.countryCode
+    );
+  }
+
+  onCountryChange() {
+    this.stateOptions = this.toolsService.getStateCodes(
+      this.editDTO.countryCode
+    );
+    this.editDTO.stateCode = StateCodeEnum.Select; // optional reset
   }
 
   editSave() {

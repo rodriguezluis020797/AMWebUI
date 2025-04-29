@@ -120,14 +120,22 @@ export class ToolsService {
   }
 
   getStateCodes(
-    countryCode: CountryCodeEnum
+    countryCode: CountryCodeEnum | string
   ): { key: StateCodeEnum; label: string }[] {
-    return Object.entries(StateToCountryMap)
-      .filter(([, mappedCountry]) => mappedCountry === countryCode)
-      .map(([stateKey]) => {
-        const key = Number(stateKey) as StateCodeEnum;
-        const label = StateCodeEnum[key].replaceAll('_', ' ');
-        return { key, label };
-      });
+    const numericCountryCode = Number(countryCode);
+
+    const stateCodes = Object.values(StateCodeEnum)
+      .filter((value) => typeof value === 'number')
+      .map((stateCode) => stateCode as StateCodeEnum)
+      .filter(
+        (stateCode) => StateToCountryMap[stateCode] === numericCountryCode
+      )
+      .map((stateCode) => ({
+        key: stateCode,
+        label: StateCodeEnum[stateCode].replaceAll('_', ' '),
+      }));
+
+    console.log('Filtered states:', stateCodes);
+    return stateCodes;
   }
 }

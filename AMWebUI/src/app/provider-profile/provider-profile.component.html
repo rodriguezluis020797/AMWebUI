@@ -27,7 +27,11 @@
     <input type="text" id="lastName" [(ngModel)]="editDTO.lastName" />
 
     <label for="countryDropdown">Country:</label>
-    <select [(ngModel)]="editDTO.countryCode" name="countryCode">
+    <select
+      [(ngModel)]="editDTO.countryCode"
+      (change)="onCountryChange()"
+      name="countryCode"
+    >
       <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">
         {{ opt.label }}
       </option>
@@ -35,7 +39,7 @@
 
     <label for="stateDropdown">State:</label>
     <select [(ngModel)]="editDTO.stateCode" name="countryCode">
-      <option *ngFor="let opt of stateCodeOptions" [value]="opt.key">
+      <option *ngFor="let opt of stateOptions" [value]="opt.key">
         {{ opt.label }}
       </option>
     </select>
