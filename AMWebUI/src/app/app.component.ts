@@ -123,13 +123,16 @@ export class AppComponent implements OnInit {
     const timeDifferenceInMin = timeDifferenceInMs / 60000;
     console.log('timeDifferenceInMin: ' + timeDifferenceInMin);
 
-    if (minutesNeededToPing < timeDifferenceInMin) {
+    if (
+      minutesNeededToPing < timeDifferenceInMin &&
+      this.currentStateService.systemStatus.value == true
+    ) {
       console.log('Ping performed...');
       this.identityService.pingAsync().subscribe((result) => {
         this.currentStateService.lastPingSubject.next(new Date());
       });
     } else {
-      console.log('Not time yet... ping not needed');
+      console.log('Not time yet or system offline... ping not needed');
     }
     console.log('');
   }

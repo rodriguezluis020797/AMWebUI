@@ -21,7 +21,9 @@ export class SystemUnavailableComponent implements OnInit {
     private currentStateService: CurrentStateService,
     private cookieService: CookiesService
   ) {}
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.currentStateService.systemStatus.next(false);
+  }
 
   loading: Boolean = false;
   time = new Date();
@@ -45,6 +47,7 @@ export class SystemUnavailableComponent implements OnInit {
         });
         this.message = 'Last checked at ' + this.shortTime + '.';
       } else {
+        this.currentStateService.systemStatus.next(true);
         this.router.navigate(['']).then(() => {
           window.location.reload();
         });

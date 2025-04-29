@@ -44,6 +44,13 @@
       </option>
     </select>
 
+    <label for="stateDropdown">Time Zone:</label>
+    <select [(ngModel)]="editDTO.timeZoneCode">
+      <option *ngFor="let option of timeZoneOptions" [value]="option.key">
+        {{ option.label }}
+      </option>
+    </select>
+
     <a routerLink="/reset-email">Reset E-Mail</a>
     <a routerLink="/update-password">Reset Password</a>
     <br />

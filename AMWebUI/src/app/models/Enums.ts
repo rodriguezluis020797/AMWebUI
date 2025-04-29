@@ -17,12 +17,12 @@ export enum CountryCodeEnum {
 }
 export enum TimeZoneCodeEnum {
   Select,
-  PST, // United States and Mexico
-  MST, // United States and Mexico
-  CST, // United States and Mexico
-  EST, // United States and Mexico
-  AKST, // United States
-  HST, // United States
+  Pacific_Standard_Time, // United States and Mexico
+  Mountain_Standard_Time, // United States and Mexico
+  Central_Standard_Time, // United States and Mexico
+  Eastern_Standard_Time, // United States and Mexico
+  Alaska_Standard_Time, // United States
+  Hawaii_Standard_Time, // United States
 }
 export enum StateCodeEnum {
   Select,

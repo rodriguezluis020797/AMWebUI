@@ -5,7 +5,11 @@ import { CommonModule } from '@angular/common';
 import { ProviderService } from '../services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { RouterLink } from '@angular/router';
-import { CountryCodeEnum, StateCodeEnum } from '../models/Enums';
+import {
+  CountryCodeEnum,
+  StateCodeEnum,
+  TimeZoneCodeEnum,
+} from '../models/Enums';
 import { ToolsService } from '../services/tools.service';
 
 @Component({
@@ -23,6 +27,7 @@ export class ProviderProfileComponent implements OnInit {
     return this.toolsService.getCountryCodes();
   }
   stateOptions: { key: StateCodeEnum; label: string }[] = [];
+  timeZoneOptions: { key: TimeZoneCodeEnum; label: string }[] = [];
 
   constructor(
     private providerService: ProviderService,
@@ -46,10 +51,16 @@ export class ProviderProfileComponent implements OnInit {
     this.stateOptions = this.toolsService.getStateCodes(
       this.editDTO.countryCode
     );
+    this.timeZoneOptions = this.toolsService.getTimeZoneCodes(
+      this.editDTO.countryCode
+    );
   }
 
   onCountryChange() {
     this.stateOptions = this.toolsService.getStateCodes(
+      this.editDTO.countryCode
+    );
+    this.timeZoneOptions = this.toolsService.getTimeZoneCodes(
       this.editDTO.countryCode
     );
     this.editDTO.stateCode = StateCodeEnum.Select; // optional reset
@@ -59,6 +70,7 @@ export class ProviderProfileComponent implements OnInit {
     this.loading = true;
     this.editDTO.countryCode = Number(this.editDTO.countryCode);
     this.editDTO.stateCode = Number(this.editDTO.stateCode);
+    this.editDTO.timeZoneCode = Number(this.editDTO.timeZoneCode);
     this.providerService
       .updateProviderAsync(this.editDTO)
       .subscribe((result) => {

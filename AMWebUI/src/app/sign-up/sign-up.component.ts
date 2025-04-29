@@ -31,7 +31,7 @@ export class SignUpComponent {
       countryCode: CountryCodeEnum.United_States,
       hasLoggedIn: false,
       stateCode: StateCodeEnum.California,
-      timeZoneCode: TimeZoneCodeEnum.PST,
+      timeZoneCode: TimeZoneCodeEnum.Pacific_Standard_Time,
       eMail: 'jdoe@gmail.com',
       errorMessage: '',
       isSpecialCase: false,

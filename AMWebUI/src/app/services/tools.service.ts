@@ -1,5 +1,9 @@
 import { Injectable } from '@angular/core';
-import { CountryCodeEnum, StateCodeEnum } from '../models/Enums';
+import {
+  CountryCodeEnum,
+  StateCodeEnum,
+  TimeZoneCodeEnum,
+} from '../models/Enums';
 
 const CountryCodeMap: Record<CountryCodeEnum, string> = {
   [CountryCodeEnum.Select]: CountryCodeEnum[CountryCodeEnum.Select].replaceAll(
@@ -128,14 +132,58 @@ export class ToolsService {
       .filter((value) => typeof value === 'number')
       .map((stateCode) => stateCode as StateCodeEnum)
       .filter(
-        (stateCode) => StateToCountryMap[stateCode] === numericCountryCode
+        (stateCode) =>
+          stateCode === StateCodeEnum.Select || // always include Select
+          StateToCountryMap[stateCode] === numericCountryCode
       )
       .map((stateCode) => ({
         key: stateCode,
         label: StateCodeEnum[stateCode].replaceAll('_', ' '),
       }));
 
-    console.log('Filtered states:', stateCodes);
-    return stateCodes;
+    // Ensure Select is first
+    return stateCodes.sort((a, b) =>
+      a.key === StateCodeEnum.Select
+        ? -1
+        : b.key === StateCodeEnum.Select
+        ? 1
+        : 0
+    );
+  }
+
+  getTimeZoneCodes(
+    countryCode: CountryCodeEnum
+  ): { key: TimeZoneCodeEnum; label: string }[] {
+    const countryToTimeZoneMap: Record<CountryCodeEnum, TimeZoneCodeEnum[]> = {
+      [CountryCodeEnum.Select]: [],
+      [CountryCodeEnum.Mexico]: [
+        TimeZoneCodeEnum.Pacific_Standard_Time,
+        TimeZoneCodeEnum.Mountain_Standard_Time,
+        TimeZoneCodeEnum.Central_Standard_Time,
+        TimeZoneCodeEnum.Eastern_Standard_Time,
+      ],
+      [CountryCodeEnum.United_States]: [
+        TimeZoneCodeEnum.Pacific_Standard_Time,
+        TimeZoneCodeEnum.Mountain_Standard_Time,
+        TimeZoneCodeEnum.Central_Standard_Time,
+        TimeZoneCodeEnum.Eastern_Standard_Time,
+        TimeZoneCodeEnum.Alaska_Standard_Time,
+        TimeZoneCodeEnum.Hawaii_Standard_Time,
+      ],
+    };
+
+    // Always start with Select, then append the rest (de-duplicated if necessary)
+    const rawTimeZones = [
+      TimeZoneCodeEnum.Select,
+      ...(countryToTimeZoneMap[countryCode] || []),
+    ];
+
+    // Remove duplicates (just in case)
+    const uniqueTimeZones = Array.from(new Set(rawTimeZones));
+
+    return uniqueTimeZones.map((tz) => ({
+      key: tz,
+      label: TimeZoneCodeEnum[tz].replaceAll('_', ' '),
+    }));
   }
 }
