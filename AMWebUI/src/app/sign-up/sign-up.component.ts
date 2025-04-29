@@ -28,7 +28,7 @@ export class SignUpComponent {
 
   ngOnInit() {
     this.dto = {
-      countryCode: CountryCodeEnum.UnitedStates,
+      countryCode: CountryCodeEnum.United_States,
       hasLoggedIn: false,
       stateCode: StateCodeEnum.California,
       timeZoneCode: TimeZoneCodeEnum.PST,

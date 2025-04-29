@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProviderDTO } from '../models/ProviderDTO';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProviderService } from '../services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
@@ -19,6 +19,20 @@ export class ProviderProfileComponent implements OnInit {
   editProvider: boolean = false;
   loading: boolean = true;
   countryCodes: CountryCodeEnum[] = [];
+
+  myForm = new FormGroup({
+    selection: new FormControl(''),
+  });
+
+  options: { [key: string]: string } = {
+    option1: 'Option One',
+    option2: 'Option Two',
+    option3: 'Option Three',
+  };
+
+  get optionsArray() {
+    return Object.entries(this.options); // Converts the dictionary to an array of [key, value]
+  }
 
   constructor(private providerService: ProviderService) {}
   ngOnInit(): void {

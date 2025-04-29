@@ -22,6 +22,13 @@
     <label for="lastName">Last Name</label>
     <input type="text" id="lastName" [(ngModel)]="editDTO.lastName" />
 
+    <label for="dropdown">Select an option:</label>
+    <select [(ngModel)]="editDTO.countryCode" name="dropdown">
+      <option *ngFor="let entry of optionsArray" [value]="entry[0]">
+        {{ entry[1] }}
+      </option>
+    </select>
+
     <a routerLink="/reset-email">Reset E-Mail</a>
     <a routerLink="/update-password">Reset Password</a>
     <br />

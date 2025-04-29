@@ -70,7 +70,7 @@ export class ProviderService {
   getCountryCodes(): CountryCodeEnum[] {
     return [
       CountryCodeEnum.Select,
-      CountryCodeEnum.UnitedStates,
+      CountryCodeEnum.United_States,
       CountryCodeEnum.Mexico,
     ];
   }
