@@ -9,7 +9,7 @@ export class ProviderDTO extends BaseDTO {
   countryCode: CountryCodeEnum;
   stateCode: StateCodeEnum;
   timeZoneCode: TimeZoneCodeEnum;
-  hasLoggedIn: boolean;
+  hasCompletedSignUp: boolean;
   currentPassword: string;
   newPassword: string;
   isTempPassword: boolean;
@@ -23,7 +23,7 @@ export class ProviderDTO extends BaseDTO {
     this.countryCode = CountryCodeEnum.Select;
     this.stateCode = StateCodeEnum.Select;
     this.timeZoneCode = TimeZoneCodeEnum.Select;
-    this.hasLoggedIn = false;
+    this.hasCompletedSignUp = false;
     this.currentPassword = '';
     this.newPassword = '';
     this.isTempPassword = false;

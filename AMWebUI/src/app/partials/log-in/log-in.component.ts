@@ -44,6 +44,10 @@ export class LogInComponent implements OnInit {
 
       this.currentStateService.loggedInSubject.next(true);
       this.currentStateService.lastPingSubject.next(new Date());
+      if (!result.hasCompletedSignUp) {
+        this.currentStateService.hasCompletedProfile.next(false);
+      }
+
       if (result.isSpecialCase === true) {
         this.currentStateService.temporaryPasswordSubject.next(true);
         this.router.navigate(['update-password']);

@@ -14,6 +14,7 @@ import { CurrentStateService } from '../../services/current-state.service';
 export class NavBarComponent implements OnInit {
   isMenuOpen = false;
   loggedIn = false;
+  completedProfile = false;
 
   constructor(
     private identityService: IdentityService,
@@ -24,6 +25,9 @@ export class NavBarComponent implements OnInit {
   ngOnInit() {
     this.currentStateService.isLoggedIn$.subscribe((status) => {
       this.loggedIn = status;
+    });
+    this.currentStateService.hasCompletedProfile$.subscribe((staus) => {
+      this.completedProfile = staus;
     });
   }
 

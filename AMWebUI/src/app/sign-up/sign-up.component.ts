@@ -28,8 +28,8 @@ export class SignUpComponent {
 
   ngOnInit() {
     this.dto = {
+      hasCompletedSignUp: false,
       countryCode: CountryCodeEnum.United_States,
-      hasLoggedIn: false,
       stateCode: StateCodeEnum.California,
       timeZoneCode: TimeZoneCodeEnum.Pacific_Standard_Time,
       eMail: 'jdoe@gmail.com',

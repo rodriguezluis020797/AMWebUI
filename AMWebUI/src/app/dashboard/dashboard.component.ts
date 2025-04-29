@@ -4,7 +4,6 @@ import { ProviderService } from '../services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { Router } from '@angular/router';
-import { CurrentStateService } from '../services/current-state.service';
 
 @Component({
   selector: 'am-dashboard',
@@ -26,10 +25,8 @@ export class DashboardComponent implements OnInit {
 
   getProvider() {
     this.providerService.getProviderAsync().subscribe((result) => {
+      this.loading = true;
       this.provider = result;
-      if (!this.provider.hasLoggedIn) {
-        this.router.navigate(['complete-sign-up']);
-      }
       this.setTimeOut();
     });
   }

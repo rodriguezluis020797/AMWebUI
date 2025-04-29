@@ -31,13 +31,15 @@ export class IdentityService {
         })
       );
   }
-  loginAsync(provider: ProviderDTO): Observable<BaseDTO> {
+  loginAsync(provider: ProviderDTO): Observable<ProviderDTO> {
     return this.http
-      .post<BaseDTO>('/api/Identity/Login', provider, {
+      .post<ProviderDTO>('/api/Identity/Login', provider, {
         headers: this.getFingerprintHeaders(),
       })
       .pipe(
-        catchError((error) => this.httpErrorHandler.handleError<BaseDTO>(error))
+        catchError((error) =>
+          this.httpErrorHandler.handleError<ProviderDTO>(error)
+        )
       );
   }
 

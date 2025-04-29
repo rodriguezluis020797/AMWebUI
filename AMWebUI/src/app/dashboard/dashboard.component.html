@@ -1,7 +1,8 @@
 <div class="dashboard-container" *ngIf="!loading">
   <h2>Welcome, {{ provider.firstName }}!</h2>
   <h3>Replace with daily appointment report...</h3>
-  <div class="dashboard-container" *ngIf="loading">
-    <am-loading-screen></am-loading-screen>
-  </div>
+</div>
+
+<div class="dashboard-container" *ngIf="loading">
+  <am-loading-screen></am-loading-screen>
 </div>

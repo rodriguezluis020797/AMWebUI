@@ -11,6 +11,7 @@ import {
   TimeZoneCodeEnum,
 } from '../models/Enums';
 import { ToolsService } from '../services/tools.service';
+import { CurrentStateService } from '../services/current-state.service';
 
 @Component({
   selector: 'am-provider-profile',
@@ -23,6 +24,7 @@ export class ProviderProfileComponent implements OnInit {
   editDTO: ProviderDTO = new ProviderDTO();
   editProvider: boolean = false;
   loading: boolean = true;
+  disableCancel: boolean = false;
   CountryCodeEnum = CountryCodeEnum;
   StateCodeEnum = StateCodeEnum;
   TimeZoneCodeEnum = TimeZoneCodeEnum;
@@ -34,7 +36,8 @@ export class ProviderProfileComponent implements OnInit {
 
   constructor(
     private providerService: ProviderService,
-    private toolsService: ToolsService
+    private toolsService: ToolsService,
+    private currentStateService: CurrentStateService
   ) {}
   ngOnInit(): void {
     this.getProvider();
@@ -44,6 +47,12 @@ export class ProviderProfileComponent implements OnInit {
     this.loading = true;
     this.providerService.getProviderAsync().subscribe((result) => {
       this.dto = result;
+      if (!this.currentStateService.hasCompletedProfile.value) {
+        this.disableCancel = true;
+        this.edit();
+      } else {
+        this.disableCancel = false;
+      }
       this.setTimeout();
     });
   }
@@ -85,6 +94,7 @@ export class ProviderProfileComponent implements OnInit {
         if (!result.errorMessage || result.errorMessage.trim() === '') {
           this.getProvider();
           this.cancelEdit();
+          this.currentStateService.hasCompletedProfile.next(true);
         } else {
           this.editDTO.errorMessage = result.errorMessage;
         }
