@@ -5,7 +5,8 @@ import { CommonModule } from '@angular/common';
 import { ProviderService } from '../services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { RouterLink } from '@angular/router';
-import { CountryCodeEnum } from '../models/Enums';
+import { CountryCodeEnum, StateCodeEnum } from '../models/Enums';
+import { ToolsService } from '../services/tools.service';
 
 @Component({
   selector: 'am-provider-profile',
@@ -18,26 +19,17 @@ export class ProviderProfileComponent implements OnInit {
   editDTO: ProviderDTO = new ProviderDTO();
   editProvider: boolean = false;
   loading: boolean = true;
-  countryCodes: CountryCodeEnum[] = [];
-
-  myForm = new FormGroup({
-    selection: new FormControl(''),
-  });
-
-  options: { [key in CountryCodeEnum]?: string } = {
-    [CountryCodeEnum.Select]: 'Select a Country',
-    [CountryCodeEnum.United_States]: 'United States',
-    [CountryCodeEnum.Mexico]: 'Mexico',
-  };
-
-  get optionsArray(): { key: CountryCodeEnum; label: string }[] {
-    return Object.entries(this.options).map(([key, label]) => ({
-      key: Number(key), // Convert string key back to enum number
-      label: label!,
-    }));
+  get countryCodeOptions(): { key: CountryCodeEnum; label: string }[] {
+    return this.toolsService.getCountryCodes();
+  }
+  get stateCodeOptions(): { key: StateCodeEnum; label: string }[] {
+    return this.toolsService.getStateCodes(this.dto.countryCode);
   }
 
-  constructor(private providerService: ProviderService) {}
+  constructor(
+    private providerService: ProviderService,
+    private toolsService: ToolsService
+  ) {}
   ngOnInit(): void {
     this.getProvider();
   }
@@ -46,28 +38,39 @@ export class ProviderProfileComponent implements OnInit {
     this.loading = true;
     this.providerService.getProviderAsync().subscribe((result) => {
       this.dto = result;
-      this.loading = false;
+      this.setTimeout();
     });
   }
 
   edit() {
     this.editDTO = JSON.parse(JSON.stringify(this.dto));
-    this.countryCodes = this.providerService.getCountryCodes();
     this.editProvider = true;
   }
 
   editSave() {
-    console.log(this.editDTO.countryCode);
+    this.loading = true;
+    this.editDTO.countryCode = Number(this.editDTO.countryCode);
+    this.editDTO.stateCode = Number(this.editDTO.stateCode);
     this.providerService
       .updateProviderAsync(this.editDTO)
       .subscribe((result) => {
-        this.getProvider();
-        this.cancelEdit();
+        if (!result.errorMessage || result.errorMessage.trim() === '') {
+          this.getProvider();
+          this.cancelEdit();
+        } else {
+          this.editDTO.errorMessage = result.errorMessage;
+        }
+        this.setTimeout();
       });
   }
 
   cancelEdit() {
     this.editDTO = new ProviderDTO();
     this.editProvider = false;
+  }
+  setTimeout() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 3000);
   }
 }

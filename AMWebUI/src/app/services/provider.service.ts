@@ -1,4 +1,4 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
+import { HttpClient, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
@@ -17,7 +17,7 @@ export class ProviderService {
 
   getProviderAsync(): Observable<ProviderDTO> {
     return this.http
-      .get<ProviderDTO>('/api/Provider/GetProvider')
+      .get<ProviderDTO>('/api/Provider/GetProvider', { withCredentials: true })
       .pipe(
         catchError((error) =>
           this.httpErrorHandler.handleError<ProviderDTO>(error)
@@ -25,19 +25,21 @@ export class ProviderService {
       );
   }
 
-  updateProviderAsync(provider: ProviderDTO): Observable<ProviderDTO> {
+  updateProviderAsync(provider: ProviderDTO): Observable<BaseDTO> {
     return this.http
-      .post<ProviderDTO>('/api/Provider/UpdateProvider', provider)
+      .post<BaseDTO>('/api/Provider/UpdateProvider', provider, {
+        withCredentials: true,
+      })
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<ProviderDTO>(error)
-        )
+        catchError((error) => this.httpErrorHandler.handleError<BaseDTO>(error))
       );
   }
 
   updateEMailAsync(provider: ProviderDTO): Observable<ProviderDTO> {
     return this.http
-      .post<ProviderDTO>('/api/Provider/UpdateEMail', provider)
+      .post<ProviderDTO>('/api/Provider/UpdateEMail', provider, {
+        withCredentials: true,
+      })
       .pipe(
         catchError((error) =>
           this.httpErrorHandler.handleError<ProviderDTO>(error)
@@ -65,13 +67,5 @@ export class ProviderService {
           this.httpErrorHandler.handleError<ProviderDTO>(error)
         )
       );
-  }
-
-  getCountryCodes(): CountryCodeEnum[] {
-    return [
-      CountryCodeEnum.Select,
-      CountryCodeEnum.United_States,
-      CountryCodeEnum.Mexico,
-    ];
   }
 }

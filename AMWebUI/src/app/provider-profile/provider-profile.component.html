@@ -2,6 +2,10 @@
   <h2 *ngIf="!editProvider">Details</h2>
   <h2 *ngIf="editProvider">Edit Details</h2>
 
+  <div *ngIf="editDTO.errorMessage && editProvider" class="error-message">
+    <p>{{ editDTO.errorMessage }}</p>
+  </div>
+
   <!-- Display Mode -->
   <div *ngIf="!editProvider">
     <div><strong>First Name:</strong> {{ dto.firstName }}</div>
@@ -22,9 +26,16 @@
     <label for="lastName">Last Name</label>
     <input type="text" id="lastName" [(ngModel)]="editDTO.lastName" />
 
-    <label for="dropdown">Select an option:</label>
+    <label for="countryDropdown">Country:</label>
     <select [(ngModel)]="editDTO.countryCode" name="countryCode">
-      <option *ngFor="let opt of optionsArray" [value]="opt.key">
+      <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">
+        {{ opt.label }}
+      </option>
+    </select>
+
+    <label for="stateDropdown">State:</label>
+    <select [(ngModel)]="editDTO.stateCode" name="countryCode">
+      <option *ngFor="let opt of stateCodeOptions" [value]="opt.key">
         {{ opt.label }}
       </option>
     </select>
