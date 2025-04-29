@@ -12,6 +12,17 @@
     <div><strong>Middle Name:</strong> {{ dto.middleName || "—" }}</div>
     <div><strong>Last Name:</strong> {{ dto.lastName }}</div>
     <div><strong>E-Mail:</strong> {{ dto.eMail }}</div>
+    <div>
+      <strong>Country:</strong>
+      {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}
+    </div>
+    <div>
+      <strong>State:</strong> {{ getEnumLabel(StateCodeEnum, dto.stateCode) }}
+    </div>
+    <div>
+      <strong>Time Zone:</strong>
+      {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}
+    </div>
     <button (click)="edit()">Edit</button>
   </div>
 

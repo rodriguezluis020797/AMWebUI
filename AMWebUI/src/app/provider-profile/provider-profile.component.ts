@@ -23,6 +23,9 @@ export class ProviderProfileComponent implements OnInit {
   editDTO: ProviderDTO = new ProviderDTO();
   editProvider: boolean = false;
   loading: boolean = true;
+  CountryCodeEnum = CountryCodeEnum;
+  StateCodeEnum = StateCodeEnum;
+  TimeZoneCodeEnum = TimeZoneCodeEnum;
   get countryCodeOptions(): { key: CountryCodeEnum; label: string }[] {
     return this.toolsService.getCountryCodes();
   }
@@ -45,6 +48,10 @@ export class ProviderProfileComponent implements OnInit {
     });
   }
 
+  getEnumLabel(enumObj: any, enumValue: any): string {
+    return enumObj[enumValue]?.replaceAll('_', ' ') || '';
+  }
+
   edit() {
     this.editDTO = JSON.parse(JSON.stringify(this.dto));
     this.editProvider = true;
@@ -63,7 +70,8 @@ export class ProviderProfileComponent implements OnInit {
     this.timeZoneOptions = this.toolsService.getTimeZoneCodes(
       this.editDTO.countryCode
     );
-    this.editDTO.stateCode = StateCodeEnum.Select; // optional reset
+    this.editDTO.stateCode = StateCodeEnum.Select;
+    this.editDTO.timeZoneCode = TimeZoneCodeEnum.Select;
   }
 
   editSave() {
