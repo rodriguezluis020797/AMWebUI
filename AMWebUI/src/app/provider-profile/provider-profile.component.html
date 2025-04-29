@@ -23,9 +23,9 @@
     <input type="text" id="lastName" [(ngModel)]="editDTO.lastName" />
 
     <label for="dropdown">Select an option:</label>
-    <select [(ngModel)]="editDTO.countryCode" name="dropdown">
-      <option *ngFor="let entry of optionsArray" [value]="entry[0]">
-        {{ entry[1] }}
+    <select [(ngModel)]="editDTO.countryCode" name="countryCode">
+      <option *ngFor="let opt of optionsArray" [value]="opt.key">
+        {{ opt.label }}
       </option>
     </select>
 

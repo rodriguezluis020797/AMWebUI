@@ -24,14 +24,17 @@ export class ProviderProfileComponent implements OnInit {
     selection: new FormControl(''),
   });
 
-  options: { [key: string]: string } = {
-    option1: 'Option One',
-    option2: 'Option Two',
-    option3: 'Option Three',
+  options: { [key in CountryCodeEnum]?: string } = {
+    [CountryCodeEnum.Select]: 'Select a Country',
+    [CountryCodeEnum.United_States]: 'United States',
+    [CountryCodeEnum.Mexico]: 'Mexico',
   };
 
-  get optionsArray() {
-    return Object.entries(this.options); // Converts the dictionary to an array of [key, value]
+  get optionsArray(): { key: CountryCodeEnum; label: string }[] {
+    return Object.entries(this.options).map(([key, label]) => ({
+      key: Number(key), // Convert string key back to enum number
+      label: label!,
+    }));
   }
 
   constructor(private providerService: ProviderService) {}
@@ -54,6 +57,7 @@ export class ProviderProfileComponent implements OnInit {
   }
 
   editSave() {
+    console.log(this.editDTO.countryCode);
     this.providerService
       .updateProviderAsync(this.editDTO)
       .subscribe((result) => {
