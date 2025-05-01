@@ -38,7 +38,7 @@ export class ProviderProfileComponent implements OnInit {
     private providerService: ProviderService,
     private toolsService: ToolsService,
     private currentStateService: CurrentStateService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.getProvider();
   }
@@ -95,7 +95,7 @@ export class ProviderProfileComponent implements OnInit {
       .updateProviderAsync(this.editDTO)
       .subscribe((result) => {
         if (!result.errorMessage || result.errorMessage.trim() === '') {
-          this.getProvider();
+          this.dto = JSON.parse(JSON.stringify(this.editDTO));
           this.cancelEdit();
           this.currentStateService.hasCompletedProfile.next(true);
         } else {
