@@ -1,6 +1,6 @@
 <div *ngIf="!loading" class="provider-container">
-  <h2 *ngIf="!editProvider">Details</h2>
-  <h2 *ngIf="editProvider">Edit Details</h2>
+  <h1 *ngIf="!editProvider">Details</h1>
+  <h1 *ngIf="editProvider">Edit Details</h1>
 
   <div *ngIf="editDTO.errorMessage && editProvider" class="error-message">
     <p>{{ editDTO.errorMessage }}</p>
@@ -8,6 +8,7 @@
 
   <!-- Display Mode -->
   <div *ngIf="!editProvider">
+    <h2>Personal Details</h2>
     <div><strong>First Name:</strong> {{ dto.firstName }}</div>
     <div><strong>Middle Name:</strong> {{ dto.middleName || "—" }}</div>
     <div><strong>Last Name:</strong> {{ dto.lastName }}</div>

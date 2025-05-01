@@ -47,6 +47,9 @@ export class ProviderProfileComponent implements OnInit {
     this.loading = true;
     this.providerService.getProviderAsync().subscribe((result) => {
       this.dto = result;
+      this.currentStateService.hasCompletedProfile.next(
+        this.dto.hasCompletedSignUp
+      );
       if (!this.currentStateService.hasCompletedProfile.value) {
         this.disableCancel = true;
         this.edit();

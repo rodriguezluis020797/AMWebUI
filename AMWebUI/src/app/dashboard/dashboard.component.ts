@@ -4,6 +4,7 @@ import { ProviderService } from '../services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { Router } from '@angular/router';
+import { CurrentStateService } from '../services/current-state.service';
 
 @Component({
   selector: 'am-dashboard',
@@ -14,7 +15,8 @@ import { Router } from '@angular/router';
 export class DashboardComponent implements OnInit {
   constructor(
     private providerService: ProviderService,
-    private router: Router
+    private router: Router,
+    private currentStateService: CurrentStateService
   ) {}
   provider: ProviderDTO = new ProviderDTO();
   loading = true;
@@ -24,9 +26,12 @@ export class DashboardComponent implements OnInit {
   }
 
   getProvider() {
+    this.loading = true;
     this.providerService.getProviderAsync().subscribe((result) => {
-      this.loading = true;
       this.provider = result;
+      this.currentStateService.hasCompletedProfile.next(
+        this.provider.hasCompletedSignUp
+      );
       this.setTimeOut();
     });
   }
