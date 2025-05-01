@@ -2,10 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
-import { ProviderService } from '../../services/provider.service';
+import { ProviderService } from '../../_services/provider.service';
 import { BaseDTO } from '../../models/BaseDTO';
 import { of, switchMap } from 'rxjs';
-import { IdentityService } from '../../services/identity.service';
+import { IdentityService } from '../../_services/identity.service';
 
 @Component({
   standalone: true,
@@ -19,7 +19,7 @@ export class VerifyEMailComponent implements OnInit {
     private route: ActivatedRoute,
     private providerService: ProviderService,
     private identityService: IdentityService
-  ) {}
+  ) { }
 
   guid: string | null = null;
   isNew: boolean | null = null;

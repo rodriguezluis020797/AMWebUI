@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { FormControl, FormGroup, FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { ProviderService } from '../services/provider.service';
+import { ProviderService } from '../_services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { RouterLink } from '@angular/router';
 import {
@@ -10,8 +10,8 @@ import {
   StateCodeEnum,
   TimeZoneCodeEnum,
 } from '../models/Enums';
-import { ToolsService } from '../services/tools.service';
-import { CurrentStateService } from '../services/current-state.service';
+import { ToolsService } from '../_services/tools.service';
+import { CurrentStateService } from '../_services/current-state.service';
 
 @Component({
   selector: 'am-provider-profile',

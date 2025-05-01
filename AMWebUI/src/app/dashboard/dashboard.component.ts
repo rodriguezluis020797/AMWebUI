@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ProviderService } from '../services/provider.service';
+import { ProviderService } from '../_services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { Router } from '@angular/router';
-import { CurrentStateService } from '../services/current-state.service';
+import { CurrentStateService } from '../_services/current-state.service';
 
 @Component({
   selector: 'am-dashboard',
@@ -17,7 +17,7 @@ export class DashboardComponent implements OnInit {
     private providerService: ProviderService,
     private router: Router,
     private currentStateService: CurrentStateService
-  ) {}
+  ) { }
   provider: ProviderDTO = new ProviderDTO();
   loading = true;
 

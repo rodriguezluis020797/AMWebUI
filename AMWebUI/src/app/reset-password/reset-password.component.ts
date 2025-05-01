@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { RouterLink } from '@angular/router';
-import { IdentityService } from '../services/identity.service';
+import { IdentityService } from '../_services/identity.service';
 
 @Component({
   selector: 'am-reset-password',
@@ -13,7 +13,7 @@ import { IdentityService } from '../services/identity.service';
   styleUrl: './reset-password.component.css',
 })
 export class ResetPasswordComponent {
-  constructor(private identityService: IdentityService) {}
+  constructor(private identityService: IdentityService) { }
 
   dto: ProviderDTO = new ProviderDTO();
   loading: Boolean = false;

@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { RouterLink } from '@angular/router';
-import { ProviderService } from '../services/provider.service';
+import { ProviderService } from '../_services/provider.service';
 
 @Component({
   standalone: true,
@@ -19,7 +19,7 @@ export class ResetEMailComponent implements OnInit {
   disableSubmit: Boolean = false;
   success: Boolean = false;
 
-  constructor(private providerService: ProviderService) {}
+  constructor(private providerService: ProviderService) { }
   ngOnInit(): void {
     this.loading = false;
   }

@@ -2,9 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { IdentityService } from '../services/identity.service';
+import { IdentityService } from '../_services/identity.service';
 import { ProviderDTO } from '../models/ProviderDTO';
-import { CurrentStateService } from '../services/current-state.service';
+import { CurrentStateService } from '../_services/current-state.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 
 @Component({
@@ -19,7 +19,7 @@ export class UpdatePasswordComponent implements OnInit {
     private identityService: IdentityService,
     private router: Router,
     private currentStateService: CurrentStateService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.dto.isTempPassword =

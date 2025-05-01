@@ -2,12 +2,12 @@ import { Component, OnInit } from '@angular/core';
 import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
 import { CommonModule } from '@angular/common';
 import { FooterComponent } from './partials/footer/footer.component';
-import { SystemStatusService } from './services/system-status.service';
+import { SystemStatusService } from './_services/system-status.service';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
 import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
-import { CurrentStateService } from './services/current-state.service';
+import { CurrentStateService } from './_services/current-state.service';
 import { filter, of, switchMap, take, map, Observable, EMPTY } from 'rxjs';
-import { IdentityService } from './services/identity.service';
+import { IdentityService } from './_services/identity.service';
 import { HttpStatusCodeEnum } from './models/Enums';
 
 @Component({
@@ -28,7 +28,7 @@ export class AppComponent implements OnInit {
     private currentStateService: CurrentStateService,
     private router: Router,
     private identityService: IdentityService
-  ) {}
+  ) { }
 
   title: String = 'AM';
   loading: Boolean = true;

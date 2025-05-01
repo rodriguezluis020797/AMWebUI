@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { ProviderService } from '../services/provider.service';
+import { ProviderService } from '../_services/provider.service';
 import { RouterLink } from '@angular/router';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { BaseDTO } from '../models/BaseDTO';
@@ -20,7 +20,7 @@ import {
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent {
-  constructor(private providerService: ProviderService) {}
+  constructor(private providerService: ProviderService) { }
   dto = new ProviderDTO();
   signUpSuccessful: boolean = false;
   result = new BaseDTO();

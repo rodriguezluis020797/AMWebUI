@@ -1,8 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { IdentityService } from '../../services/identity.service';
-import { CurrentStateService } from '../../services/current-state.service';
+import { IdentityService } from '../../_services/identity.service';
+import { CurrentStateService } from '../../_services/current-state.service';
 
 @Component({
   standalone: true,
@@ -20,7 +20,7 @@ export class NavBarComponent implements OnInit {
     private identityService: IdentityService,
     private router: Router,
     private currentStateService: CurrentStateService
-  ) {}
+  ) { }
 
   ngOnInit() {
     this.currentStateService.isLoggedIn$.subscribe((status) => {

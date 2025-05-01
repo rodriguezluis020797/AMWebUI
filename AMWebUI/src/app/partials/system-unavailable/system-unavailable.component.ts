@@ -1,8 +1,8 @@
 import { Component, AfterViewInit, OnDestroy, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { SystemStatusService } from '../../services/system-status.service';
-import { CurrentStateService } from '../../services/current-state.service';
-import { CookiesService } from '../../services/cookies.service';
+import { SystemStatusService } from '../../_services/system-status.service';
+import { CurrentStateService } from '../../_services/current-state.service';
+import { CookiesService } from '../../_services/cookies.service';
 import { HttpStatusCodeEnum } from '../../models/Enums';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
 import { CommonModule } from '@angular/common';
@@ -20,7 +20,7 @@ export class SystemUnavailableComponent implements OnInit {
     private systemStatusService: SystemStatusService,
     private currentStateService: CurrentStateService,
     private cookieService: CookiesService
-  ) {}
+  ) { }
   ngOnInit(): void {
     this.currentStateService.systemStatus.next(false);
   }

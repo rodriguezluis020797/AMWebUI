@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import { IdentityService } from '../../services/identity.service';
+import { IdentityService } from '../../_services/identity.service';
 
 @Component({
   selector: 'am-unauthorized',

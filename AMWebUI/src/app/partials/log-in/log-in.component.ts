@@ -1,10 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { IdentityService } from '../../services/identity.service';
+import { IdentityService } from '../../_services/identity.service';
 import { RouterLink } from '@angular/router';
 import { Router } from '@angular/router';
-import { CurrentStateService } from '../../services/current-state.service';
+import { CurrentStateService } from '../../_services/current-state.service';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
 import { ProviderDTO } from '../../models/ProviderDTO';
 
@@ -20,7 +20,7 @@ export class LogInComponent implements OnInit {
     private identityService: IdentityService,
     private router: Router,
     private currentStateService: CurrentStateService
-  ) {}
+  ) { }
 
   dto: ProviderDTO = new ProviderDTO();
   loading = false;
