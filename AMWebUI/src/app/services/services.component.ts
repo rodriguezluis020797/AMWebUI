@@ -61,6 +61,7 @@ export class ServicesComponent implements OnInit {
     this.loading = true;
     this.editDTO.errorMessage = null;
     if (!this.editDTO.serviceId || this.editDTO.serviceId === '') {
+
       console.log('assume it is a new service')
       this.serviceService.createServiceAsync(this.editDTO).subscribe((result) => {
         if (result.errorMessage && result.errorMessage.trim() !== '') {
@@ -68,6 +69,7 @@ export class ServicesComponent implements OnInit {
         }
         else {
           this.editServiceBool = false;
+          this.editDTO = new ServiceDTO();
           this.getServices();
         }
 
@@ -75,6 +77,18 @@ export class ServicesComponent implements OnInit {
       })
     } else {
       console.log('assume it is an existing service')
+      this.serviceService.updateServiceAsync(this.editDTO).subscribe((result) => {
+        if (result.errorMessage && result.errorMessage.trim() !== '') {
+          this.editDTO.errorMessage = result.errorMessage;
+        }
+        else {
+          this.editServiceBool = false;
+          this.editDTO = new ServiceDTO();
+          this.getServices();
+        }
+
+        this.setTimeout();
+      })
     }
   }
 
@@ -95,6 +109,10 @@ export class ServicesComponent implements OnInit {
         this.pendingDeleteId = null;
         this.getServices(); //set timeout done here
       });
+    }
+    else {
+      this.showDeleteModal = false;
+      this.pendingDeleteId = null;
     }
   }
 

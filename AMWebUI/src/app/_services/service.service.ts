@@ -44,4 +44,14 @@ export class ServiceService {
     );
   }
 
+  updateServiceAsync(dto: ServiceDTO): Observable<ServiceDTO> {
+    return this.http.post<ServiceDTO>('/api/Service/UpdateService', dto, {
+      withCredentials: true,
+    }).pipe(
+      catchError((error) =>
+        this.httpErrorHandler.handleError<ServiceDTO>(error)
+      )
+    );
+  }
+
 }

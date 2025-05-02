@@ -17,7 +17,7 @@
                 <h3>{{ svc.name }}</h3>
                 <p><strong>Description:</strong> {{ svc.description || '—' }}</p>
                 <p><strong>Price:</strong> {{ svc.price | currency }}</p>
-                <p><strong>Scheduling Enabled:</strong> {{ svc.allowClientScheduling ? 'Yes' : 'No' }}</p>
+                <!-- <p><strong>Scheduling Enabled:</strong> {{ svc.allowClientScheduling ? 'Yes' : 'No' }}</p> -->
                 <button (click)="editService(svc.serviceId)">Edit</button>
             </div>
         </div>
@@ -36,9 +36,11 @@
         <label for="price">Price</label>
         <input type="number" id="price" [(ngModel)]="editDTO.price" min="0" step="5.00" />
 
+        <!--
         <label>Client Scheduling</label>
         <input type="checkbox" name="serviceOption" [(ngModel)]="editDTO.allowClientScheduling"
             value="allowClientScheduling" />
+            -->
 
         <br />
         <button (click)="save()">Save</button>
