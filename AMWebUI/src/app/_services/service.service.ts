@@ -34,4 +34,14 @@ export class ServiceService {
     );
   }
 
+  deleteServiceAsync(dto: ServiceDTO): Observable<ServiceDTO> {
+    return this.http.post<ServiceDTO>('/api/Service/DeleteService', dto, {
+      withCredentials: true,
+    }).pipe(
+      catchError((error) =>
+        this.httpErrorHandler.handleError<ServiceDTO>(error)
+      )
+    );
+  }
+
 }

@@ -4,10 +4,11 @@ import { ServiceDTO } from '../models/ServiceDTO';
 import { CommonModule } from '@angular/common';
 import { LoadingScreenComponent } from "../partials/loading-screen/loading-screen.component";
 import { FormsModule } from '@angular/forms';
+import { DeleteEntityComponent } from "../partials/delete-entity/delete-entity.component";
 
 @Component({
   selector: 'am-services',
-  imports: [FormsModule, CommonModule, LoadingScreenComponent],
+  imports: [FormsModule, CommonModule, LoadingScreenComponent, DeleteEntityComponent],
   templateUrl: './services.component.html',
   styleUrl: './services.component.css'
 })
@@ -18,6 +19,8 @@ export class ServicesComponent implements OnInit {
   editServiceBool: boolean = false;
   isNewService: boolean = false;
   loading: boolean = true;
+  showDeleteModal: boolean = false;
+  pendingDeleteId: string | null = null;
 
   constructor(private serviceService: ServiceService) {
 
@@ -72,6 +75,26 @@ export class ServicesComponent implements OnInit {
       })
     } else {
       console.log('assume it is an existing service')
+    }
+  }
+
+  delete(serviceId: string) {
+    this.pendingDeleteId = serviceId;
+    this.showDeleteModal = true;
+  }
+
+  onConfirmDelete(confirm: boolean) {
+    if (confirm && this.pendingDeleteId) {
+      this.loading = true;
+      let dto = new ServiceDTO();
+      dto.serviceId = this.pendingDeleteId;
+      this.serviceService.deleteServiceAsync(dto).subscribe((result) => {
+        this.editServiceBool = false;
+        this.editDTO = new ServiceDTO();
+        this.showDeleteModal = false;
+        this.pendingDeleteId = null;
+        this.getServices(); //set timeout done here
+      });
     }
   }
 

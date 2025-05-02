@@ -43,8 +43,13 @@
         <br />
         <button (click)="save()">Save</button>
         <button (click)="cancel()">Cancel</button>
+        <button (click)="delete(editDTO.serviceId)">Delete</button>
     </div>
 </div>
+
+<am-delete-entity *ngIf="showDeleteModal && !loading" [message]="'Are you sure you want to delete this service?'"
+    (confirm)="onConfirmDelete($event)">
+</am-delete-entity>
 
 <div *ngIf="loading">
     <am-loading-screen></am-loading-screen>
