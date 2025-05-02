@@ -30,7 +30,6 @@ export class UpdatePasswordComponent implements OnInit {
   confirmPassword: string = '';
   loading: Boolean = true;
   message: string | null = null;
-  hasLoggedInBefore: boolean | null = null;
 
   submit() {
     this.loading = true;

@@ -11,6 +11,7 @@ import { VerifyEMailComponent } from './partials/verify-email/verify-email.compo
 import { ResetEMailComponent } from './reset-email/reset-email.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CompleteSignUpComponentn } from './complete-sign-up/complete-sign-up.component';
+import { ServicesComponent } from './services/services.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -40,4 +41,9 @@ export const routes: Routes = [
     component: CompleteSignUpComponentn,
     canActivate: [authorizationGuard],
   },
+  {
+    path: 'services',
+    component: ServicesComponent,
+    canActivate: [authorizationGuard]
+  }
 ];

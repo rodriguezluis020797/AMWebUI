@@ -1,1 +1,51 @@
-<p>services works!</p>
+<div *ngIf="!loading" class="service-container">
+    <h1 *ngIf="!editServiceBool">Services</h1>
+    <h1 *ngIf="editServiceBool">{{ isNewService ? 'Add Service' : 'Edit Service' }}</h1>
+
+    <!-- Error Display -->
+    <div *ngIf="editDTO?.errorMessage && editServiceBool" class="error-message">
+        <p>{{ editDTO.errorMessage }}</p>
+    </div>
+
+    <!-- List Mode -->
+    <div *ngIf="!editServiceBool">
+        <div *ngIf="services.length <= 0">
+            <h2>You have no services.</h2>
+        </div>
+        <div *ngIf="0 < services.length">
+            <div *ngFor="let svc of services" class="service-item">
+                <h3>{{ svc.name }}</h3>
+                <p><strong>Description:</strong> {{ svc.description || '—' }}</p>
+                <p><strong>Price:</strong> {{ svc.price | currency }}</p>
+                <p><strong>Scheduling Enabled:</strong> {{ svc.allowClientScheduling ? 'Yes' : 'No' }}</p>
+                <button (click)="editService(svc.serviceId)">Edit</button>
+            </div>
+        </div>
+
+        <button (click)="addService()">Add New Service</button>
+    </div>
+
+    <!-- Edit/Add Mode -->
+    <div *ngIf="editServiceBool">
+        <label for="name">Name</label>
+        <input type="text" id="name" [(ngModel)]="editDTO.name" />
+
+        <label for="description">Description</label>
+        <textarea id="description" [(ngModel)]="editDTO.description"></textarea>
+
+        <label for="price">Price</label>
+        <input type="number" id="price" [(ngModel)]="editDTO.price" min="0" step="5.00" />
+
+        <label>Client Scheduling</label>
+        <input type="checkbox" name="serviceOption" [(ngModel)]="editDTO.allowClientScheduling"
+            value="allowClientScheduling" />
+
+        <br />
+        <button (click)="save()">Save</button>
+        <button (click)="cancel()">Cancel</button>
+    </div>
+</div>
+
+<div *ngIf="loading">
+    <am-loading-screen></am-loading-screen>
+</div>
