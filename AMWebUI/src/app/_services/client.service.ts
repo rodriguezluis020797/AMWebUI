@@ -16,7 +16,7 @@ export class ClientService {
 
   createClientAsync(client: ClientDTO): Observable<ClientDTO> {
     return this.http
-      .post<ClientDTO>('/api/Client/GetClient', client, {
+      .post<ClientDTO>('/api/Client/CreateClient', client, {
         withCredentials: true,
       })
       .pipe(
