@@ -45,7 +45,7 @@
         <br />
         <button (click)="save()">Save</button>
         <button (click)="cancel()">Cancel</button>
-        <button (click)="delete(editDTO.serviceId)">Delete</button>
+        <button *ngIf="!isNewService" (click)="delete(editDTO.serviceId)">Delete</button>
     </div>
 </div>
 

@@ -12,6 +12,7 @@ import { ResetEMailComponent } from './reset-email/reset-email.component';
 import { ResetPasswordComponent } from './reset-password/reset-password.component';
 import { CompleteSignUpComponentn } from './complete-sign-up/complete-sign-up.component';
 import { ServicesComponent } from './services/services.component';
+import { ClientComponent } from './client/client.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -44,6 +45,11 @@ export const routes: Routes = [
   {
     path: 'services',
     component: ServicesComponent,
+    canActivate: [authorizationGuard]
+  },
+  {
+    path: 'clients',
+    component: ClientComponent,
     canActivate: [authorizationGuard]
   }
 ];
