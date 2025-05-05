@@ -30,13 +30,11 @@ export class ResetEMailComponent implements OnInit {
 
     this.providerService.updateEMailAsync(this.dto).subscribe((result) => {
       this.dto = result;
-      if (this.dto.errorMessage === '') {
+      if (this.dto.errorMessage === '' || !this.dto.errorMessage) {
         this.success = true;
       }
-
       this.loading = false;
       this.disableSubmit = false;
     });
   }
-  //add timeout
 }

@@ -22,14 +22,7 @@ export class ResetPasswordComponent {
   submit() {
     this.loading = true;
     this.identityService.resetPasswordAsync(this.dto).subscribe((result) => {
-      this.setTimeout();
-    });
-  }
-
-  private setTimeout() {
-    setTimeout(() => {
       this.loading = false;
-      this.success = true;
-    }, 3000);
+    });
   }
 }

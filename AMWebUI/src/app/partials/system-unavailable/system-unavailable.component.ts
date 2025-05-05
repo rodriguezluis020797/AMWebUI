@@ -52,13 +52,7 @@ export class SystemUnavailableComponent implements OnInit {
           window.location.reload();
         });
       }
-      this.setTimeout();
-    });
-  }
-
-  private setTimeout() {
-    setTimeout(() => {
       this.loading = false;
-    }, 3000);
+    });
   }
 }

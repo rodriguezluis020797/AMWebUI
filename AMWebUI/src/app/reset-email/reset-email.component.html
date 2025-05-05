@@ -5,13 +5,7 @@
   </div>
   <div>
     <label for="username">E-Mail:</label>
-    <input
-      type="text"
-      id="username"
-      [(ngModel)]="dto.eMail"
-      name="username"
-      required
-    />
+    <input type="text" id="username" [(ngModel)]="dto.eMail" name="username" required />
   </div>
   <button *ngIf="!disableSubmit" type="submit" (click)="submit()">
     Update E-Mail
@@ -22,7 +16,7 @@
 
 <div class="reset-email" *ngIf="!loading && success">
   <h2>Update E-Mail</h2>
-  <p>Please check your new e-mail's inbox to verify your new e-mail.</p>
+  <p>Please check your inbox to verify your new e-mail.</p>
   <a routerLink="/provider-profile">Back To Profile</a>
 </div>
 

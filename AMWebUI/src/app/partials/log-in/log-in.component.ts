@@ -28,7 +28,7 @@ export class LogInComponent implements OnInit {
 
   ngOnInit() {
     this.dto.eMail = 'jdoe@gmail.com';
-    this.dto.currentPassword = 'Gp7&_zX+';
+    this.dto.currentPassword = 'XNwpFLI7lm#_XNwpFLI7lm#_';
   }
 
   submit(event: MouseEvent) {
@@ -38,7 +38,7 @@ export class LogInComponent implements OnInit {
       if (result.errorMessage !== null) {
         this.message = result.errorMessage;
         this.dto.currentPassword = '';
-        this.setTimeout();
+        this.loading = false;
         return;
       }
 
@@ -54,13 +54,7 @@ export class LogInComponent implements OnInit {
       } else {
         this.router.navigate(['dashboard']);
       }
-      this.setTimeout();
-    });
-  }
-
-  private setTimeout() {
-    setTimeout(() => {
       this.loading = false;
-    }, 3000);
+    });
   }
 }

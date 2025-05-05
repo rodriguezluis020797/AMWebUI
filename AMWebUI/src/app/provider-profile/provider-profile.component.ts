@@ -56,7 +56,7 @@ export class ProviderProfileComponent implements OnInit {
       } else {
         this.disableCancel = false;
       }
-      this.setTimeout();
+      this.loading = false;
     });
   }
 
@@ -101,17 +101,12 @@ export class ProviderProfileComponent implements OnInit {
         } else {
           this.editDTO.errorMessage = result.errorMessage;
         }
-        this.setTimeout();
+        this.loading = false;
       });
   }
 
   cancelEdit() {
     this.editDTO = new ProviderDTO();
     this.editProvider = false;
-  }
-  setTimeout() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 3000);
   }
 }

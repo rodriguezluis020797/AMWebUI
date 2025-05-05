@@ -32,13 +32,7 @@ export class DashboardComponent implements OnInit {
       this.currentStateService.hasCompletedProfile.next(
         this.provider.hasCompletedSignUp
       );
-      this.setTimeOut();
-    });
-  }
-
-  setTimeOut() {
-    setTimeout(() => {
       this.loading = false;
-    }, 3000);
+    });
   }
 }

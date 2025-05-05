@@ -35,7 +35,7 @@ export class UpdatePasswordComponent implements OnInit {
     this.loading = true;
     if (this.dto.newPassword !== this.confirmPassword) {
       this.message = 'Passwords do not match';
-      this.setTimeOut();
+      this.loading = false;
       return;
     }
 
@@ -47,7 +47,7 @@ export class UpdatePasswordComponent implements OnInit {
           this.message =
             'Current password is wrong, new password has been used too recently, or new password does not meet requirements.';
         }
-        this.setTimeOut();
+        this.loading = false;
         return;
       }
 
@@ -57,13 +57,7 @@ export class UpdatePasswordComponent implements OnInit {
       } else {
         this.router.navigate(['provider-profile']);
       }
-      this.setTimeOut();
-    });
-  }
-
-  private setTimeOut() {
-    setTimeout(() => {
       this.loading = false;
-    }, 3000);
+    });
   }
 }

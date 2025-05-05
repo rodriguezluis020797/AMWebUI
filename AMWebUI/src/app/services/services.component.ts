@@ -34,7 +34,7 @@ export class ServicesComponent implements OnInit {
     this.loading = true;
     this.serviceService.getServicesAsync().subscribe((result) => {
       this.services = result;
-      this.setTimeout();
+      this.loading = false;
     })
   }
 
@@ -42,7 +42,7 @@ export class ServicesComponent implements OnInit {
     this.loading = true;
     this.editServiceBool = true;
     this.isNewService = true;
-    this.setTimeout();
+    this.loading = false;
   }
 
   editService(serviceId: string) {
@@ -53,8 +53,7 @@ export class ServicesComponent implements OnInit {
       parse(JSON
         .stringify(this.services
           .find(x => x.serviceId === serviceId)));
-
-    this.setTimeout();
+    this.loading = false;
   }
 
   save() {
@@ -72,8 +71,7 @@ export class ServicesComponent implements OnInit {
           this.editDTO = new ServiceDTO();
           this.getServices();
         }
-
-        this.setTimeout();
+        this.loading = false;
       })
     } else {
       console.log('assume it is an existing service')
@@ -86,8 +84,7 @@ export class ServicesComponent implements OnInit {
           this.editDTO = new ServiceDTO();
           this.getServices();
         }
-
-        this.setTimeout();
+        this.loading = false;
       })
     }
   }
@@ -120,11 +117,4 @@ export class ServicesComponent implements OnInit {
     this.editDTO = new ServiceDTO();
     this.editServiceBool = false;
   }
-
-  setTimeout() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000);
-  }
-
 }

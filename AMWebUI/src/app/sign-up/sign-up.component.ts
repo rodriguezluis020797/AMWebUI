@@ -52,9 +52,7 @@ export class SignUpComponent {
       if (this.result.errorMessage === null) {
         this.signUpSuccessful = true;
       }
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
+      this.loading = false;
     });
   }
 }

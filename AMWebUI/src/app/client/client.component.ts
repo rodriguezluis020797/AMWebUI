@@ -32,7 +32,7 @@ export class ClientComponent implements OnInit {
     this.loading = true;
     this.clientService.getClientsAsync().subscribe((result) => {
       this.clients = result;
-      this.setTimeout();
+      this.loading = false;
     });
   }
 
@@ -40,7 +40,7 @@ export class ClientComponent implements OnInit {
     this.loading = true;
     this.editClientBool = true;
     this.isNewClient = true;
-    this.setTimeout();
+    this.loading = false;
   }
 
   editClient(clientId: string) {
@@ -48,7 +48,7 @@ export class ClientComponent implements OnInit {
     this.isNewClient = false;
     this.editClientBool = true;
     this.editDTO = JSON.parse(JSON.stringify(this.clients.find(x => x.clientId === clientId)));
-    this.setTimeout();
+    this.loading = false;
   }
 
   save() {
@@ -64,7 +64,7 @@ export class ClientComponent implements OnInit {
           this.editDTO = new ClientDTO();
           this.getClients();
         }
-        this.setTimeout();
+        this.loading = false;
       });
     } else {
       this.clientService.updateClientAsync(this.editDTO).subscribe((result) => {
@@ -75,7 +75,7 @@ export class ClientComponent implements OnInit {
           this.editDTO = new ClientDTO();
           this.getClients();
         }
-        this.setTimeout();
+        this.loading = false;
       });
     }
   }
@@ -106,11 +106,5 @@ export class ClientComponent implements OnInit {
   cancel() {
     this.editDTO = new ClientDTO();
     this.editClientBool = false;
-  }
-
-  setTimeout() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000);
   }
 }
