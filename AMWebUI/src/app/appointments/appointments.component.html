@@ -1,0 +1,66 @@
+<div *ngIf="!loading" class="appointment-container">
+    <h1 *ngIf="!editAppointmentBool">Appointments</h1>
+    <h1 *ngIf="editAppointmentBool">{{ isNewAppointment ? 'Add Appointment' : 'Edit Appointment' }}</h1>
+
+    <!-- Error Display -->
+    <div *ngIf="editDTO?.errorMessage && editAppointmentBool" class="error-message">
+        <p>{{ editDTO.errorMessage }}</p>
+    </div>
+
+    <!-- List Mode -->
+    <div *ngIf="!editAppointmentBool">
+        <div *ngIf="appointments.length <= 0">
+            <h2>You have no appointments.</h2>
+        </div>
+        <div *ngIf="0 < appointments.length">
+            <div *ngFor="let appt of appointments" class="appointment-item">
+                <h3>{{ appt.startDate | date:'medium' }} – {{ appt.endDate | date:'shortTime' }}</h3>
+                <p><strong>Client ID:</strong> {{ appt.clientId }}</p>
+                <p><strong>Service ID:</strong> {{ appt.serviceId }}</p>
+                <p><strong>Status:</strong> {{ appt.status | appointmentStatus }}</p>
+                <p><strong>Notes:</strong> {{ appt.notes || '—' }}</p>
+                <button (click)="editAppointment(appt.appointmentId)">Edit</button>
+            </div>
+        </div>
+
+        <button (click)="addAppointment()">Add New Appointment</button>
+    </div>
+
+    <!-- Edit/Add Mode -->
+    <div *ngIf="editAppointmentBool">
+        <label for="clientId">Client ID</label>
+        <input type="text" id="clientId" [(ngModel)]="editDTO.clientId" />
+
+        <label for="serviceId">Service ID</label>
+        <input type="text" id="serviceId" [(ngModel)]="editDTO.serviceId" />
+
+        <label for="startDate">Start Date</label>
+        <input type="datetime-local" id="startDate" [(ngModel)]="editDTO.startDate" />
+
+        <label for="endDate">End Date</label>
+        <input type="datetime-local" id="endDate" [(ngModel)]="editDTO.endDate" />
+
+        <label for="notes">Notes</label>
+        <textarea id="notes" [(ngModel)]="editDTO.notes"></textarea>
+
+        <label for="status">Status</label>
+        <select id="status" [(ngModel)]="editDTO.status">
+            <option *ngFor="let status of [0,1,2,3]" [value]="status">
+                {{ status | appointmentStatus }}
+            </option>
+        </select>
+
+        <br />
+        <button (click)="save()">Save</button>
+        <button (click)="cancel()">Cancel</button>
+        <button *ngIf="!isNewAppointment" (click)="delete(editDTO.appointmentId)">Delete</button>
+    </div>
+</div>
+
+<am-delete-entity *ngIf="showDeleteModal && !loading" [message]="'Are you sure you want to delete this appointment?'"
+    (confirm)="onConfirmDelete($event)">
+</am-delete-entity>
+
+<div *ngIf="loading">
+    <am-loading-screen></am-loading-screen>
+</div>

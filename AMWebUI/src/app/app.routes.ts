@@ -13,6 +13,7 @@ import { ResetPasswordComponent } from './reset-password/reset-password.componen
 import { CompleteSignUpComponentn } from './complete-sign-up/complete-sign-up.component';
 import { ServicesComponent } from './services/services.component';
 import { ClientComponent } from './client/client.component';
+import { AppointmentsComponent } from './appointments/appointments.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -50,6 +51,11 @@ export const routes: Routes = [
   {
     path: 'clients',
     component: ClientComponent,
+    canActivate: [authorizationGuard]
+  },
+  {
+    path: 'appointments',
+    component: AppointmentsComponent,
     canActivate: [authorizationGuard]
   }
 ];

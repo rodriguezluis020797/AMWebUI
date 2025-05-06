@@ -114,3 +114,10 @@ export enum StateCodeEnum {
 export enum CookieEnum {
   Unknown = 0,
 }
+
+export enum AppointmentStatusEnum {
+  Unknown = 0,
+  Scheduled,
+  Completed,
+  Cancelled
+}

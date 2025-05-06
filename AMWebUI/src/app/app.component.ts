@@ -74,7 +74,6 @@ export class AppComponent implements OnInit {
         } else {
           this.router.navigate(['']);
         }
-
         this.loading = false; // Ensure loading is set to false once everything is done
       });
   }
@@ -111,7 +110,7 @@ export class AppComponent implements OnInit {
     const timeLastPinged = this.currentStateService.lastPingSubject.value;
     console.log('timeLastPinged: ' + timeLastPinged);
 
-    const msNeededToPing = 300000;
+    const msNeededToPing = 0;//300000;
     console.log('msNeededToPing: ' + msNeededToPing);
 
     const timeDifferenceInMs = timeNow.getTime() - timeLastPinged.getTime();
