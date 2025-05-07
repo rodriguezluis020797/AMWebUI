@@ -1,8 +1,8 @@
 {
-    "/api": {
-      "target": "https://localhost:7155",
-      "secure": false,
-      "changeOrigin": true,
-      "logLevel": "debug"
-    }
+  "/api": {
+    "target": "https://1d6c-45-172-89-18.ngrok-free.app",
+    "secure": false,
+    "changeOrigin": true,
+    "logLevel": "debug"
   }
+}

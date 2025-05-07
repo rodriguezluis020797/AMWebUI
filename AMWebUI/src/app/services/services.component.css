@@ -1,4 +1,4 @@
-:host ::ng-deep .appointment-container {
+:host ::ng-deep .service-container {
     background-color: #FFFFFF;
     color: #000000;
     padding: 2rem;
@@ -9,33 +9,31 @@
     text-align: left;
 }
 
-:host ::ng-deep .appointment-container h1,
-:host ::ng-deep .appointment-container h2 {
+:host ::ng-deep .service-container h1,
+:host ::ng-deep .service-container h2 {
     font-size: 1.8rem;
     margin-bottom: 1.5rem;
     color: #000000;
     text-align: center;
 }
 
-:host ::ng-deep .appointment-container .error-message {
+:host ::ng-deep .service-container .error-message {
     color: red;
     font-size: 1rem;
     margin-bottom: 1rem;
     text-align: center;
 }
 
-:host ::ng-deep .appointment-container label {
+:host ::ng-deep .service-container label {
     display: block;
     font-size: 1rem;
     margin-bottom: 0.5rem;
     color: #000000;
 }
 
-:host ::ng-deep .appointment-container input[type="text"],
-:host ::ng-deep .appointment-container input[type="number"],
-:host ::ng-deep .appointment-container input[type="datetime-local"],
-:host ::ng-deep .appointment-container textarea,
-:host ::ng-deep .appointment-container select {
+:host ::ng-deep .service-container input[type="text"],
+:host ::ng-deep .service-container input[type="number"],
+:host ::ng-deep .service-container textarea {
     width: 100%;
     padding: 0.8rem;
     margin-bottom: 1rem;
@@ -47,14 +45,18 @@
     resize: vertical;
 }
 
-:host ::ng-deep .appointment-container input:focus,
-:host ::ng-deep .appointment-container textarea:focus,
-:host ::ng-deep .appointment-container select:focus {
+:host ::ng-deep .service-container input:focus,
+:host ::ng-deep .service-container textarea:focus {
     border-color: #000000;
     outline: none;
 }
 
-:host ::ng-deep .appointment-container .appointment-item {
+:host ::ng-deep .service-container input[type="checkbox"] {
+    margin-right: 0.5rem;
+    vertical-align: middle;
+}
+
+:host ::ng-deep .service-container .service-item {
     border: 1px solid #000000;
     border-radius: 6px;
     padding: 1rem;
@@ -62,11 +64,11 @@
     background-color: #f9f9f9;
 }
 
-:host ::ng-deep .appointment-container .appointment-item h3 {
+:host ::ng-deep .service-container .service-item h3 {
     margin-top: 0;
 }
 
-:host ::ng-deep .appointment-container button {
+:host ::ng-deep .service-container button {
     display: inline-block;
     padding: 0.8rem 1rem;
     font-size: 1rem;
@@ -79,8 +81,8 @@
     margin-top: 0.5rem;
 }
 
-:host ::ng-deep .appointment-container button:hover,
-:host ::ng-deep .appointment-container button:focus {
+:host ::ng-deep .service-container button:hover,
+:host ::ng-deep .service-container button:focus {
     background-color: #333333;
     outline: none;
 }

@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { AppointmentDTO, AppointmentStatusEnum } from '../models/AppointmentDTO';
+import { AppointmentDTO } from '../models/AppointmentDTO';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { DeleteEntityComponent } from '../partials/delete-entity/delete-entity.component';
 import { AppointmentService } from '../_services/appointment.service';
 import { AppointmentStatusPipe } from "../pipes/appointment-status.pipe";
+import { ClientDTO } from '../models/ClientDTO';
+import { ClientService } from '../_services/client.service';
+import { switchMap } from 'rxjs';
+import { ServiceService } from '../_services/service.service';
+import { ServiceDTO } from '../models/ServiceDTO';
+import { AppointmentStatusEnum } from '../models/Enums';
 
 @Component({
   selector: 'am-appointments',
@@ -15,8 +21,6 @@ import { AppointmentStatusPipe } from "../pipes/appointment-status.pipe";
   styleUrl: './appointments.component.css'
 })
 export class AppointmentsComponent implements OnInit {
-
-  appointments: AppointmentDTO[] = [];
   editDTO: AppointmentDTO = new AppointmentDTO();
   editAppointmentBool: boolean = false;
   isNewAppointment: boolean = false;
@@ -24,22 +28,59 @@ export class AppointmentsComponent implements OnInit {
   showDeleteModal: boolean = false;
   pendingDeleteId: string | null = null;
 
-  constructor(private appointmentService: AppointmentService) { }
+  appointments: (AppointmentDTO & { clientName?: string, serviceName?: string })[] = [];
+  clients: ClientDTO[] = [];
+  services: ServiceDTO[] = [];
+
+  constructor(private appointmentService: AppointmentService, private clientService: ClientService, private serviceService: ServiceService) { }
 
   ngOnInit(): void {
-    this.getAppointments();
+    this.loading = true;
+    this.appointmentService.getAppointmentsAsync().pipe(
+      switchMap((result) => {
+        console.log("getAppointmentsAsync");
+        this.appointments = result;
+        return this.clientService.getClientsAsync();
+      }),
+      switchMap((result) => {
+        console.log("getClientsAsync");
+        this.clients = result;
+        return this.serviceService.getServicesAsync();
+      })
+    ).subscribe((result) => {
+      console.log("getServicesAsync");
+      this.services = result;
+      this.mapClientAndServiceNames();
+    });
+  }
+
+  mapClientAndServiceNames() {
+    for (const appointment of this.appointments) {
+      const client = this.clients.find(c => c.clientId === appointment.clientId);
+      const service = this.services.find(s => s.serviceId === appointment.serviceId);
+
+      appointment.clientName = client
+        ? `${client.firstName} ${client.middleName ?? ''} ${client.lastName}`.trim().replace(/\s+/g, ' ')
+        : 'Unknown Client';
+
+      appointment.serviceName = service ? service.name : 'Unknown Service';
+    }
+
+    this.loading = false;
   }
 
   getAppointments() {
     this.loading = true;
-    this.appointmentService.getAppointmentsAsync().subscribe(result => {
-      this.appointments = result;
-      this.loading = false;
-    });
+    this.appointmentService.getAppointmentsAsync().subscribe(
+      (result) => {
+        this.appointments = result;
+        this.loading = false;
+      })
   }
 
   addAppointment() {
     this.loading = true;
+    this.editDTO = new AppointmentDTO();
     this.editAppointmentBool = true;
     this.isNewAppointment = true;
     this.loading = false;
@@ -56,29 +97,30 @@ export class AppointmentsComponent implements OnInit {
   save() {
     this.loading = true;
     this.editDTO.errorMessage = null;
+    this.editDTO.status = Number(this.editDTO.status);
 
     if (!this.editDTO.appointmentId || this.editDTO.appointmentId === '') {
       this.editDTO.status = AppointmentStatusEnum.Scheduled;
       this.appointmentService.createAppointmentAsync(this.editDTO).subscribe(result => {
         if (result.errorMessage && result.errorMessage.trim() !== '') {
           this.editDTO.errorMessage = result.errorMessage;
+          this.loading = false;
         } else {
           this.editAppointmentBool = false;
           this.editDTO = new AppointmentDTO();
           this.getAppointments();
         }
-        this.loading = false;
       });
     } else {
       this.appointmentService.updateAppointmentAsync(this.editDTO).subscribe(result => {
         if (result.errorMessage && result.errorMessage.trim() !== '') {
           this.editDTO.errorMessage = result.errorMessage;
+          this.loading = false;
         } else {
           this.editAppointmentBool = false;
           this.editDTO = new AppointmentDTO();
           this.getAppointments();
         }
-        this.loading = false;
       });
     }
   }

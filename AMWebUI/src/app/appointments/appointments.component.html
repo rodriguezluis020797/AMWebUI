@@ -15,10 +15,10 @@
         <div *ngIf="0 < appointments.length">
             <div *ngFor="let appt of appointments" class="appointment-item">
                 <h3>{{ appt.startDate | date:'medium' }} – {{ appt.endDate | date:'shortTime' }}</h3>
-                <p><strong>Client ID:</strong> {{ appt.clientId }}</p>
-                <p><strong>Service ID:</strong> {{ appt.serviceId }}</p>
-                <p><strong>Status:</strong> {{ appt.status | appointmentStatus }}</p>
+                <p><strong>Client:</strong> {{ appt.clientName }}</p>
+                <p><strong>Service:</strong> {{ appt.serviceName }}</p>
                 <p><strong>Notes:</strong> {{ appt.notes || '—' }}</p>
+                <p><strong>Status:</strong> {{ appt.status | appointmentStatus }}</p>
                 <button (click)="editAppointment(appt.appointmentId)">Edit</button>
             </div>
         </div>
@@ -28,11 +28,19 @@
 
     <!-- Edit/Add Mode -->
     <div *ngIf="editAppointmentBool">
-        <label for="clientId">Client ID</label>
-        <input type="text" id="clientId" [(ngModel)]="editDTO.clientId" />
+        <label for="clientId">Client</label>
+        <select id="clientId" [(ngModel)]="editDTO.clientId">
+            <option *ngFor="let client of clients" [value]="client.clientId">
+                {{ client.firstName }} {{client.middleName || "-"}} {{ client.lastName }}
+            </option>
+        </select>
 
-        <label for="serviceId">Service ID</label>
-        <input type="text" id="serviceId" [(ngModel)]="editDTO.serviceId" />
+        <label for="serviceId">Service</label>
+        <select id="serviceId" [(ngModel)]="editDTO.serviceId">
+            <option *ngFor="let service of services" [value]="service.serviceId">
+                {{ service.name }}
+            </option>
+        </select>
 
         <label for="startDate">Start Date</label>
         <input type="datetime-local" id="startDate" [(ngModel)]="editDTO.startDate" />

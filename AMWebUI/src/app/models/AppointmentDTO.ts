@@ -21,5 +21,3 @@ export class AppointmentDTO extends BaseDTO {
         this.status = AppointmentStatusEnum.Unknown;
     }
 }
-export { AppointmentStatusEnum };
-
