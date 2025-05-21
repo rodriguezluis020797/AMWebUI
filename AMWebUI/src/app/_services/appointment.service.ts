@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
-import { HttpErrorHandlerService } from './http-error-handler.service';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { AppointmentDTO } from '../models/AppointmentDTO';
 import { catchError, Observable, of } from 'rxjs';
 import { Router } from '@angular/router';
+import { CurrentStateService } from './current-state.service';
 
 @Injectable({
   providedIn: 'root'
@@ -12,58 +12,92 @@ export class AppointmentService {
 
   constructor(
     private http: HttpClient,
-    private httpErrorHandler: HttpErrorHandlerService,
-    private router: Router
+    private router: Router,
+    private currentStateService: CurrentStateService
   ) { }
 
-  createAppointmentAsync(dto: AppointmentDTO): Observable<AppointmentDTO> {
+  createAppointmentAsync(dto: AppointmentDTO): Observable<AppointmentDTO | null> {
     return this.http.post<AppointmentDTO>('/api/Appointment/CreateAppointment', dto, {
       withCredentials: true,
-    }).pipe(
-      catchError((error) =>
-        this.httpErrorHandler.handleError<AppointmentDTO>(error)
-      )
-    );
+    })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
   }
 
-  getAllAppointmentsAsync(): Observable<AppointmentDTO[]> {
+  getAllAppointmentsAsync(): Observable<AppointmentDTO[] | null> {
     return this.http.get<AppointmentDTO[]>('/api/Appointment/GetAllAppointments', {
       withCredentials: true,
-    }).pipe(
-      catchError((error) =>
-        this.httpErrorHandler.handleError<AppointmentDTO[]>(error)
-      )
-    );
+    })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
   }
 
   getUpcomingAppointmentsAsync(): Observable<AppointmentDTO[] | null> {
     return this.http.get<AppointmentDTO[]>('/api/Appointment/GetUpcomingAppointments', {
       withCredentials: true,
-    }).pipe(
-      catchError((error) => {
-        this.router.navigate(['/error'])
-        return of(null);
-      })
-    );
+    })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
   }
 
-  deleteAppointmentAsync(dto: AppointmentDTO): Observable<AppointmentDTO> {
+  deleteAppointmentAsync(dto: AppointmentDTO): Observable<AppointmentDTO | null> {
     return this.http.post<AppointmentDTO>('/api/Appointment/DeleteAppointment', dto, {
       withCredentials: true,
-    }).pipe(
-      catchError((error) =>
-        this.httpErrorHandler.handleError<AppointmentDTO>(error)
-      )
-    );
+    })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
   }
 
-  updateAppointmentAsync(dto: AppointmentDTO): Observable<AppointmentDTO> {
+  updateAppointmentAsync(dto: AppointmentDTO): Observable<AppointmentDTO | null> {
     return this.http.post<AppointmentDTO>('/api/Appointment/UpdateAppointment', dto, {
       withCredentials: true,
-    }).pipe(
-      catchError((error) =>
-        this.httpErrorHandler.handleError<AppointmentDTO>(error)
-      )
-    );
+    })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
   }
 }

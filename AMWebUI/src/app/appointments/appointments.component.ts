@@ -38,6 +38,10 @@ export class AppointmentsComponent implements OnInit {
     this.loading = true;
     this.appointmentService.getAllAppointmentsAsync().pipe(
       switchMap((result) => {
+        if (result === null) {
+          this.loading = false;
+          return EMPTY;
+        }
         this.appointments = result;
         return this.clientService.getClientsAsync();
       }),
@@ -78,6 +82,10 @@ export class AppointmentsComponent implements OnInit {
     this.loading = true;
     this.appointmentService.getAllAppointmentsAsync().subscribe(
       (result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
         this.appointments = result;
         this.loading = false;
       })
@@ -107,6 +115,10 @@ export class AppointmentsComponent implements OnInit {
     if (!this.editDTO.appointmentId || this.editDTO.appointmentId === '') {
       this.editDTO.status = AppointmentStatusEnum.Scheduled;
       this.appointmentService.createAppointmentAsync(this.editDTO).subscribe(result => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
         if (result.errorMessage && result.errorMessage.trim() !== '') {
           this.editDTO.errorMessage = result.errorMessage;
           this.loading = false;
@@ -118,6 +130,10 @@ export class AppointmentsComponent implements OnInit {
       });
     } else {
       this.appointmentService.updateAppointmentAsync(this.editDTO).subscribe(result => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
         if (result.errorMessage && result.errorMessage.trim() !== '') {
           this.editDTO.errorMessage = result.errorMessage;
           this.loading = false;
