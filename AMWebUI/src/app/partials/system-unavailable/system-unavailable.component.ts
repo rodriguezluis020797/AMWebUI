@@ -19,7 +19,6 @@ export class SystemUnavailableComponent implements OnInit {
     private router: Router,
     private systemStatusService: SystemStatusService,
     private currentStateService: CurrentStateService,
-    private cookieService: CookiesService
   ) { }
   ngOnInit(): void {
     this.currentStateService.systemStatus.next(false);
@@ -36,10 +35,7 @@ export class SystemUnavailableComponent implements OnInit {
   reCheckSytemstatus(): void {
     this.loading = true;
     this.systemStatusService.fullSystemCheckAsync().subscribe((result) => {
-      if (
-        Number(result) === HttpStatusCodeEnum.ServerError ||
-        Number(result) === HttpStatusCodeEnum.SystemUnavailable
-      ) {
+      if (result === null) {
         this.time = new Date();
         this.shortTime = this.time.toLocaleTimeString([], {
           hour: 'numeric',

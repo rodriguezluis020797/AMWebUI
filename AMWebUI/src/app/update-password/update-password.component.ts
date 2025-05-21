@@ -40,6 +40,10 @@ export class UpdatePasswordComponent implements OnInit {
     }
 
     this.identityService.updatePasswordAsync(this.dto).subscribe((result) => {
+      if (result === null) {
+        return;
+      }
+
       if (result.errorMessage !== null) {
         if (result.isSpecialCase) {
           this.message = 'Password does not meet requirements.';

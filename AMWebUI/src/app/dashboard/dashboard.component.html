@@ -1,17 +1,18 @@
-<div
-  class="dashboard-container"
-  *ngIf="!loading && provider.hasCompletedSignUp"
->
+<div class="dashboard-container" *ngIf="!loading">
   <h2>Welcome, {{ provider.firstName }}!</h2>
-  <h3>Replace with daily appointment report...</h3>
-</div>
+  <h3>Next 24 Hours At A Glance</h3>
+  <div *ngIf="appointments.length <= 0">
+    <h3>No Apppointments</h3>
+  </div>
+  <div *ngIf="0 < appointments.length">
 
-<div
-  class="dashboard-container"
-  *ngIf="!loading && !provider.hasCompletedSignUp"
->
-  <h2>Welcome, {{ provider.firstName }}!</h2>
-  <h3>Please complete your profile.</h3>
+    <div *ngFor="let appt of appointments" class="appointment-item">
+      <h3>{{ appt.startDate | date:'medium' }} – {{ appt.endDate | date:'shortTime' }}</h3>
+      <p><strong>Client:</strong> {{ appt.clientName }}</p>
+      <p><strong>Service:</strong> {{ appt.serviceName }}</p>
+      <p><strong>Notes:</strong> {{ appt.notes || '—' }}</p>
+    </div>
+  </div>
 </div>
 
 <div class="dashboard-container" *ngIf="loading">

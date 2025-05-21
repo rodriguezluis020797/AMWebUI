@@ -6,9 +6,9 @@ import {
   HttpResponse,
 } from '@angular/common/http';
 import { catchError, Observable, of } from 'rxjs';
-import { HttpErrorHandlerService } from './http-error-handler.service';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { BaseDTO } from '../models/BaseDTO';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -16,10 +16,10 @@ import { BaseDTO } from '../models/BaseDTO';
 export class IdentityService {
   constructor(
     private http: HttpClient,
-    private httpErrorHandler: HttpErrorHandlerService
-  ) {}
+    private router: Router
+  ) { }
 
-  isLoggedInAsync(): Observable<HttpResponse<any>> {
+  isLoggedInAsync(): Observable<HttpResponse<any> | null> {
     return this.http
       .get<HttpResponse<any>>('/api/Identity/IsLoggedIn', {
         observe: 'response',
@@ -27,41 +27,51 @@ export class IdentityService {
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          return this.httpErrorHandler.handleError<HttpResponse<any>>(error);
+          this.router.navigate(['/error']);
+          return of(null);
         })
       );
   }
-  loginAsync(provider: ProviderDTO): Observable<ProviderDTO> {
+
+  loginAsync(provider: ProviderDTO): Observable<ProviderDTO | null> {
     return this.http
       .post<ProviderDTO>('/api/Identity/Login', provider, {
         headers: this.getFingerprintHeaders(),
       })
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<ProviderDTO>(error)
+        catchError((error) => {
+          this.router.navigate(['/error']);
+          return of(null);
+        }
         )
       );
   }
 
-  logoutAsync(): Observable<boolean> {
+  logoutAsync(): Observable<boolean | null> {
     return this.http
       .get<boolean>('/api/Identity/LogOut')
       .pipe(
-        catchError((error) => this.httpErrorHandler.handleError<boolean>(error))
+        catchError((error) => {
+          this.router.navigate(['/error']);
+          return of(null);
+        })
       );
   }
 
-  updatePasswordAsync(provider: ProviderDTO): Observable<BaseDTO> {
+  updatePasswordAsync(provider: ProviderDTO): Observable<BaseDTO | null> {
     return this.http
       .post<BaseDTO>('/api/Identity/UpdatePassword', provider, {
         withCredentials: true,
       })
       .pipe(
-        catchError((error) => this.httpErrorHandler.handleError<BaseDTO>(error))
+        catchError((error) => {
+          this.router.navigate(['/error']);
+          return of(null);
+        })
       );
   }
 
-  pingAsync(): Observable<HttpResponse<any>> {
+  pingAsync(): Observable<HttpResponse<any> | null> {
     return this.http
       .get('/api/Identity/Ping', {
         withCredentials: true,
@@ -69,13 +79,15 @@ export class IdentityService {
         observe: 'response',
       })
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<HttpResponse<any>>(error)
+        catchError((error) => {
+          this.router.navigate(['/error']);
+          return of(null);
+        }
         )
       );
   }
 
-  resetPasswordAsync(dto: ProviderDTO): Observable<HttpResponse<any>> {
+  resetPasswordAsync(dto: ProviderDTO): Observable<HttpResponse<any> | null> {
     return this.http
       .post('/api/Identity/ResetPassword', dto, {
         withCredentials: true,
@@ -83,8 +95,10 @@ export class IdentityService {
         observe: 'response',
       })
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<HttpResponse<any>>(error)
+        catchError((error) => {
+          this.router.navigate(['/error']);
+          return of(null);
+        }
         )
       );
   }

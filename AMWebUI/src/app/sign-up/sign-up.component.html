@@ -4,36 +4,49 @@
     <div *ngIf="result.errorMessage" class="error-message">
       <p>{{ result.errorMessage }}</p>
     </div>
-    <div>
-      <label for="username">E-Mail:</label>
-      <input
-        type="text"
-        id="username"
-        [(ngModel)]="dto.eMail"
-        name="username"
-        required
-      />
-    </div>
-    <div>
-      <label for="firstName">First Name:</label>
-      <input
-        type="text"
-        id="firstName"
-        [(ngModel)]="dto.firstName"
-        name="firstName"
-        required
-      />
-    </div>
-    <div>
-      <label for="lastName">Last Name:</label>
-      <input
-        type="text"
-        id="lastName"
-        [(ngModel)]="dto.lastName"
-        name="lastName"
-        required
-      />
-    </div>
+
+    <label for="username">E-Mail:</label>
+    <input type="text" id="username" [(ngModel)]="dto.eMail" name="username" required />
+    <label for="firstName">Business Name:</label>
+    <input type="text" id="businessName" [(ngModel)]="dto.businessName" name="businessName" required />
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" [(ngModel)]="dto.firstName" name="firstName" required />
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" [(ngModel)]="dto.lastName" name="lastName" required />
+    <p>Address used only for billing and tax purposes.</p>
+    <label for="lastName">Address Line 1:</label>
+    <input type="text" id="lastName" [(ngModel)]="dto.addressLine1" name="lastName" required />
+    <label for="lastName">Address Line 2:</label>
+    <input type="text" id="lastName" [(ngModel)]="dto.addressLine2" name="lastName" required />
+    <label for="lastName">City:</label>
+    <input type="text" id="lastName" [(ngModel)]="dto.city" name="lastName" required />
+    <label for="lastName">Zip Code:</label>
+    <input type="text" id="lastName" [(ngModel)]="dto.zipCode" name="lastName" required />
+    <label for="stateDropdown">State:</label>
+    <select [(ngModel)]="dto.stateCode" name="countryCode">
+      <option *ngFor="let opt of stateOptions" [value]="opt.key">
+        {{ opt.label }}
+      </option>
+    </select>
+    <label for="countryDropdown">Country:</label>
+    <p>United States</p>
+    <!--
+    <select [(ngModel)]="dto.countryCode" (change)="onCountryChange()" name="countryCode">
+      <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">
+        {{ opt.label }}
+      </option>
+    </select>
+  -->
+    <p>Time zone used for proper scheduling services.</p>
+    <label for="stateDropdown">Time Zone:</label>
+    <select [(ngModel)]="dto.timeZoneCode">
+      <option *ngFor="let option of timeZoneOptions" [value]="option.key">
+        {{ option.label }}
+      </option>
+    </select>
+
+    <br />
+    <br />
     <button type="submit" (click)="submit()">Sign Up</button>
     <a routerLink="">Login Here</a>
   </div>

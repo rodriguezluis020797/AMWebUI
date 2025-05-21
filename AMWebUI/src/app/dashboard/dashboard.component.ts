@@ -5,6 +5,9 @@ import { LoadingScreenComponent } from '../partials/loading-screen/loading-scree
 import { ProviderDTO } from '../models/ProviderDTO';
 import { Router } from '@angular/router';
 import { CurrentStateService } from '../_services/current-state.service';
+import { EMPTY, switchMap } from 'rxjs';
+import { AppointmentService } from '../_services/appointment.service';
+import { AppointmentDTO } from '../models/AppointmentDTO';
 
 @Component({
   selector: 'am-dashboard',
@@ -15,10 +18,10 @@ import { CurrentStateService } from '../_services/current-state.service';
 export class DashboardComponent implements OnInit {
   constructor(
     private providerService: ProviderService,
-    private router: Router,
-    private currentStateService: CurrentStateService
+    private appointmentService: AppointmentService
   ) { }
   provider: ProviderDTO = new ProviderDTO();
+  appointments: AppointmentDTO[] = [];
   loading = true;
 
   ngOnInit() {
@@ -27,11 +30,19 @@ export class DashboardComponent implements OnInit {
 
   getProvider() {
     this.loading = true;
-    this.providerService.getProviderAsync().subscribe((result) => {
-      this.provider = result;
-      this.currentStateService.hasCompletedProfile.next(
-        this.provider.hasCompletedSignUp
-      );
+    this.providerService.getProviderAsync().pipe(
+      switchMap((result) => {
+        if (result === null) {
+          this.loading = false;
+          return EMPTY;
+        }
+        this.provider = result;
+        return this.appointmentService.getUpcomingAppointmentsAsync();
+      }),
+    ).subscribe((result) => {
+      if (result !== null) {
+        this.appointments = result;
+      }
       this.loading = false;
     });
   }

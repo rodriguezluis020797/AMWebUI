@@ -28,7 +28,11 @@ export class ResetEMailComponent implements OnInit {
     this.disableSubmit = true;
     this.loading = true;
 
-    this.providerService.updateEMailAsync(this.dto).subscribe((result) => {
+    this.providerService.requestUpdateEMailAsync(this.dto).subscribe((result) => {
+      if (result === null) {
+        this.loading = false;
+        return;
+      }
       this.dto = result;
       if (this.dto.errorMessage === '' || !this.dto.errorMessage) {
         this.success = true;

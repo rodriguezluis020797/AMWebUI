@@ -36,7 +36,7 @@ export class AppointmentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    this.appointmentService.getAppointmentsAsync().pipe(
+    this.appointmentService.getAllAppointmentsAsync().pipe(
       switchMap((result) => {
         console.log("getAppointmentsAsync");
         this.appointments = result;
@@ -71,7 +71,7 @@ export class AppointmentsComponent implements OnInit {
 
   getAppointments() {
     this.loading = true;
-    this.appointmentService.getAppointmentsAsync().subscribe(
+    this.appointmentService.getAllAppointmentsAsync().subscribe(
       (result) => {
         this.appointments = result;
         this.loading = false;

@@ -1,10 +1,11 @@
-import { HttpClient, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { catchError, Observable } from 'rxjs';
-import { HttpErrorHandlerService } from './http-error-handler.service';
+import { catchError, Observable, of } from 'rxjs';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { BaseDTO } from '../models/BaseDTO';
 import { CountryCodeEnum } from '../models/Enums';
+import { Router } from '@angular/router';
+import { CurrentStateService } from './current-state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -12,59 +13,108 @@ import { CountryCodeEnum } from '../models/Enums';
 export class ProviderService {
   constructor(
     private http: HttpClient,
-    private httpErrorHandler: HttpErrorHandlerService
-  ) {}
+    private router: Router,
+    private currentStateService: CurrentStateService
+  ) { }
 
-  getProviderAsync(): Observable<ProviderDTO> {
+  getProviderAsync(): Observable<ProviderDTO | null> {
     return this.http
-      .get<ProviderDTO>('/api/Provider/GetProvider', { withCredentials: true })
+      .get<ProviderDTO>('/api/Provider/GetProvider', {
+        withCredentials: true
+      })
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<ProviderDTO>(error)
-        )
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
       );
   }
 
-  updateProviderAsync(provider: ProviderDTO): Observable<BaseDTO> {
+  updateProviderAsync(provider: ProviderDTO): Observable<BaseDTO | null> {
     return this.http
       .post<BaseDTO>('/api/Provider/UpdateProvider', provider, {
         withCredentials: true,
       })
       .pipe(
-        catchError((error) => this.httpErrorHandler.handleError<BaseDTO>(error))
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
       );
   }
 
-  updateEMailAsync(provider: ProviderDTO): Observable<ProviderDTO> {
+  requestUpdateEMailAsync(provider: ProviderDTO): Observable<ProviderDTO | null> {
     return this.http
       .post<ProviderDTO>('/api/Provider/UpdateEMail', provider, {
         withCredentials: true,
       })
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<ProviderDTO>(error)
-        )
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
       );
   }
 
-  verifyUpdateEMailAsync(guid: string): Observable<BaseDTO> {
+  updateEMailAsync(guid: string): Observable<BaseDTO | null> {
     return this.http
-      .get<BaseDTO>('/api/Provider/VerifyUpdateEMail', {
+      .get<BaseDTO>('/api/Provider/updateEMail', {
         params: {
           guid: guid,
         },
       })
       .pipe(
-        catchError((error) => this.httpErrorHandler.handleError<BaseDTO>(error))
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
       );
   }
 
-  createProviderAsync(provider: ProviderDTO): Observable<ProviderDTO> {
+  verifyEMailAsync(guid: string, verifying: boolean): Observable<BaseDTO | null> {
+    return this.http
+      .get<BaseDTO>('/api/Provider/VerifyEMail', {
+        params: {
+          guid: guid,
+          verifying: verifying
+        },
+      })
+      .pipe(
+        catchError((error) => {
+          this.router.navigate(['/error']);
+          return of(null);
+        })
+      );
+  }
+
+  createProviderAsync(provider: ProviderDTO): Observable<ProviderDTO | null> {
     return this.http
       .post<ProviderDTO>('/api/Provider/CreateProvider', provider)
       .pipe(
-        catchError((error) =>
-          this.httpErrorHandler.handleError<ProviderDTO>(error)
+        catchError((error) => {
+          this.router.navigate(['/error']);
+          return of(null);
+        }
         )
       );
   }

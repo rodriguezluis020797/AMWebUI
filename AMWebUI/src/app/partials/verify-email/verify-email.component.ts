@@ -4,7 +4,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { LoadingScreenComponent } from '../loading-screen/loading-screen.component';
 import { ProviderService } from '../../_services/provider.service';
 import { BaseDTO } from '../../models/BaseDTO';
-import { of, switchMap } from 'rxjs';
+import { EMPTY, of, switchMap } from 'rxjs';
 import { IdentityService } from '../../_services/identity.service';
 
 @Component({
@@ -22,41 +22,46 @@ export class VerifyEMailComponent implements OnInit {
   ) { }
 
   guid: string | null = null;
-  isNew: boolean | null = null;
+  verifying: boolean | null = null;
   message: string | null = null;
   loading: boolean = true;
 
   ngOnInit(): void {
-    const guidParam = this.route.snapshot.queryParamMap.get('guid');
-    const guidRegex =
-      /^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{4}-[0-9a-fA-F]{12}$/;
-    this.guid = guidParam && guidRegex.test(guidParam) ? guidParam : null;
+    this.verifying = this.route.snapshot.queryParamMap.get('verifying')?.toLowerCase() === 'true';
 
-    switch (this.route.snapshot.queryParamMap.get('isNew')) {
+    const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+    const guidParam = this.route.snapshot.queryParamMap.get('guid');
+    this.guid = guidRegex.test(guidParam ?? '') ? guidParam : null;
+
+    switch (this.route.snapshot.queryParamMap.get('verifying')) {
       case 'true':
-        this.isNew = true;
+        this.verifying = true;
         break;
       case 'false':
-        this.isNew = false;
+        this.verifying = false;
         break;
       default:
-        this.isNew = null;
+        this.verifying = null;
     }
 
-    if (this.guid === null || this.isNew === null) {
+    if (this.guid === null || this.verifying === null) {
       this.message = 'URL link is broken. Unable to process transaction.';
       this.loading = false;
     } else {
       this.providerService
-        .verifyUpdateEMailAsync(this.guid)
+        .verifyEMailAsync(this.guid, this.verifying)
         .pipe(
           switchMap((result) => {
+            if (result === null) {
+              this.loading = false;
+              return EMPTY;
+            }
             if (result.errorMessage !== null) {
               this.message = result.errorMessage;
               this.loading = false;
               return of(null);
             } else {
-              this.message = 'E-Mail successfully verified.';
+              this.message = "E-mail successfully verified. You will receive an e-mail with instructions from Stripe on setting up your billing profile shortly. If you don't, please reach out to customer support.";
               return this.identityService.logoutAsync();
             }
           })

@@ -20,13 +20,8 @@ export class CurrentStateService {
   readonly lastPingSubject = new BehaviorSubject<Date>(new Date());
   //#endregion
 
-  //#region Has Cpmpleted Profle Subject
-  readonly hasCompletedProfile = new BehaviorSubject<boolean>(true);
-  readonly hasCompletedProfile$ = this.hasCompletedProfile.asObservable();
-  //#endregion
-
   //#region Should Ping Subject
   readonly systemStatus = new BehaviorSubject<boolean>(true);
   //#endregion
-  constructor(private readonly router: Router) {}
+  constructor(private readonly router: Router) { }
 }

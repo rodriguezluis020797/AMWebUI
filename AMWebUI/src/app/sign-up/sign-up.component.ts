@@ -11,6 +11,7 @@ import {
   StateCodeEnum,
   TimeZoneCodeEnum,
 } from '../models/Enums';
+import { ToolsService } from '../_services/tools.service';
 
 @Component({
   standalone: true,
@@ -20,34 +21,67 @@ import {
   styleUrl: './sign-up.component.css',
 })
 export class SignUpComponent {
-  constructor(private providerService: ProviderService) { }
+  constructor(private providerService: ProviderService, private toolsService: ToolsService) { }
   dto = new ProviderDTO();
   signUpSuccessful: boolean = false;
   result = new BaseDTO();
   loading: Boolean = true;
 
+  get countryCodeOptions(): { key: CountryCodeEnum; label: string }[] {
+    return this.toolsService.getCountryCodes();
+  }
+  stateOptions: { key: StateCodeEnum; label: string }[] = [];
+  timeZoneOptions: { key: TimeZoneCodeEnum; label: string }[] = [];
+
   ngOnInit() {
     this.dto = {
-      hasCompletedSignUp: false,
-      countryCode: CountryCodeEnum.United_States,
-      stateCode: StateCodeEnum.California,
-      timeZoneCode: TimeZoneCodeEnum.Pacific_Standard_Time,
-      eMail: 'jdoe@gmail.com',
-      errorMessage: '',
-      isSpecialCase: false,
-      firstName: 'Jon',
-      lastName: 'Doe',
+      firstName: 'Luis',
       middleName: null,
+      lastName: 'Rodriguez',
+      businessName: 'AM Tech',
+      addressLine1: '6619 Gehrig Dr.',
+      addressLine2: '',
+      city: 'Pasco',
+      zipCode: '99301',
+      eMail: 'rodriguez.luis020797@gmail.com',
+      countryCode: CountryCodeEnum.Select,
+      stateCode: StateCodeEnum.Select,
+      timeZoneCode: TimeZoneCodeEnum.Select,
+      hasLoggedIn: false,
       currentPassword: '',
       newPassword: '',
       isTempPassword: false,
+      errorMessage: '',
+      isSpecialCase: false
     };
+
+    this.onCountryChange();
 
     this.loading = false;
   }
+
+  onCountryChange() {
+    this.stateOptions = this.toolsService.getStateCodes(
+      this.dto.countryCode
+    );
+    this.timeZoneOptions = this.toolsService.getTimeZoneCodes(
+      this.dto.countryCode
+    );
+    this.dto.stateCode = StateCodeEnum.Select;
+    this.dto.timeZoneCode = TimeZoneCodeEnum.Select;
+  }
+
   submit() {
     this.loading = true;
+    this.dto.countryCode = Number(CountryCodeEnum.United_States);
+    this.dto.stateCode = Number(StateCodeEnum.Washington);
+    this.dto.timeZoneCode = Number(TimeZoneCodeEnum.Pacific_Standard_Time);
     this.providerService.createProviderAsync(this.dto).subscribe((result) => {
+      if (result === null) {
+        this.loading = false;
+        return;
+      }
+
       this.result = result;
       if (this.result.errorMessage === null) {
         this.signUpSuccessful = true;

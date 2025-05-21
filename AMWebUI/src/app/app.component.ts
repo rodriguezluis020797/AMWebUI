@@ -39,42 +39,36 @@ export class AppComponent implements OnInit {
       .fullSystemCheckAsync()
       .pipe(
         switchMap((result) => {
-          if (
-            Number(result) === HttpStatusCodeEnum.ServerError ||
-            Number(result) === HttpStatusCodeEnum.SystemUnavailable
-          ) {
+          if (result === null) {
+            this.router.navigate(['/error'])
             this.loading = false;
             return EMPTY;
-          } else if (
-            result.status === HttpStatusCodeEnum.ServerError ||
-            result.status === HttpStatusCodeEnum.SystemUnavailable
-          ) {
-            this.loading = false;
-            return EMPTY; // Skip login check if system check failed
           } else {
-            return this.getCurrentPath(); // Get the current path and continue with the flow
+            return this.getCurrentPath();
           }
         }),
         switchMap((currentPath) => {
-          // Ensure we do not pass `null` to isCurrentPathAllowlisted
-          const validPath = currentPath ?? ''; // Default to empty string if null
+          const validPath = currentPath ?? '';
           if (!this.isCurrentPathAllowlisted(validPath)) {
-            // Only check if logged in if the path is not allowlisted
             return this.identityService.isLoggedInAsync();
           } else {
-            this.loading = false; // No need to check login if path is allowlisted
-            return EMPTY; // Skip login check
+            this.loading = false;
+            return EMPTY;
           }
         })
       )
       .subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
         if (result.status === HttpStatusCodeEnum.LoggedIn) {
           this.currentStateService.loggedInSubject.next(true);
           this.router.navigate(['dashboard']);
         } else {
           this.router.navigate(['']);
         }
-        this.loading = false; // Ensure loading is set to false once everything is done
+        this.loading = false;
       });
   }
 
@@ -82,14 +76,12 @@ export class AppComponent implements OnInit {
     return this.allowlistedRoutes.includes(currentPath);
   }
 
-  // Get the current path from the router
   getCurrentPath(): Observable<string> {
     return this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd), // Ensure navigation is completed
-      take(1), // Only take the first NavigationEnd event
+      filter((event) => event instanceof NavigationEnd),
+      take(1),
       map(() => {
-        const currentPath = this.router.url.split('?')[0].split('#')[0]; // Strip query and fragment
-        console.log('Current path:', currentPath); // Log for debugging
+        const currentPath = this.router.url.split('?')[0].split('#')[0];
         return currentPath;
       })
     );

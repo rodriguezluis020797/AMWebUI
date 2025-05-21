@@ -46,16 +46,12 @@ export class ProviderProfileComponent implements OnInit {
   getProvider() {
     this.loading = true;
     this.providerService.getProviderAsync().subscribe((result) => {
-      this.dto = result;
-      this.currentStateService.hasCompletedProfile.next(
-        this.dto.hasCompletedSignUp
-      );
-      if (!this.currentStateService.hasCompletedProfile.value) {
-        this.disableCancel = true;
-        this.edit();
-      } else {
-        this.disableCancel = false;
+      if (result === null) {
+        this.loading = false;
+        return;
       }
+      this.dto = result;
+      this.disableCancel = false;
       this.loading = false;
     });
   }
@@ -94,10 +90,13 @@ export class ProviderProfileComponent implements OnInit {
     this.providerService
       .updateProviderAsync(this.editDTO)
       .subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
         if (!result.errorMessage || result.errorMessage.trim() === '') {
           this.dto = JSON.parse(JSON.stringify(this.editDTO));
           this.cancelEdit();
-          this.currentStateService.hasCompletedProfile.next(true);
         } else {
           this.editDTO.errorMessage = result.errorMessage;
         }

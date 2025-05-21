@@ -27,14 +27,20 @@ export class LogInComponent implements OnInit {
   message: string | null = null;
 
   ngOnInit() {
-    this.dto.eMail = 'jdoe@gmail.com';
-    this.dto.currentPassword = 'XNwpFLI7lm#_XNwpFLI7lm#_XNwpFLI7lm#_XNwpFLI7lm#_';
+    this.dto.eMail = 'rodriguez.luis020797@gmail.com';
+    this.dto.currentPassword = 'bEOES&QBq0MbbEOES&QBq0Mb';
   }
 
   submit(event: MouseEvent) {
     event.stopPropagation();
     this.loading = true;
     this.identityService.loginAsync(this.dto).subscribe((result) => {
+
+      if (result === null) {
+        this.loading = false;
+        return;
+      }
+
       if (result.errorMessage !== null) {
         this.message = result.errorMessage;
         this.dto.currentPassword = '';
@@ -44,9 +50,6 @@ export class LogInComponent implements OnInit {
 
       this.currentStateService.loggedInSubject.next(true);
       this.currentStateService.lastPingSubject.next(new Date());
-      if (!result.hasCompletedSignUp) {
-        this.currentStateService.hasCompletedProfile.next(false);
-      }
 
       if (result.isSpecialCase === true) {
         this.currentStateService.temporaryPasswordSubject.next(true);

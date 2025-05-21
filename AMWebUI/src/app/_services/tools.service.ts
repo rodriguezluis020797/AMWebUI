@@ -114,7 +114,7 @@ const StateToCountryMap: Record<StateCodeEnum, CountryCodeEnum> = {
   providedIn: 'root',
 })
 export class ToolsService {
-  constructor() {}
+  constructor() { }
 
   getCountryCodes(): { key: CountryCodeEnum; label: string }[] {
     return Object.entries(CountryCodeMap).map(([key, label]) => ({
@@ -146,8 +146,8 @@ export class ToolsService {
       a.key === StateCodeEnum.Select
         ? -1
         : b.key === StateCodeEnum.Select
-        ? 1
-        : 0
+          ? 1
+          : 0
     );
   }
 
@@ -185,5 +185,9 @@ export class ToolsService {
       key: tz,
       label: TimeZoneCodeEnum[tz].replaceAll('_', ' '),
     }));
+  }
+
+  IsNullOrEmpty(str: string | null | undefined): boolean {
+    return !str || str.trim().length === 0;
   }
 }

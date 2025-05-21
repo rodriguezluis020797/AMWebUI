@@ -1,5 +1,6 @@
 <nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <a class="navbar-brand" routerLink="#">AM Tech</a>
+  <a *ngIf="!loggedIn" class="navbar-brand" routerLink="/">AM Tech</a>
+  <a *ngIf="loggedIn" class="navbar-brand" routerLink="/dashboard">AM Tech</a>
   <div *ngIf="loggedIn">
     <button class="navbar-toggler" type="button" (click)="toggleMenu()" aria-controls="navbarNav" aria-expanded="false"
       aria-label="Toggle navigation">
@@ -7,22 +8,19 @@
     </button>
     <div [class.collapse]="!isMenuOpen" class="navbar-collapse" id="navbarNav">
       <ul class="navbar-nav">
-        <li *ngIf="completedProfile" class="nav-item active">
+        <li class="nav-item active">
           <a routerLink="/dashboard" class="nav-link">Dashboard</a>
         </li>
-        <li *ngIf="completedProfile" class="nav-item active">
+        <li class="nav-item active">
           <a routerLink="/provider-profile" class="nav-link">Profile</a>
         </li>
-        <li *ngIf="!completedProfile" class="nav-item active">
-          <a routerLink="/provider-profile" class="nav-link">Complete Profile</a>
-        </li>
-        <li *ngIf="completedProfile" class="nav-item active">
+        <li class="nav-item active">
           <a routerLink="/services" class="nav-link">Services</a>
         </li>
-        <li *ngIf="completedProfile" class="nav-item active">
+        <li class="nav-item active">
           <a routerLink="/clients" class="nav-link">Clients</a>
         </li>
-        <li *ngIf="completedProfile" class="nav-item active">
+        <li class="nav-item active">
           <a routerLink="/appointments" class="nav-link">Appointments</a>
         </li>
         <li class="nav-item active">
