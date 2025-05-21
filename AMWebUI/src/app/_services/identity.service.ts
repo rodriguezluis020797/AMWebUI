@@ -9,6 +9,7 @@ import { catchError, Observable, of } from 'rxjs';
 import { ProviderDTO } from '../models/ProviderDTO';
 import { BaseDTO } from '../models/BaseDTO';
 import { Router } from '@angular/router';
+import { CurrentStateService } from './current-state.service';
 
 @Injectable({
   providedIn: 'root',
@@ -16,7 +17,8 @@ import { Router } from '@angular/router';
 export class IdentityService {
   constructor(
     private http: HttpClient,
-    private router: Router
+    private router: Router,
+    private currentStateService: CurrentStateService
   ) { }
 
   isLoggedInAsync(): Observable<HttpResponse<any> | null> {
@@ -64,8 +66,13 @@ export class IdentityService {
         withCredentials: true,
       })
       .pipe(
-        catchError((error) => {
-          this.router.navigate(['/error']);
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
           return of(null);
         })
       );
@@ -79,11 +86,15 @@ export class IdentityService {
         observe: 'response',
       })
       .pipe(
-        catchError((error) => {
-          this.router.navigate(['/error']);
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
           return of(null);
-        }
-        )
+        })
       );
   }
 
@@ -95,11 +106,15 @@ export class IdentityService {
         observe: 'response',
       })
       .pipe(
-        catchError((error) => {
-          this.router.navigate(['/error']);
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
           return of(null);
-        }
-        )
+        })
       );
   }
 

@@ -33,6 +33,10 @@ export class ServicesComponent implements OnInit {
   getServices() {
     this.loading = true;
     this.serviceService.getServicesAsync().subscribe((result) => {
+      if (result === null) {
+        this.loading = false;
+        return;
+      }
       this.services = result;
       this.loading = false;
     })
@@ -63,6 +67,10 @@ export class ServicesComponent implements OnInit {
 
       console.log('assume it is a new service')
       this.serviceService.createServiceAsync(this.editDTO).subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
         if (result.errorMessage && result.errorMessage.trim() !== '') {
           this.editDTO.errorMessage = result.errorMessage;
         }
@@ -76,6 +84,10 @@ export class ServicesComponent implements OnInit {
     } else {
       console.log('assume it is an existing service')
       this.serviceService.updateServiceAsync(this.editDTO).subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
         if (result.errorMessage && result.errorMessage.trim() !== '') {
           this.editDTO.errorMessage = result.errorMessage;
         }

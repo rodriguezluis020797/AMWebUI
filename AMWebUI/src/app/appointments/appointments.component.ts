@@ -38,17 +38,18 @@ export class AppointmentsComponent implements OnInit {
     this.loading = true;
     this.appointmentService.getAllAppointmentsAsync().pipe(
       switchMap((result) => {
-        console.log("getAppointmentsAsync");
         this.appointments = result;
         return this.clientService.getClientsAsync();
       }),
       switchMap((result) => {
-        console.log("getClientsAsync");
         this.clients = result;
         return this.serviceService.getServicesAsync();
       })
     ).subscribe((result) => {
-      console.log("getServicesAsync");
+      if (result === null) {
+        this.loading = false;
+        return;
+      }
       this.services = result;
       this.mapClientAndServiceNames();
     });
