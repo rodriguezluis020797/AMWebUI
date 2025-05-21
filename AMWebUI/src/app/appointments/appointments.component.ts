@@ -8,7 +8,7 @@ import { AppointmentService } from '../_services/appointment.service';
 import { AppointmentStatusPipe } from "../pipes/appointment-status.pipe";
 import { ClientDTO } from '../models/ClientDTO';
 import { ClientService } from '../_services/client.service';
-import { switchMap } from 'rxjs';
+import { EMPTY, switchMap } from 'rxjs';
 import { ServiceService } from '../_services/service.service';
 import { ServiceDTO } from '../models/ServiceDTO';
 import { AppointmentStatusEnum } from '../models/Enums';
@@ -42,6 +42,10 @@ export class AppointmentsComponent implements OnInit {
         return this.clientService.getClientsAsync();
       }),
       switchMap((result) => {
+        if (result === null) {
+          this.loading = false;
+          return EMPTY;
+        }
         this.clients = result;
         return this.serviceService.getServicesAsync();
       })

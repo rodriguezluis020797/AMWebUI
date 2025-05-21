@@ -31,6 +31,10 @@ export class ClientComponent implements OnInit {
   getClients() {
     this.loading = true;
     this.clientService.getClientsAsync().subscribe((result) => {
+      if (result === null) {
+        this.loading = false;
+        return;
+      }
       this.clients = result;
       this.loading = false;
     });
@@ -57,6 +61,10 @@ export class ClientComponent implements OnInit {
 
     if (!this.editDTO.clientId || this.editDTO.clientId === '') {
       this.clientService.createClientAsync(this.editDTO).subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
         if (result.errorMessage && result.errorMessage.trim() !== '') {
           this.editDTO.errorMessage = result.errorMessage;
         } else {
@@ -68,6 +76,10 @@ export class ClientComponent implements OnInit {
       });
     } else {
       this.clientService.updateClientAsync(this.editDTO).subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
         if (result.errorMessage && result.errorMessage.trim() !== '') {
           this.editDTO.errorMessage = result.errorMessage;
         } else {
