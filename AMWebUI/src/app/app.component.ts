@@ -87,7 +87,7 @@ export class AppComponent implements OnInit {
     );
   }
 
-  private readonly allowlistedRoutes = ['/verify-email'];
+  private readonly allowlistedRoutes = ['/verify-email', '/reset-password'];
 
   pingIfNeeded(): void {
     if (!this.currentStateService.loggedInSubject.value) {

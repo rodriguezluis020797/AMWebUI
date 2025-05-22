@@ -98,9 +98,9 @@ export class IdentityService {
       );
   }
 
-  resetPasswordAsync(dto: ProviderDTO): Observable<HttpResponse<any> | null> {
+  resetPasswordRequestAsync(dto: ProviderDTO): Observable<HttpResponse<any> | null> {
     return this.http
-      .post('/api/Identity/ResetPassword', dto, {
+      .post('/api/Identity/ResetPasswordRequest', dto, {
         withCredentials: true,
         headers: this.getFingerprintHeaders(),
         observe: 'response',
@@ -113,6 +113,21 @@ export class IdentityService {
           } else {
             this.router.navigate(['/error']);
           }
+          return of(null);
+        })
+      );
+  }
+
+  resetPasswordAsync(dto: ProviderDTO, guid: string): Observable<BaseDTO | null> {
+    return this.http
+      .post<BaseDTO>('/api/Identity/ResetPassword', dto, {
+        params: {
+          guid: guid
+        }
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          this.router.navigate(['/error']);
           return of(null);
         })
       );
