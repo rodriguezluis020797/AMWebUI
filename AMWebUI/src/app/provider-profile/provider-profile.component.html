@@ -9,10 +9,15 @@
   <!-- Display Mode -->
   <div *ngIf="!editProvider">
     <h2>Personal Details</h2>
+    <div><strong>Business Name:</strong> {{ dto.businessName }}</div>
     <div><strong>First Name:</strong> {{ dto.firstName }}</div>
     <div><strong>Middle Name:</strong> {{ dto.middleName || "—" }}</div>
     <div><strong>Last Name:</strong> {{ dto.lastName }}</div>
     <div><strong>E-Mail:</strong> {{ dto.eMail }}</div>
+    <div><strong>Address Line 1:</strong> {{ dto.addressLine1 }}</div>
+    <div><strong>Address Line 2:</strong> {{ dto.addressLine2 || "—" }}</div>
+    <div><strong>City:</strong> {{ dto.city }}</div>
+    <div><strong>Zip Code:</strong> {{ dto.zipCode }}</div>
     <div>
       <strong>Country:</strong>
       {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}
@@ -25,34 +30,41 @@
       {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}
     </div>
     <button (click)="edit()">Edit</button>
+    <a [href]="dto.payEngineInfoUrl" target="_blank" rel="noopener noreferrer">Edit Payment Method or View
+      Invoices</a>
   </div>
 
   <!-- Edit Mode -->
   <div *ngIf="editProvider">
-    <label for="firstName">First Name</label>
-    <input type="text" id="firstName" [(ngModel)]="editDTO.firstName" />
-
-    <label for="middleName">Middle Name</label>
-    <input type="text" id="middleName" [(ngModel)]="editDTO.middleName" />
-
-    <label for="lastName">Last Name</label>
-    <input type="text" id="lastName" [(ngModel)]="editDTO.lastName" />
+    <label for="businessName">Business Name:</label>
+    <input type="text" id="businessName" [(ngModel)]="editDTO.businessName" name="businessName" required />
+    <label for="firstName">First Name:</label>
+    <input type="text" id="firstName" [(ngModel)]="editDTO.firstName" name="firstName" required />
+    <label for="middleName">Middle Name:</label>
+    <input type="text" id="middleName" [(ngModel)]="editDTO.middleName" name="middleName" required />
+    <label for="lastName">Last Name:</label>
+    <input type="text" id="lastName" [(ngModel)]="editDTO.lastName" name="lastName" required />
+    <p>Address used only for billing and tax purposes.</p>
+    <label for="addressLine1">Address Line 1:</label>
+    <input type="text" id="addressLine1" [(ngModel)]="editDTO.addressLine1" name="addressLine1" required />
+    <label for="addressLine2">Address Line 2:</label>
+    <input type="text" id="addressLine2" [(ngModel)]="editDTO.addressLine2" name="addressLine2" required />
+    <label for="city">City:</label>
+    <input type="text" id="city" [(ngModel)]="editDTO.city" name="city" required />
+    <label for="zipCode">Zip Code:</label>
+    <input type="text" id="zipCode" [(ngModel)]="editDTO.zipCode" name="zipCode" required />
 
     <label for="countryDropdown">Country:</label>
-    <select
-      [(ngModel)]="editDTO.countryCode"
-      (change)="onCountryChange()"
-      name="countryCode"
-    >
+    <select [(ngModel)]="editDTO.countryCode" (change)="onCountryChange()" name="countryCode">
       <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">
         {{ opt.label }}
       </option>
     </select>
 
     <label for="stateDropdown">State:</label>
-    <select [(ngModel)]="editDTO.stateCode" name="countryCode">
+    <select [(ngModel)]="editDTO.stateCode" name="stateCode" id="stateDropdown">
       <option *ngFor="let opt of stateOptions" [value]="opt.key">
-        {{ opt.label }}
+        {{ getEditLabel(opt.label) }}
       </option>
     </select>
 

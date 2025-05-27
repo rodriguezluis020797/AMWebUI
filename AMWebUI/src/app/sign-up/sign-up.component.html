@@ -7,28 +7,28 @@
 
     <label for="username">E-Mail:</label>
     <input type="text" id="username" [(ngModel)]="dto.eMail" name="username" required />
-    <label for="firstName">Business Name:</label>
+    <label for="businessName">Business Name:</label>
     <input type="text" id="businessName" [(ngModel)]="dto.businessName" name="businessName" required />
     <label for="firstName">First Name:</label>
     <input type="text" id="firstName" [(ngModel)]="dto.firstName" name="firstName" required />
     <label for="lastName">Last Name:</label>
     <input type="text" id="lastName" [(ngModel)]="dto.lastName" name="lastName" required />
     <p>Address used only for billing and tax purposes.</p>
-    <label for="lastName">Address Line 1:</label>
-    <input type="text" id="lastName" [(ngModel)]="dto.addressLine1" name="lastName" required />
-    <label for="lastName">Address Line 2:</label>
-    <input type="text" id="lastName" [(ngModel)]="dto.addressLine2" name="lastName" required />
-    <label for="lastName">City:</label>
-    <input type="text" id="lastName" [(ngModel)]="dto.city" name="lastName" required />
-    <label for="lastName">Zip Code:</label>
-    <input type="text" id="lastName" [(ngModel)]="dto.zipCode" name="lastName" required />
-    <label for="stateDropdown">State:</label>
-    <select [(ngModel)]="dto.stateCode" name="countryCode">
+    <label for="addressLine1">Address Line 1:</label>
+    <input type="text" id="addressLine1" [(ngModel)]="dto.addressLine1" name="addressLine1" required />
+    <label for="addressLine2">Address Line 2:</label>
+    <input type="text" id="addressLine2" [(ngModel)]="dto.addressLine2" name="addressLine2" required />
+    <label for="city">City:</label>
+    <input type="text" id="city" [(ngModel)]="dto.city" name="city" required />
+    <label for="zipCode">Zip Code:</label>
+    <input type="text" id="zipCode" [(ngModel)]="dto.zipCode" name="zipCode" required />
+    <label for="stateCode">State:</label>
+    <select [(ngModel)]="dto.stateCode" name="stateCode">
       <option *ngFor="let opt of stateOptions" [value]="opt.key">
-        {{ opt.label }}
+        {{ getEditLabel(opt.label) }}
       </option>
     </select>
-    <label for="countryDropdown">Country:</label>
+    <label for="countryCode">Country:</label>
     <p>United States</p>
     <!--
     <select [(ngModel)]="dto.countryCode" (change)="onCountryChange()" name="countryCode">

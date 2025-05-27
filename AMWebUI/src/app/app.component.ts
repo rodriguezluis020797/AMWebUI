@@ -91,40 +91,40 @@ export class AppComponent implements OnInit {
 
   pingIfNeeded(): void {
     if (!this.currentStateService.loggedInSubject.value) {
-      console.log('Not logged in.. ping not needed');
+      //console.log('Not logged in.. ping not needed');
       this.currentStateService.lastPingSubject.next(new Date());
       return;
     }
 
     const timeNow = new Date();
-    console.log('timeNow: ' + timeNow);
+    //console.log('timeNow: ' + timeNow);
 
     const timeLastPinged = this.currentStateService.lastPingSubject.value;
-    console.log('timeLastPinged: ' + timeLastPinged);
+    //console.log('timeLastPinged: ' + timeLastPinged);
 
     const msNeededToPing = 0;//300000;
-    console.log('msNeededToPing: ' + msNeededToPing);
+    //console.log('msNeededToPing: ' + msNeededToPing);
 
     const timeDifferenceInMs = timeNow.getTime() - timeLastPinged.getTime();
-    console.log('timeDifferenceInMs: ' + timeDifferenceInMs);
+    //console.log('timeDifferenceInMs: ' + timeDifferenceInMs);
 
     const minutesNeededToPing = msNeededToPing / (1000 * 60);
-    console.log('minutesNeededToPing: ' + minutesNeededToPing);
+    //console.log('minutesNeededToPing: ' + minutesNeededToPing);
 
     const timeDifferenceInMin = timeDifferenceInMs / 60000;
-    console.log('timeDifferenceInMin: ' + timeDifferenceInMin);
+    //console.log('timeDifferenceInMin: ' + timeDifferenceInMin);
 
     if (
       minutesNeededToPing < timeDifferenceInMin &&
       this.currentStateService.systemStatus.value == true
     ) {
-      console.log('Ping performed...');
+      //console.log('Ping performed...');
       this.identityService.pingAsync().subscribe((result) => {
         this.currentStateService.lastPingSubject.next(new Date());
       });
     } else {
-      console.log('Not time yet or system offline... ping not needed');
+      //console.log('Not time yet or system offline... ping not needed');
     }
-    console.log('');
+    //console.log('');
   }
 }

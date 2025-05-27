@@ -16,10 +16,13 @@ export class ProviderService {
     private currentStateService: CurrentStateService
   ) { }
 
-  getProviderAsync(): Observable<ProviderDTO | null> {
+  getProviderAsync(generateUrl: boolean): Observable<ProviderDTO | null> {
     return this.http
       .get<ProviderDTO>('/api/Provider/GetProvider', {
-        withCredentials: true
+        withCredentials: true,
+        params: {
+          generateUrl: generateUrl
+        }
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {

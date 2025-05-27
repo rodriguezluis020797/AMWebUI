@@ -44,7 +44,7 @@ export class SignUpComponent {
       city: 'Pasco',
       zipCode: '99301',
       eMail: 'rodriguez.luis020797@gmail.com',
-      countryCode: CountryCodeEnum.Select,
+      countryCode: CountryCodeEnum.United_States,
       stateCode: StateCodeEnum.Select,
       timeZoneCode: TimeZoneCodeEnum.Select,
       hasLoggedIn: false,
@@ -52,12 +52,21 @@ export class SignUpComponent {
       newPassword: '',
       isTempPassword: false,
       errorMessage: '',
-      isSpecialCase: false
+      isSpecialCase: false,
+      payEngineInfoUrl: ''
     };
 
     this.onCountryChange();
 
     this.loading = false;
+  }
+
+  public getEditLabel(label: string): string {
+    if (!label) return '';
+    if (label === "Select") {
+      return label;
+    }
+    return label.substring(3).trim();
   }
 
   onCountryChange() {
@@ -74,7 +83,7 @@ export class SignUpComponent {
   submit() {
     this.loading = true;
     this.dto.countryCode = Number(CountryCodeEnum.United_States);
-    this.dto.stateCode = Number(StateCodeEnum.Washington);
+    this.dto.stateCode = Number(StateCodeEnum.US_WA);
     this.dto.timeZoneCode = Number(TimeZoneCodeEnum.Pacific_Standard_Time);
     this.providerService.createProviderAsync(this.dto).subscribe((result) => {
       if (result === null) {

@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
 
   getProvider() {
     this.loading = true;
-    this.providerService.getProviderAsync().pipe(
+    this.providerService.getProviderAsync(false).pipe(
       switchMap((result) => {
         if (result === null) {
           this.loading = false;

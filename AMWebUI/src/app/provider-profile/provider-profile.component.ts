@@ -45,19 +45,28 @@ export class ProviderProfileComponent implements OnInit {
 
   getProvider() {
     this.loading = true;
-    this.providerService.getProviderAsync().subscribe((result) => {
+    this.providerService.getProviderAsync(true).subscribe((result) => {
       if (result === null) {
         this.loading = false;
         return;
       }
       this.dto = result;
+      console.log(this.dto);
       this.disableCancel = false;
       this.loading = false;
     });
   }
 
   getEnumLabel(enumObj: any, enumValue: any): string {
-    return enumObj[enumValue]?.replaceAll('_', ' ') || '';
+    return enumObj[enumValue]?.replaceAll('_', ' ').replaceAll('US ', "") || '';
+  }
+
+  public getEditLabel(label: string): string {
+    if (!label) return '';
+    if (label === "Select") {
+      return label;
+    }
+    return label.substring(3).trim();
   }
 
   edit() {
@@ -87,6 +96,7 @@ export class ProviderProfileComponent implements OnInit {
     this.editDTO.countryCode = Number(this.editDTO.countryCode);
     this.editDTO.stateCode = Number(this.editDTO.stateCode);
     this.editDTO.timeZoneCode = Number(this.editDTO.timeZoneCode);
+    console.log(this.dto)
     this.providerService
       .updateProviderAsync(this.editDTO)
       .subscribe((result) => {
