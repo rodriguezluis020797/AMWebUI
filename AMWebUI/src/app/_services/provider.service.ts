@@ -123,7 +123,21 @@ export class ProviderService {
 
   cancelSubscriptionAsync(): Observable<BaseDTO | null> {
     return this.http
-      .get<ProviderDTO>('/api/Provider/CancelSubscription', {
+      .get<BaseDTO>('/api/Provider/CancelSubscription', {
+        withCredentials: true
+      })
+      .pipe(
+        catchError((error) => {
+          this.router.navigate(['/error']);
+          return of(null);
+        }
+        )
+      );
+  }
+
+  reActivateSubscriptionAsync(): Observable<BaseDTO | null> {
+    return this.http
+      .get<BaseDTO>('/api/Provider/ReActivateSubscription', {
         withCredentials: true
       })
       .pipe(

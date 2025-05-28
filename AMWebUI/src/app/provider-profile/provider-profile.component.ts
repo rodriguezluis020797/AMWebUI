@@ -35,6 +35,7 @@ export class ProviderProfileComponent implements OnInit {
   stateOptions: { key: StateCodeEnum; label: string }[] = [];
   timeZoneOptions: { key: TimeZoneCodeEnum; label: string }[] = [];
   showDeleteModal: boolean = false;
+  showReSubscribeModal: boolean = false;
 
   constructor(
     private providerService: ProviderService,
@@ -124,7 +125,7 @@ export class ProviderProfileComponent implements OnInit {
     this.showDeleteModal = true;
   }
 
-  oncCancelSubscription(confirm: boolean) {
+  onCancelSubscription(confirm: boolean) {
     this.loading = true;
     if (confirm) {
       this.providerService.cancelSubscriptionAsync().subscribe((result) => {
@@ -133,9 +134,38 @@ export class ProviderProfileComponent implements OnInit {
           return;
         }
         this.getProvider();
+        this.loading = false;
       })
     }
-    this.loading = false;
     this.showDeleteModal = false;
+  }
+
+  reActivateSubscription() {
+    this.showReSubscribeModal = true;
+  }
+
+  onReActivateSubscription(confirm: boolean) {
+    this.loading = true;
+    if (confirm) {
+      this.providerService.reActivateSubscriptionAsync().subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
+
+        if (!this.toolsService.IsNullOrEmpty(result.errorMessage)) {
+          this.dto.errorMessage = result.errorMessage;
+        }
+        else {
+          this.getProvider();
+        }
+
+        this.loading = false;
+      })
+    }
+    else {
+      this.loading = false;
+    }
+    this.showReSubscribeModal = false;
   }
 }

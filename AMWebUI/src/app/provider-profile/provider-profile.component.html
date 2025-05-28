@@ -38,7 +38,10 @@
     <p *ngIf="dto.endOfService !== null">
       <strong>End of Service</strong>: {{ dto.endOfService | date:'MM/dd/yyyy' }}
     </p>
-    <a *ngIf="dto.endOfService !== null" (click)="cancelSubscription()">Reactivate Service</a>
+    <p *ngIf="dto.endOfService !== null && dto.errorMessage != ''">
+      {{dto.errorMessage}}
+    </p>
+    <a *ngIf="dto.endOfService !== null" (click)="reActivateSubscription()">Reactivate Service</a>
   </div>
 
   <!-- Edit Mode -->
@@ -92,7 +95,12 @@
 
 <am-delete-entity *ngIf="showDeleteModal && !loading" [header]="'Cancel Subsciption'"
   [message]="'Your subscription will stay active until the end of the billing cycle. Messages scheduled before then will still be sent unless manually deleted. Others won’t send—even if you reactivate.'"
-  (confirm)="oncCancelSubscription($event)">
+  (confirm)="onCancelSubscription($event)">
+</am-delete-entity>
+
+<am-delete-entity *ngIf="showReSubscribeModal && !loading" [header]="'Reactivate Subsciption'"
+  [message]="'Your subscription will be reactivated immediately, and your default payment method will be charged automatically if you’re outside your final billing cycle. If applicable, the charge will be prorated based on the remaining time in the current billing period.'"
+  (confirm)="onReActivateSubscription($event)">
 </am-delete-entity>
 
 <div *ngIf="loading">
