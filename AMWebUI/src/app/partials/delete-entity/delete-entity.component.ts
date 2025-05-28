@@ -1,4 +1,4 @@
-import { Component, Output, EventEmitter, Input } from '@angular/core';
+import { Component, Output, EventEmitter, Input, input } from '@angular/core';
 
 @Component({
   selector: 'am-delete-entity',
@@ -7,14 +7,15 @@ import { Component, Output, EventEmitter, Input } from '@angular/core';
   styleUrl: './delete-entity.component.css'
 })
 export class DeleteEntityComponent {
-  @Input() message: string = 'Are you sure you want to delete this item?';
+  @Input() header: string = "";
+  @Input() message: string = "";
   @Output() confirm = new EventEmitter<boolean>();
 
   onConfirm() {
-    this.confirm.emit(true); // ✅ emits boolean
+    this.confirm.emit(true);
   }
 
   onCancel() {
-    this.confirm.emit(false); // ✅ emits boolean
+    this.confirm.emit(false);
   }
 }

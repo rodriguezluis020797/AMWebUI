@@ -32,6 +32,13 @@
     <button (click)="edit()">Edit</button>
     <a [href]="dto.payEngineInfoUrl" target="_blank" rel="noopener noreferrer">Edit Payment Method or View
       Invoices</a>
+    <br>
+    <br>
+    <a *ngIf="dto.endOfService === null" (click)="cancelSubscription()">Cancel Subscription</a>
+    <p *ngIf="dto.endOfService !== null">
+      <strong>End of Service</strong>: {{ dto.endOfService | date:'MM/dd/yyyy' }}
+    </p>
+    <a *ngIf="dto.endOfService !== null" (click)="cancelSubscription()">Reactivate Service</a>
   </div>
 
   <!-- Edit Mode -->
@@ -75,13 +82,18 @@
       </option>
     </select>
 
-    <a routerLink="/reset-email">Reset E-Mail</a>
-    <a routerLink="/update-password">Reset Password</a>
+    <a routerLink="/reset-email">Update E-Mail</a>
+    <a routerLink="/update-password">Update Password</a>
     <br />
     <button (click)="editSave()">Save</button>
     <button *ngIf="!disableCancel" (click)="cancelEdit()">Cancel</button>
   </div>
 </div>
+
+<am-delete-entity *ngIf="showDeleteModal && !loading" [header]="'Cancel Subsciption'"
+  [message]="'Your subscription will stay active until the end of the billing cycle. Messages scheduled before then will still be sent unless manually deleted. Others won’t send—even if you reactivate.'"
+  (confirm)="oncCancelSubscription($event)">
+</am-delete-entity>
 
 <div *ngIf="loading">
   <am-loading-screen></am-loading-screen>

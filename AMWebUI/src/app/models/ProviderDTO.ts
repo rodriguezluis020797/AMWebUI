@@ -19,6 +19,7 @@ export class ProviderDTO extends BaseDTO {
   newPassword: string;
   isTempPassword: boolean;
   payEngineInfoUrl: string;
+  endOfService: Date | null;
 
   constructor() {
     super();
@@ -39,5 +40,6 @@ export class ProviderDTO extends BaseDTO {
     this.newPassword = '';
     this.isTempPassword = false;
     this.payEngineInfoUrl = '';
+    this.endOfService = null;
   }
 }

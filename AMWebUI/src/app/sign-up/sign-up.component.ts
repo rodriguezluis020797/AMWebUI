@@ -53,7 +53,8 @@ export class SignUpComponent {
       isTempPassword: false,
       errorMessage: '',
       isSpecialCase: false,
-      payEngineInfoUrl: ''
+      payEngineInfoUrl: '',
+      endOfService: null
     };
 
     this.onCountryChange();

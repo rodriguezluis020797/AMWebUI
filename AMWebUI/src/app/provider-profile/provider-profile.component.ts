@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ProviderDTO } from '../models/ProviderDTO';
-import { FormControl, FormGroup, FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProviderService } from '../_services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
@@ -12,10 +12,11 @@ import {
 } from '../models/Enums';
 import { ToolsService } from '../_services/tools.service';
 import { CurrentStateService } from '../_services/current-state.service';
+import { DeleteEntityComponent } from '../partials/delete-entity/delete-entity.component';
 
 @Component({
   selector: 'am-provider-profile',
-  imports: [CommonModule, RouterLink, FormsModule, LoadingScreenComponent],
+  imports: [CommonModule, RouterLink, FormsModule, LoadingScreenComponent, DeleteEntityComponent],
   templateUrl: './provider-profile.component.html',
   styleUrl: './provider-profile.component.css',
 })
@@ -33,6 +34,7 @@ export class ProviderProfileComponent implements OnInit {
   }
   stateOptions: { key: StateCodeEnum; label: string }[] = [];
   timeZoneOptions: { key: TimeZoneCodeEnum; label: string }[] = [];
+  showDeleteModal: boolean = false;
 
   constructor(
     private providerService: ProviderService,
@@ -43,6 +45,7 @@ export class ProviderProfileComponent implements OnInit {
     this.getProvider();
   }
 
+
   getProvider() {
     this.loading = true;
     this.providerService.getProviderAsync(true).subscribe((result) => {
@@ -51,7 +54,6 @@ export class ProviderProfileComponent implements OnInit {
         return;
       }
       this.dto = result;
-      console.log(this.dto);
       this.disableCancel = false;
       this.loading = false;
     });
@@ -96,7 +98,6 @@ export class ProviderProfileComponent implements OnInit {
     this.editDTO.countryCode = Number(this.editDTO.countryCode);
     this.editDTO.stateCode = Number(this.editDTO.stateCode);
     this.editDTO.timeZoneCode = Number(this.editDTO.timeZoneCode);
-    console.log(this.dto)
     this.providerService
       .updateProviderAsync(this.editDTO)
       .subscribe((result) => {
@@ -117,5 +118,24 @@ export class ProviderProfileComponent implements OnInit {
   cancelEdit() {
     this.editDTO = new ProviderDTO();
     this.editProvider = false;
+  }
+
+  cancelSubscription() {
+    this.showDeleteModal = true;
+  }
+
+  oncCancelSubscription(confirm: boolean) {
+    this.loading = true;
+    if (confirm) {
+      this.providerService.cancelSubscriptionAsync().subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
+        this.getProvider();
+      })
+    }
+    this.loading = false;
+    this.showDeleteModal = false;
   }
 }

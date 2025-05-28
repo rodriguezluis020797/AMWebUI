@@ -65,7 +65,6 @@ export class ServicesComponent implements OnInit {
     this.editDTO.errorMessage = null;
     if (!this.editDTO.serviceId || this.editDTO.serviceId === '') {
 
-      console.log('assume it is a new service')
       this.serviceService.createServiceAsync(this.editDTO).subscribe((result) => {
         if (result === null) {
           this.loading = false;
@@ -82,7 +81,6 @@ export class ServicesComponent implements OnInit {
         this.loading = false;
       })
     } else {
-      console.log('assume it is an existing service')
       this.serviceService.updateServiceAsync(this.editDTO).subscribe((result) => {
         if (result === null) {
           this.loading = false;

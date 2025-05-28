@@ -61,7 +61,12 @@ export class VerifyEMailComponent implements OnInit {
               this.loading = false;
               return of(null);
             } else {
-              this.message = "E-mail successfully verified. You will receive an e-mail with instructions from Stripe on setting up your billing profile shortly. If you don't, please reach out to customer support.";
+              if (this.verifying) {
+                this.message = "Thank you for verifying your e-mail! You will receive an e-mail when you have been given access to the system.";
+              }
+              else {
+                this.message = "Thank you for verifying your e-mail! For security reasons, you have been logged out. Please log back in."
+              }
               return this.identityService.logoutAsync();
             }
           })

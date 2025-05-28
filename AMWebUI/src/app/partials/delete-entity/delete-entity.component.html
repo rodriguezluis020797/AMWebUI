@@ -1,8 +1,8 @@
 <div class="modal-backdrop">
     <div class="modal-content">
-        <h2>Confirm Delete</h2>
-        <p>Are you sure you want to delete this item?</p>
-        <button (click)="onConfirm()">Yes, Delete</button>
+        <h2>{{header}}</h2>
+        <p>{{message}}</p>
+        <button (click)="onConfirm()">Yes, {{header}}</button>
         <button (click)="onCancel()">Cancel</button>
     </div>
 </div>

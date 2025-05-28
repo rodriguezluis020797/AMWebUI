@@ -120,4 +120,18 @@ export class ProviderService {
         )
       );
   }
+
+  cancelSubscriptionAsync(): Observable<BaseDTO | null> {
+    return this.http
+      .get<ProviderDTO>('/api/Provider/CancelSubscription', {
+        withCredentials: true
+      })
+      .pipe(
+        catchError((error) => {
+          this.router.navigate(['/error']);
+          return of(null);
+        }
+        )
+      );
+  }
 }
