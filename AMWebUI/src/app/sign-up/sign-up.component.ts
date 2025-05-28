@@ -54,7 +54,8 @@ export class SignUpComponent {
       errorMessage: '',
       isSpecialCase: false,
       payEngineInfoUrl: '',
-      endOfService: null
+      nextBillingDate: null,
+      subscriptionToBeCancelled: false
     };
 
     this.onCountryChange();

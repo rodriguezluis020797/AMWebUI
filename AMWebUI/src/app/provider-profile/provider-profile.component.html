@@ -34,14 +34,19 @@
       Invoices</a>
     <br>
     <br>
-    <a *ngIf="dto.endOfService === null" (click)="cancelSubscription()">Cancel Subscription</a>
-    <p *ngIf="dto.endOfService !== null">
-      <strong>End of Service</strong>: {{ dto.endOfService | date:'MM/dd/yyyy' }}
+
+    <p *ngIf="dto.subscriptionToBeCancelled == false">
+      <strong>Next Billing Date</strong>: {{ dto.nextBillingDate | date:'MM/dd/yyyy' }}
     </p>
-    <p *ngIf="dto.endOfService !== null && dto.errorMessage != ''">
+    <a *ngIf="dto.subscriptionToBeCancelled == false" (click)="cancelSubscription()">Cancel Subscription</a>
+    <p *ngIf="dto.subscriptionToBeCancelled == true && dto.errorMessage != ''">
       {{dto.errorMessage}}
     </p>
-    <a *ngIf="dto.endOfService !== null" (click)="reActivateSubscription()">Reactivate Service</a>
+
+    <p *ngIf="dto.subscriptionToBeCancelled == true">
+      <strong>Cancellation Date</strong>: {{ dto.nextBillingDate | date:'MM/dd/yyyy' }}
+    </p>
+    <a *ngIf="dto.subscriptionToBeCancelled == true" (click)="reActivateSubscription()">Reactivate Service</a>
   </div>
 
   <!-- Edit Mode -->
