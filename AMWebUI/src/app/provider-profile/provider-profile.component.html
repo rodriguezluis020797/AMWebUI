@@ -99,12 +99,12 @@
 </div>
 
 <am-delete-entity *ngIf="showDeleteModal && !loading" [header]="'Cancel Subsciption'"
-  [message]="'Your subscription will stay active until the end of the billing cycle. Messages scheduled before then will still be sent unless manually deleted. Others won’t send—even if you reactivate.'"
+  [message]="'You’ll keep access through your current billing period. Any messages set to go out afterward won’t be delivered unless you reactivate in time.'"
   (confirm)="onCancelSubscription($event)">
 </am-delete-entity>
 
 <am-delete-entity *ngIf="showReSubscribeModal && !loading" [header]="'Reactivate Subsciption'"
-  [message]="'Your subscription will be reactivated immediately, and your default payment method will be charged automatically if you’re outside your final billing cycle. If applicable, the charge will be prorated based on the remaining time in the current billing period.'"
+  [message]="'Your subscription will be reactivated right away. If your last billing cycle has ended, your default payment method will be charged automatically.'"
   (confirm)="onReActivateSubscription($event)">
 </am-delete-entity>
 

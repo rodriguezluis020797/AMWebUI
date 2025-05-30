@@ -11,6 +11,8 @@ export class AppointmentDTO extends BaseDTO {
     endDate: string;
     notes: string;
     status: AppointmentStatusEnum;
+    price: number;
+    overridePrice: boolean;
 
     constructor() {
         super();
@@ -23,5 +25,7 @@ export class AppointmentDTO extends BaseDTO {
         this.endDate = new Date().toISOString();
         this.notes = '';
         this.status = AppointmentStatusEnum.Unknown;
+        this.price = 0.0;
+        this.overridePrice = false;
     }
 }

@@ -12,11 +12,22 @@ import { EMPTY, switchMap } from 'rxjs';
 import { ServiceService } from '../_services/service.service';
 import { ServiceDTO } from '../models/ServiceDTO';
 import { AppointmentStatusEnum } from '../models/Enums';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'am-appointments',
   standalone: true,
-  imports: [FormsModule, CommonModule, LoadingScreenComponent, DeleteEntityComponent, AppointmentStatusPipe],
+  imports: [FormsModule, CommonModule, LoadingScreenComponent, DeleteEntityComponent, AppointmentStatusPipe, MatFormFieldModule,
+    MatInputModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatIconModule,
+    MatButtonModule],
   templateUrl: './appointments.component.html',
   styleUrl: './appointments.component.css'
 })
@@ -27,40 +38,68 @@ export class AppointmentsComponent implements OnInit {
   loading: boolean = true;
   showDeleteModal: boolean = false;
   pendingDeleteId: string | null = null;
+  servicePrice: number = 0;
 
   appointments: (AppointmentDTO & { clientName?: string, serviceName?: string })[] = [];
   clients: ClientDTO[] = [];
+  clientName: string | null = null;
   services: ServiceDTO[] = [];
+  timeEditDTO = {
+    startDateOnly: '',  // yyyy-MM-dd
+    startTimeOnly: '',  // HH:mm
+    endDateOnly: '',
+    endTimeOnly: ''
+  };
 
   constructor(private appointmentService: AppointmentService, private clientService: ClientService, private serviceService: ServiceService) { }
 
   ngOnInit(): void {
     this.loading = true;
-    this.appointmentService.getAllAppointmentsAsync().pipe(
-      switchMap((result) => {
+    this.appointmentService
+      .getAllAppointmentsAsync().pipe(
+        switchMap((result) => {
+          if (result === null) {
+            this.loading = false;
+            return EMPTY;
+          }
+          this.appointments = result;
+          return this.clientService.getClientsAsync();
+        }),
+        switchMap((result) => {
+          if (result === null) {
+            this.loading = false;
+            return EMPTY;
+          }
+          this.clients = result;
+          return this.serviceService.getServicesAsync();
+        })
+      ).subscribe((result) => {
         if (result === null) {
           this.loading = false;
-          return EMPTY;
+          return;
         }
-        this.appointments = result;
-        return this.clientService.getClientsAsync();
-      }),
-      switchMap((result) => {
-        if (result === null) {
+        this.services = result;
+        this.mapClientAndServiceNames();
+      });
+  }
+
+  onServiceChange() {
+    this.loading = true;
+    this.editDTO.overridePrice = false;
+    const serviceDto = new ServiceDTO();
+    serviceDto.serviceId = this.editDTO.serviceId;
+
+    this.serviceService
+      .getServicePriceAsync(serviceDto)
+      .subscribe((result) => {
+        if (result == null) {
           this.loading = false;
-          return EMPTY;
+          return;
         }
-        this.clients = result;
-        return this.serviceService.getServicesAsync();
-      })
-    ).subscribe((result) => {
-      if (result === null) {
+        this.editDTO.price = result.price;
+        console.log(this.editDTO.price)
         this.loading = false;
-        return;
-      }
-      this.services = result;
-      this.mapClientAndServiceNames();
-    });
+      });
   }
 
   mapClientAndServiceNames() {
@@ -93,10 +132,38 @@ export class AppointmentsComponent implements OnInit {
 
   addAppointment() {
     this.loading = true;
+
+    const now = new Date();
+
+    // Round UP to the next 30-minute increment
+    const minutes = now.getMinutes();
+    const remainder = 30 - (minutes % 30);
+    const adjustedMinutes = (minutes + remainder) % 60;
+    now.setMinutes(adjustedMinutes);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+
+    if (minutes + remainder >= 60) {
+      now.setHours(now.getHours() + 1);
+      now.setMinutes(0);
+    }
+
+    const end = new Date(now);
+    end.setHours(end.getHours() + 1);
+
     this.editDTO = new AppointmentDTO();
+    this.editDTO.startDate = this.formatDateLocal(now); // Local format for datetime-local input
+    this.editDTO.endDate = this.formatDateLocal(end);
+
     this.editAppointmentBool = true;
     this.isNewAppointment = true;
     this.loading = false;
+  }
+
+  // Helper to format date as yyyy-MM-ddTHH:mm
+  private formatDateLocal(date: Date): string {
+    const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
   }
 
   editAppointment(appointmentId: string) {
@@ -104,6 +171,8 @@ export class AppointmentsComponent implements OnInit {
     this.isNewAppointment = false;
     this.editAppointmentBool = true;
     this.editDTO = JSON.parse(JSON.stringify(this.appointments.find(x => x.appointmentId === appointmentId)));
+    const client = this.clients.find(x => x.clientId === this.editDTO.clientId);
+    this.clientName = client ? `${client.firstName} ${client.middleName ?? ''} ${client.lastName}`.trim().replace(/\s+/g, ' ') : 'Unknown Client';
     this.loading = false;
   }
 
@@ -113,7 +182,6 @@ export class AppointmentsComponent implements OnInit {
     this.editDTO.status = Number(this.editDTO.status);
 
     if (!this.editDTO.appointmentId || this.editDTO.appointmentId === '') {
-      this.editDTO.status = AppointmentStatusEnum.Scheduled;
       this.appointmentService.createAppointmentAsync(this.editDTO).subscribe(result => {
         if (result === null) {
           this.loading = false;

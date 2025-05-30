@@ -85,4 +85,21 @@ export class ServiceService {
       );
   }
 
+  getServicePriceAsync(dto: ServiceDTO): Observable<ServiceDTO | null> {
+    return this.http.post<ServiceDTO>('/api/Service/GetServicePrice', dto, {
+      withCredentials: true,
+    })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
+  }
+
 }

@@ -7,7 +7,7 @@
   <div *ngIf="0 < appointments.length">
 
     <div *ngFor="let appt of appointments" class="appointment-item">
-      <h3>{{ appt.startDate | date:'medium' }} – {{ appt.endDate | date:'shortTime' }}</h3>
+      <h3>{{ appt.startDate | date:'M/d/yy h:mm a' }} - {{ appt.endDate | date:'h:mm a' }}</h3>
       <p><strong>Client:</strong> {{ appt.clientName }}</p>
       <p><strong>Service:</strong> {{ appt.serviceName }}</p>
       <p><strong>Notes:</strong> {{ appt.notes || '—' }}</p>

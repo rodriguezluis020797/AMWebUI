@@ -14,7 +14,7 @@
         </div>
         <div *ngIf="0 < appointments.length">
             <div *ngFor="let appt of appointments" class="appointment-item">
-                <h3>{{ appt.startDate | date:'medium' }} – {{ appt.endDate | date:'shortTime' }}</h3>
+                <h3>{{ appt.startDate | date:'M/d/yy h:mm a' }} - {{ appt.endDate | date:'h:mm a' }}</h3>
                 <p><strong>Client:</strong> {{ appt.clientName }}</p>
                 <p><strong>Service:</strong> {{ appt.serviceName }}</p>
                 <p><strong>Notes:</strong> {{ appt.notes || '—' }}</p>
@@ -29,27 +29,35 @@
     <!-- Edit/Add Mode -->
     <div *ngIf="editAppointmentBool">
         <label for="clientId">Client</label>
-        <select id="clientId" [(ngModel)]="editDTO.clientId">
+        <select *ngIf="isNewAppointment" id="clientId" [(ngModel)]="editDTO.clientId">
             <option *ngFor="let client of clients" [value]="client.clientId">
-                {{ client.firstName }} {{client.middleName || "-"}} {{ client.lastName }}
+                {{ client.firstName }} {{client.middleName || ""}} {{ client.lastName }}
             </option>
         </select>
+        <p *ngIf="!isNewAppointment">{{clientName}}</p>
 
         <label for="serviceId">Service</label>
-        <select id="serviceId" [(ngModel)]="editDTO.serviceId">
+        <select id="serviceId" (change)="onServiceChange()" [(ngModel)]="editDTO.serviceId">
             <option *ngFor="let service of services" [value]="service.serviceId">
                 {{ service.name }}
             </option>
         </select>
 
         <label for="startDate">Start Date</label>
-        <input type="datetime-local" id="startDate" [(ngModel)]="editDTO.startDate" />
+        <input type="datetime-local" id="startDate" [(ngModel)]="editDTO.startDate" step="900" />
 
         <label for="endDate">End Date</label>
-        <input type="datetime-local" id="endDate" [(ngModel)]="editDTO.endDate" />
+        <input type="datetime-local" id="endDate" [(ngModel)]="editDTO.endDate" step="900" />
 
         <label for="notes">Notes</label>
         <textarea id="notes" [(ngModel)]="editDTO.notes"></textarea>
+
+        <label for="overridePrice">Override Price</label>
+        <input type="checkbox" [(ngModel)]="editDTO.overridePrice" />
+
+        <label for="price">Price</label>
+        <p *ngIf="!editDTO.overridePrice">{{editDTO.price| currency}}</p>
+        <input *ngIf="editDTO.overridePrice" type="number" id="price" [(ngModel)]="editDTO.price" min="0" step="5.00" />
 
         <label for="status">Status</label>
         <select id="status" [(ngModel)]="editDTO.status">
