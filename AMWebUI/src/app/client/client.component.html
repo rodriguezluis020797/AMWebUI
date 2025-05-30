@@ -12,8 +12,8 @@
     <h1 *ngIf="!add">Clients</h1>
     <h1 *ngIf="add">Add Client</h1>
 
-    <div *ngIf="editDTO?.errorMessage" class="error-message">
-        <p>{{ editDTO.errorMessage }}</p>
+    <div *ngIf="clientToAdd?.errorMessage" class="error-message">
+        <p>{{ clientToAdd.errorMessage }}</p>
     </div>
 
     <!-- List View -->
@@ -35,16 +35,16 @@
     <!-- Add View -->
     <div *ngIf="add">
         <label for="firstName">First Name</label>
-        <input id="firstName" [(ngModel)]="editDTO.firstName" />
+        <input id="firstName" [(ngModel)]="clientToAdd.firstName" />
 
         <label for="middleName">Middle Name</label>
-        <input id="middleName" [(ngModel)]="editDTO.middleName" />
+        <input id="middleName" [(ngModel)]="clientToAdd.middleName" />
 
         <label for="lastName">Last Name</label>
-        <input id="lastName" [(ngModel)]="editDTO.lastName" />
+        <input id="lastName" [(ngModel)]="clientToAdd.lastName" />
 
         <label for="phone">Phone Number</label>
-        <input id="phone" [(ngModel)]="editDTO.phoneNumber" />
+        <input id="phone" [(ngModel)]="clientToAdd.phoneNumber" />
 
         <br />
         <button (click)="save()">Save</button>

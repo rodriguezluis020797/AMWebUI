@@ -108,4 +108,22 @@ export class ClientService {
       );
   }
 
+  createClientNoteAsync(dto: ClientNoteDTO): Observable<ClientNoteDTO | null> {
+    return this.http
+      .post<ClientNoteDTO>('/api/Client/CreateClientNote', dto, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
+  }
+
 }

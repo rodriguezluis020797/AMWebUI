@@ -4,7 +4,6 @@ import { ClientDTO } from '../models/ClientDTO';
 import { CommonModule } from '@angular/common';
 import { LoadingScreenComponent } from "../partials/loading-screen/loading-screen.component";
 import { FormsModule } from '@angular/forms';
-import { DeleteEntityComponent } from "../partials/delete-entity/delete-entity.component";
 import { ClientDetailsComponent } from '../client-details/client-details.component';
 
 @Component({
@@ -16,7 +15,7 @@ import { ClientDetailsComponent } from '../client-details/client-details.compone
 export class ClientComponent implements OnInit {
 
   clients: ClientDTO[] = [];
-  editDTO: ClientDTO = new ClientDTO();
+  clientToAdd: ClientDTO = new ClientDTO();
   add: boolean = false;
   loading: boolean = true;
   selectedClient: ClientDTO | null = null;
@@ -47,17 +46,17 @@ export class ClientComponent implements OnInit {
 
   save() {
     this.loading = true;
-    this.editDTO.errorMessage = null;
-    this.clientService.createClientAsync(this.editDTO).subscribe((result) => {
+    this.clientToAdd.errorMessage = null;
+    this.clientService.createClientAsync(this.clientToAdd).subscribe((result) => {
       if (result === null) {
         this.loading = false;
         return;
       }
       if (result.errorMessage && result.errorMessage.trim() !== '') {
-        this.editDTO.errorMessage = result.errorMessage;
+        this.clientToAdd.errorMessage = result.errorMessage;
       } else {
         this.add = false;
-        this.editDTO = new ClientDTO();
+        this.clientToAdd = new ClientDTO();
         this.getClients();
       }
       this.loading = false;
@@ -65,7 +64,7 @@ export class ClientComponent implements OnInit {
   }
 
   cancel() {
-    this.editDTO = new ClientDTO();
+    this.clientToAdd = new ClientDTO();
     this.add = false;
   }
 
