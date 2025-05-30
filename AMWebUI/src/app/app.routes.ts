@@ -14,6 +14,7 @@ import { CompleteSignUpComponentn } from './complete-sign-up/complete-sign-up.co
 import { ServicesComponent } from './services/services.component';
 import { ClientComponent } from './client/client.component';
 import { AppointmentsComponent } from './appointments/appointments.component';
+import { ClientDetailsComponent } from './client-details/client-details.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -51,6 +52,11 @@ export const routes: Routes = [
   {
     path: 'clients',
     component: ClientComponent,
+    canActivate: [authorizationGuard]
+  },
+  {
+    path: 'client-details',
+    component: ClientDetailsComponent,
     canActivate: [authorizationGuard]
   },
   {

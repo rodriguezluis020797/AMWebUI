@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { LoadingScreenComponent } from "../partials/loading-screen/loading-screen.component";
 import { FormsModule } from '@angular/forms';
 import { DeleteEntityComponent } from "../partials/delete-entity/delete-entity.component";
+import { ClientDetailsComponent } from '../client-details/client-details.component';
 
 @Component({
   selector: 'am-clients',
-  imports: [FormsModule, CommonModule, LoadingScreenComponent, DeleteEntityComponent],
+  imports: [FormsModule, CommonModule, LoadingScreenComponent, ClientDetailsComponent],
   templateUrl: './client.component.html',
   styleUrl: './client.component.css'
 })
@@ -16,11 +17,9 @@ export class ClientComponent implements OnInit {
 
   clients: ClientDTO[] = [];
   editDTO: ClientDTO = new ClientDTO();
-  editClientBool: boolean = false;
-  isNewClient: boolean = false;
+  add: boolean = false;
   loading: boolean = true;
-  showDeleteModal: boolean = false;
-  pendingDeleteId: string | null = null;
+  selectedClient: ClientDTO | null = null;
 
   constructor(private clientService: ClientService) { }
 
@@ -42,81 +41,39 @@ export class ClientComponent implements OnInit {
 
   addClient() {
     this.loading = true;
-    this.editClientBool = true;
-    this.isNewClient = true;
-    this.loading = false;
-  }
-
-  editClient(clientId: string) {
-    this.loading = true;
-    this.isNewClient = false;
-    this.editClientBool = true;
-    this.editDTO = JSON.parse(JSON.stringify(this.clients.find(x => x.clientId === clientId)));
+    this.add = true;
     this.loading = false;
   }
 
   save() {
     this.loading = true;
     this.editDTO.errorMessage = null;
-
-    if (!this.editDTO.clientId || this.editDTO.clientId === '') {
-      this.clientService.createClientAsync(this.editDTO).subscribe((result) => {
-        if (result === null) {
-          this.loading = false;
-          return;
-        }
-        if (result.errorMessage && result.errorMessage.trim() !== '') {
-          this.editDTO.errorMessage = result.errorMessage;
-        } else {
-          this.editClientBool = false;
-          this.editDTO = new ClientDTO();
-          this.getClients();
-        }
+    this.clientService.createClientAsync(this.editDTO).subscribe((result) => {
+      if (result === null) {
         this.loading = false;
-      });
-    } else {
-      this.clientService.updateClientAsync(this.editDTO).subscribe((result) => {
-        if (result === null) {
-          this.loading = false;
-          return;
-        }
-        if (result.errorMessage && result.errorMessage.trim() !== '') {
-          this.editDTO.errorMessage = result.errorMessage;
-        } else {
-          this.editClientBool = false;
-          this.editDTO = new ClientDTO();
-          this.getClients();
-        }
-        this.loading = false;
-      });
-    }
-  }
-
-  delete(clientId: string) {
-    this.pendingDeleteId = clientId;
-    this.showDeleteModal = true;
-  }
-
-  onConfirmDelete(confirm: boolean) {
-    if (confirm && this.pendingDeleteId) {
-      this.loading = true;
-      const dto = new ClientDTO();
-      dto.clientId = this.pendingDeleteId;
-      this.clientService.deleteClientAsync(dto).subscribe(() => {
-        this.editClientBool = false;
+        return;
+      }
+      if (result.errorMessage && result.errorMessage.trim() !== '') {
+        this.editDTO.errorMessage = result.errorMessage;
+      } else {
+        this.add = false;
         this.editDTO = new ClientDTO();
-        this.showDeleteModal = false;
-        this.pendingDeleteId = null;
         this.getClients();
-      });
-    } else {
-      this.showDeleteModal = false;
-      this.pendingDeleteId = null;
-    }
+      }
+      this.loading = false;
+    });
   }
 
   cancel() {
     this.editDTO = new ClientDTO();
-    this.editClientBool = false;
+    this.add = false;
+  }
+
+  selectClient(client: ClientDTO) {
+    this.selectedClient = client;
+  }
+
+  goBackToList() {
+    this.selectedClient = null;
   }
 }
