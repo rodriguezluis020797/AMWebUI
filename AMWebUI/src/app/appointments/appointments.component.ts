@@ -97,7 +97,6 @@ export class AppointmentsComponent implements OnInit {
           return;
         }
         this.editDTO.price = result.price;
-        console.log(this.editDTO.price)
         this.loading = false;
       });
   }

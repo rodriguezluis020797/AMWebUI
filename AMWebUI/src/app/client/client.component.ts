@@ -73,6 +73,7 @@ export class ClientComponent implements OnInit {
   }
 
   goBackToList() {
+    this.getClients();
     this.selectedClient = null;
   }
 }

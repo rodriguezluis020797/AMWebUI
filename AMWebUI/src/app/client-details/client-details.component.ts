@@ -47,8 +47,6 @@ export class ClientDetailsComponent implements OnInit {
           return;
         }
         this.clientNotes = result;
-
-        console.log(this.clientNotes)
         this.loading = false;
       });
   }
@@ -137,7 +135,6 @@ export class ClientDetailsComponent implements OnInit {
 
   editNote(note: ClientNoteDTO) {
     this.loading = true;
-    console.log(note);
     this.selectedClientNote = JSON.parse(JSON.stringify(note));
     this.loading = false;
   }
@@ -148,5 +145,6 @@ export class ClientDetailsComponent implements OnInit {
 
   goBackToClient() {
     this.selectedClientNote = null;
+    this.getClientNotes();
   }
 }

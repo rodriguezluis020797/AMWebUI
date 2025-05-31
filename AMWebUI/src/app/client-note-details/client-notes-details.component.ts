@@ -28,7 +28,7 @@ export class ClientNoteDetailsComponent implements OnInit {
 
   }
 
-  eddit() {
+  edit() {
     this.loading = true;
     this.editNote = true;
     this.clientNoteEditDto = JSON.parse(JSON.stringify(this.clientNoteDto));
@@ -42,16 +42,28 @@ export class ClientNoteDetailsComponent implements OnInit {
   cancel() {
     this.loading = true;
     this.clientNoteEditDto = new ClientNoteDTO();
-
+    this.editNote = false;
     this.loading = false;
   }
 
   delete() {
+    this.loading = true;
     this.showDeleteModal = true;
+    this.loading = false;
   }
 
-  onConfirmDelete() {
-
+  onConfirmDelete(confirm: boolean) {
+    if (confirm) {
+      this.loading = true;
+      this.clientService.deleteClientNoteAsync(this.clientNoteDto).subscribe(() => {
+        this.showDeleteModal = false;
+        this.goBackToClient();
+        this.loading = false;
+      });
+    } else {
+      this.showDeleteModal = false;
+      this.loading = false;
+    }
   }
 
   goBackToClient() {

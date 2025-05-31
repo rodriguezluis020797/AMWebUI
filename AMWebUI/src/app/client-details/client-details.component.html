@@ -13,6 +13,9 @@
             <p><strong>Phone:</strong> {{ clientDto.phoneNumber }}</p>
             <button (click)="editClientFunc()">Edit</button>
 
+            <button (click)="addNote()">Add Note</button>
+            <br />
+            <br />
             <div *ngIf="clientNotes.length <= 0">
                 <h2>No client notes</h2>
             </div>
@@ -25,9 +28,6 @@
                     <button (click)="editNote(note)">Edit</button>
                 </div>
             </div>
-
-            <button (click)="addNote()">Add Note</button>
-
         </div>
 
         <div *ngIf="editClient">

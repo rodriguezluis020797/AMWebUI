@@ -44,6 +44,7 @@ export class ServicesComponent implements OnInit {
 
   addService() {
     this.loading = true;
+    this.editDTO = new ServiceDTO();
     this.editServiceBool = true;
     this.isNewService = true;
     this.loading = false;
@@ -64,7 +65,6 @@ export class ServicesComponent implements OnInit {
     this.loading = true;
     this.editDTO.errorMessage = null;
     if (!this.editDTO.serviceId || this.editDTO.serviceId === '') {
-
       this.serviceService.createServiceAsync(this.editDTO).subscribe((result) => {
         if (result === null) {
           this.loading = false;

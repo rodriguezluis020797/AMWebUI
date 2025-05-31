@@ -19,6 +19,8 @@
     <!-- List View -->
     <div *ngIf="!add">
         <button (click)="addClient()">Add New Client</button>
+        <br />
+        <br />
         <div *ngIf="clients.length <= 0">
             <h2>You have no clients.</h2>
         </div>
