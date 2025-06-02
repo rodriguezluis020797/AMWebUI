@@ -37,44 +37,68 @@
         <p *ngIf="!isNewAppointment">{{clientName}}</p>
 
         <label for="serviceId">Service</label>
-        <select id="serviceId" (change)="onServiceChange()" [(ngModel)]="editDTO.serviceId">
-            <option *ngFor="let service of services" [value]="service.serviceId">
+        <select *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"
+            id="serviceId" (change)="onServiceChange()" [(ngModel)]="editDTO.serviceId">
+            <option *ngFor="let service of services" [ngValue]="service.serviceId">
                 {{ service.name }}
             </option>
         </select>
 
+        <p *ngIf="editDTO.status === (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)">
+            {{selectedServiceName}}
+        </p>
+
         <label for="startDate">Start Date</label>
-        <input type="datetime-local" id="startDate" [(ngModel)]="editDTO.startDate" step="900" />
+        <input *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"
+            type="datetime-local" id="startDate" [(ngModel)]="editDTO.startDate" step="900" />
+        <p *ngIf="editDTO.status === (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)">
+            {{ editDTO.startDate | date: 'M/d/yy h:mm a' }} </p>
 
         <label for="endDate">End Date</label>
-        <input type="datetime-local" id="endDate" [(ngModel)]="editDTO.endDate" step="900" />
+        <input *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"
+            type="datetime-local" id="endDate" [(ngModel)]="editDTO.endDate" step="900" />
+
+        <p *ngIf="editDTO.status === (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)">
+            {{ editDTO.endDate | date: 'M/d/yy h:mm a' }} </p>
 
         <label for="notes">Notes</label>
-        <textarea id="notes" [(ngModel)]="editDTO.notes"></textarea>
+        <textarea *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"
+            id="notes" [(ngModel)]="editDTO.notes"></textarea>
+        <p *ngIf="editDTO.status === (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)">
+            {{ editDTO.notes ? editDTO.notes : '—' }}</p>
 
-        <label for="overridePrice">Override Price</label>
-        <input type="checkbox" [(ngModel)]="editDTO.overridePrice" />
+        <label *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"
+            for="overridePrice">Override Price</label>
+        <input *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"
+            type="checkbox" [(ngModel)]="editDTO.overridePrice" />
 
         <label for="price">Price</label>
         <p *ngIf="!editDTO.overridePrice">{{editDTO.price| currency}}</p>
         <input *ngIf="editDTO.overridePrice" type="number" id="price" [(ngModel)]="editDTO.price" min="0" step="5.00" />
 
         <label for="status">Status</label>
-        <select id="status" [(ngModel)]="editDTO.status">
+        <select *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"
+            id="status" [(ngModel)]="editDTO.status">
             <option *ngFor="let status of [0,1,2,3]" [value]="status">
                 {{ status | appointmentStatus }}
             </option>
         </select>
+        <p *ngIf="editDTO.status === (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)">
+            <strong>{{editDTO.status | appointmentStatus}}</strong>
+        </p>
 
         <br />
         <button (click)="save()">Save</button>
         <button (click)="cancel()">Cancel</button>
-        <button *ngIf="!isNewAppointment" (click)="delete(editDTO.appointmentId)">Delete</button>
+        <button *ngIf="!isNewAppointment && editDTO.status === AppointmentStatusEnum.Cancelled"
+            (click)="delete(editDTO.appointmentId)">
+            Delete
+        </button>
     </div>
 </div>
 
-<am-delete-entity *ngIf="showDeleteModal && !loading" [message]="'Are you sure you want to delete this appointment?'"
-    (confirm)="onConfirmDelete($event)">
+<am-delete-entity *ngIf="showDeleteModal && !loading" [header]="'Delete Appointment'"
+    [message]="'Are you sure you want to delete this appointment?'" (confirm)="onConfirmDelete($event)">
 </am-delete-entity>
 
 <div *ngIf="loading">

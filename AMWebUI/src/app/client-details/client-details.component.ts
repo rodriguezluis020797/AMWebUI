@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { DeleteEntityComponent } from '../partials/delete-entity/delete-entity.component';
 import { Router } from '@angular/router';
 import { ClientNoteDetailsComponent } from "../client-note-details/client-notes-details.component";
+import { ToolsService } from '../_services/tools.service';
 
 @Component({
   selector: 'am-client-details',
@@ -32,7 +33,7 @@ export class ClientDetailsComponent implements OnInit {
   loading: boolean = false;
   showDeleteModal: boolean = false;
 
-  constructor(private clientService: ClientService, private router: Router) { }
+  constructor(private clientService: ClientService, private router: Router, private tools: ToolsService) { }
   ngOnInit(): void {
     this.getClientNotes();
   }
@@ -92,10 +93,24 @@ export class ClientDetailsComponent implements OnInit {
   onConfirmDelete(confirm: boolean) {
     if (confirm) {
       this.loading = true;
-      this.clientService.deleteClientAsync(this.clientDto).subscribe(() => {
+      this.clientService.deleteClientAsync(this.clientDto).subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
+
+        this.clientDto.errorMessage = result.errorMessage;
+
+        if (!this.clientDto.errorMessage || this.clientDto.errorMessage.trim() === '') {
+          this.showDeleteModal = false;
+          this.router.navigate(['/clients'])
+          this.loading = false;
+          return;
+        }
+
         this.showDeleteModal = false;
-        this.router.navigate(['/clients'])
         this.loading = false;
+
       });
     } else {
       this.showDeleteModal = false;

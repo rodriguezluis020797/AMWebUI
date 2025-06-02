@@ -18,6 +18,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { ToolsService } from '../_services/tools.service';
 
 @Component({
   selector: 'am-appointments',
@@ -39,6 +40,7 @@ export class AppointmentsComponent implements OnInit {
   showDeleteModal: boolean = false;
   pendingDeleteId: string | null = null;
   servicePrice: number = 0;
+  AppointmentStatusEnum = AppointmentStatusEnum;
 
   appointments: (AppointmentDTO & { clientName?: string, serviceName?: string })[] = [];
   clients: ClientDTO[] = [];
@@ -51,7 +53,10 @@ export class AppointmentsComponent implements OnInit {
     endTimeOnly: ''
   };
 
-  constructor(private appointmentService: AppointmentService, private clientService: ClientService, private serviceService: ServiceService) { }
+  constructor(private appointmentService: AppointmentService,
+    private clientService: ClientService,
+    private serviceService: ServiceService,
+    private tools: ToolsService) { }
 
   ngOnInit(): void {
     this.loading = true;
@@ -81,6 +86,11 @@ export class AppointmentsComponent implements OnInit {
         this.services = result;
         this.mapClientAndServiceNames();
       });
+  }
+
+  get selectedServiceName(): string {
+    const match = this.services.find(s => s.serviceId === this.editDTO?.serviceId);
+    return match ? match.name : '—';
   }
 
   onServiceChange() {
@@ -169,9 +179,22 @@ export class AppointmentsComponent implements OnInit {
     this.loading = true;
     this.isNewAppointment = false;
     this.editAppointmentBool = true;
-    this.editDTO = JSON.parse(JSON.stringify(this.appointments.find(x => x.appointmentId === appointmentId)));
+
+    const appt = this.appointments.find(x => x.appointmentId === appointmentId);
+    if (!appt) return;
+
+    // Clone and reformat
+    this.editDTO = new AppointmentDTO();
+    Object.assign(this.editDTO, appt);
+
+    this.editDTO.startDate = this.formatDateLocal(new Date(appt.startDate));
+    this.editDTO.endDate = this.formatDateLocal(new Date(appt.endDate));
+
     const client = this.clients.find(x => x.clientId === this.editDTO.clientId);
-    this.clientName = client ? `${client.firstName} ${client.middleName ?? ''} ${client.lastName}`.trim().replace(/\s+/g, ' ') : 'Unknown Client';
+    this.clientName = client
+      ? `${client.firstName} ${client.middleName ?? ''} ${client.lastName}`.trim().replace(/\s+/g, ' ')
+      : 'Unknown Client';
+
     this.loading = false;
   }
 
@@ -223,7 +246,19 @@ export class AppointmentsComponent implements OnInit {
       this.loading = true;
       const dto = new AppointmentDTO();
       dto.appointmentId = this.pendingDeleteId;
-      this.appointmentService.deleteAppointmentAsync(dto).subscribe(() => {
+      this.appointmentService.deleteAppointmentAsync(dto).subscribe((result) => {
+
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
+
+        if (result.errorMessage && result.errorMessage.trim() !== '') {
+          dto.errorMessage = result.errorMessage;
+          this.loading = false;
+          return;
+        }
+
         this.editAppointmentBool = false;
         this.editDTO = new AppointmentDTO();
         this.showDeleteModal = false;

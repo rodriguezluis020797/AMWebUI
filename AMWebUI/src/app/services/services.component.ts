@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { LoadingScreenComponent } from "../partials/loading-screen/loading-screen.component";
 import { FormsModule } from '@angular/forms';
 import { DeleteEntityComponent } from "../partials/delete-entity/delete-entity.component";
+import { ToolsService } from '../_services/tools.service';
 
 @Component({
   selector: 'am-services',
@@ -22,7 +23,7 @@ export class ServicesComponent implements OnInit {
   showDeleteModal: boolean = false;
   pendingDeleteId: string | null = null;
 
-  constructor(private serviceService: ServiceService) {
+  constructor(private serviceService: ServiceService, private tools: ToolsService) {
 
   }
 
@@ -110,14 +111,25 @@ export class ServicesComponent implements OnInit {
       let dto = new ServiceDTO();
       dto.serviceId = this.pendingDeleteId;
       this.serviceService.deleteServiceAsync(dto).subscribe((result) => {
-        this.editServiceBool = false;
-        this.editDTO = new ServiceDTO();
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
+        this.editDTO.errorMessage = result.errorMessage;
+        if (!this.editDTO.errorMessage || this.editDTO.errorMessage.trim() === '') {
+          this.editServiceBool = false;
+          this.editDTO = new ServiceDTO();
+          this.showDeleteModal = false;
+          this.pendingDeleteId = null;
+          this.getServices();
+        }
+        this.loading = false;
         this.showDeleteModal = false;
         this.pendingDeleteId = null;
-        this.getServices(); //set timeout done here
       });
     }
     else {
+      this.loading = false;
       this.showDeleteModal = false;
       this.pendingDeleteId = null;
     }

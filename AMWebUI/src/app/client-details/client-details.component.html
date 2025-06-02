@@ -31,17 +31,20 @@
         </div>
 
         <div *ngIf="editClient">
+            <div *ngIf="clientEditDto.errorMessage" class="error-message">
+                <p>{{ clientDto.errorMessage }}</p>
+            </div>
             <label for="firstName">First Name</label>
-            <input id="firstName" [(ngModel)]="clientDto.firstName" />
+            <input id="firstName" [(ngModel)]="clientEditDto.firstName" />
 
             <label for="middleName">Middle Name</label>
-            <input id="middleName" [(ngModel)]="clientDto.middleName" />
+            <input id="middleName" [(ngModel)]="clientEditDto.middleName" />
 
             <label for="lastName">Last Name</label>
-            <input id="lastName" [(ngModel)]="clientDto.lastName" />
+            <input id="lastName" [(ngModel)]="clientEditDto.lastName" />
 
             <label for="phone">Phone Number</label>
-            <input id="phone" [(ngModel)]="clientDto.phoneNumber" />
+            <input id="phone" [(ngModel)]="clientEditDto.phoneNumber" />
             <br />
             <button (click)="saveClient()">Save</button>
             <button (click)="cancelEditClient()">Cancel</button>
