@@ -109,7 +109,6 @@ export class ClientService {
   }
 
   createClientNoteAsync(dto: ClientNoteDTO): Observable<ClientNoteDTO | null> {
-    console.log(dto);
     return this.http
       .post<ClientNoteDTO>('/api/Client/CreateClientNote', dto, {
         withCredentials: true,
@@ -128,7 +127,6 @@ export class ClientService {
   }
 
   deleteClientNoteAsync(dto: ClientNoteDTO | null): Observable<ClientNoteDTO | null> {
-    console.log(dto);
     return this.http
       .post<ClientNoteDTO>('/api/Client/DeleteClientNote', dto, {
         withCredentials: true,

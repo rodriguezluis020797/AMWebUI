@@ -18,7 +18,6 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { ToolsService } from '../_services/tools.service';
 
 @Component({
   selector: 'am-appointments',
@@ -46,6 +45,7 @@ export class AppointmentsComponent implements OnInit {
   clients: ClientDTO[] = [];
   clientName: string | null = null;
   services: ServiceDTO[] = [];
+  originalServicePrice: number = 0;
   timeEditDTO = {
     startDateOnly: '',  // yyyy-MM-dd
     startTimeOnly: '',  // HH:mm
@@ -55,8 +55,7 @@ export class AppointmentsComponent implements OnInit {
 
   constructor(private appointmentService: AppointmentService,
     private clientService: ClientService,
-    private serviceService: ServiceService,
-    private tools: ToolsService) { }
+    private serviceService: ServiceService) { }
 
   ngOnInit(): void {
     this.loading = true;
@@ -107,8 +106,18 @@ export class AppointmentsComponent implements OnInit {
           return;
         }
         this.editDTO.price = result.price;
+        this.originalServicePrice = this.editDTO.price;
         this.loading = false;
       });
+  }
+
+  onOverridePrice() {
+    if (this.editDTO.overridePrice) {
+      this.servicePrice = 0;
+    }
+    else {
+      this.editDTO.price = this.services.find(x => x.serviceId === this.editDTO.serviceId)?.price ?? 0;
+    }
   }
 
   mapClientAndServiceNames() {
@@ -194,14 +203,19 @@ export class AppointmentsComponent implements OnInit {
     this.clientName = client
       ? `${client.firstName} ${client.middleName ?? ''} ${client.lastName}`.trim().replace(/\s+/g, ' ')
       : 'Unknown Client';
-
     this.loading = false;
+
   }
 
   save() {
     this.loading = true;
     this.editDTO.errorMessage = null;
     this.editDTO.status = Number(this.editDTO.status);
+
+    if (this.editDTO.overridePrice) {
+      (this.editDTO.overridePrice, this.servicePrice)
+      this.editDTO.price = this.servicePrice;
+    }
 
     if (!this.editDTO.appointmentId || this.editDTO.appointmentId === '') {
       this.appointmentService.createAppointmentAsync(this.editDTO).subscribe(result => {

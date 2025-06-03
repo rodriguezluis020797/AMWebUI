@@ -67,14 +67,16 @@
         <p *ngIf="editDTO.status === (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)">
             {{ editDTO.notes ? editDTO.notes : '—' }}</p>
 
-        <label *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"
+        <label
+            *ngIf="editDTO.status !== AppointmentStatusEnum.Cancelled && editDTO.status !== AppointmentStatusEnum.Completed"
             for="overridePrice">Override Price</label>
-        <input *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"
+        <input (change)="onOverridePrice()"
+            *ngIf="editDTO.status !== AppointmentStatusEnum.Cancelled && editDTO.status !== AppointmentStatusEnum.Completed"
             type="checkbox" [(ngModel)]="editDTO.overridePrice" />
 
         <label for="price">Price</label>
         <p *ngIf="!editDTO.overridePrice">{{editDTO.price| currency}}</p>
-        <input *ngIf="editDTO.overridePrice" type="number" id="price" [(ngModel)]="editDTO.price" min="0" step="5.00" />
+        <input *ngIf="editDTO.overridePrice" type="number" id="price" [(ngModel)]="servicePrice" min="0" step="5.00" />
 
         <label for="status">Status</label>
         <select *ngIf="editDTO.status !== (AppointmentStatusEnum.Cancelled && AppointmentStatusEnum.Completed)"

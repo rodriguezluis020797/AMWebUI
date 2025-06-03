@@ -123,7 +123,7 @@ export enum CookieEnum {
 }
 
 export enum AppointmentStatusEnum {
-  Unknown = 0,
+  Select = 0,
   Scheduled,
   Completed,
   Cancelled

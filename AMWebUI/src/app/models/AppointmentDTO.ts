@@ -24,7 +24,7 @@ export class AppointmentDTO extends BaseDTO {
         this.startDate = new Date().toISOString();
         this.endDate = new Date().toISOString();
         this.notes = '';
-        this.status = AppointmentStatusEnum.Unknown;
+        this.status = AppointmentStatusEnum.Select;
         this.price = 0.0;
         this.overridePrice = false;
     }
