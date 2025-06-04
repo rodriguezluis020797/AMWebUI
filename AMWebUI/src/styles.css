@@ -1,0 +1,55 @@
+/* src/styles.css */
+
+body {
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background-color: #F7FAFC;
+    color: #1A202C;
+}
+
+h1,
+h2,
+h3,
+h4 {
+    color: #2D3748;
+}
+
+a {
+    color: #3182CE;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+/* Reusable card style */
+.card-custom {
+    border-radius: 12px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+    background-color: #fff;
+    padding: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+/* Button style */
+.btn-primary {
+    background-color: #3182CE;
+    border-color: #3182CE;
+}
+
+.btn-primary:hover {
+    background-color: #2B6CB0;
+    border-color: #2B6CB0;
+}
+
+/* Metric display */
+.metric-label {
+    font-size: 0.9rem;
+    color: #718096;
+}
+
+.metric-value {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #2D3748;
+}
