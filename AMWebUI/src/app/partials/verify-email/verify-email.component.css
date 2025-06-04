@@ -1,0 +1,40 @@
+.message-container {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background-color: #fff;
+    color: #2D3748;
+}
+
+h2 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #38A169;
+    /* green-600 */
+}
+
+p {
+    font-size: 1rem;
+    color: #718096;
+    max-width: 600px;
+    text-align: center;
+    margin-bottom: 1.5rem;
+}
+
+a.btn {
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border-radius: 6px;
+    background-color: #3182CE;
+    color: white;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+}
+
+a.btn:hover {
+    background-color: #2B6CB0;
+}
