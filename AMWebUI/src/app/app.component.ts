@@ -1,28 +1,37 @@
 import { Component, OnInit } from '@angular/core';
-import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
 import { CommonModule } from '@angular/common';
+import { Router, NavigationEnd, RouterOutlet } from '@angular/router';
+import { filter, switchMap, take, map, Observable, EMPTY } from 'rxjs';
+
+import { NavBarComponent } from './partials/nav-bar/nav-bar.component';
 import { FooterComponent } from './partials/footer/footer.component';
-import { SystemStatusService } from './_services/system-status.service';
 import { LoadingScreenComponent } from './partials/loading-screen/loading-screen.component';
-import { NavigationEnd, Router, RouterOutlet } from '@angular/router';
+
+import { SystemStatusService } from './_services/system-status.service';
 import { CurrentStateService } from './_services/current-state.service';
-import { filter, of, switchMap, take, map, Observable, EMPTY } from 'rxjs';
 import { IdentityService } from './_services/identity.service';
 import { HttpStatusCodeEnum } from './models/Enums';
 
 @Component({
   selector: 'app-root',
+  standalone: true,
   imports: [
     RouterOutlet,
     CommonModule,
     NavBarComponent,
     FooterComponent,
-    LoadingScreenComponent,
+    LoadingScreenComponent
   ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css',
+  styleUrl: './app.component.css'
 })
 export class AppComponent implements OnInit {
+  title: string = 'AM';
+  loading: boolean = true;
+
+  // Routes that are publicly accessible when entered directly into the browser's address bar
+  private readonly allowlistedRoutes: string[] = ['/verify-email', '/reset-password'];
+
   constructor(
     private systemStatusService: SystemStatusService,
     private currentStateService: CurrentStateService,
@@ -30,28 +39,26 @@ export class AppComponent implements OnInit {
     private identityService: IdentityService
   ) { }
 
-  title: String = 'AM';
-  loading: Boolean = true;
-
   ngOnInit(): void {
-    // Handle system status check
-    this.systemStatusService
-      .fullSystemCheckAsync()
+    // Perform a full system check on startup
+    this.systemStatusService.fullSystemCheckAsync()
       .pipe(
         switchMap((result) => {
           if (result === null) {
-            this.router.navigate(['/error'])
+            // Redirect to error page if system check fails
+            this.router.navigate(['/error']);
             this.loading = false;
             return EMPTY;
-          } else {
-            return this.getCurrentPath();
           }
+          return this.getCurrentPath();
         }),
         switchMap((currentPath) => {
           const validPath = currentPath ?? '';
+          // If route is not allowlisted, check login status
           if (!this.isCurrentPathAllowlisted(validPath)) {
             return this.identityService.isLoggedInAsync();
           } else {
+            this.currentStateService.loggedInSubject.next(false);
             this.loading = false;
             return EMPTY;
           }
@@ -62,69 +69,62 @@ export class AppComponent implements OnInit {
           this.loading = false;
           return;
         }
+
         if (result.status === HttpStatusCodeEnum.LoggedIn) {
+          // Mark user as logged in and navigate to dashboard
           this.currentStateService.loggedInSubject.next(true);
           this.router.navigate(['dashboard']);
         } else {
+          // Redirect to home if not logged in
           this.router.navigate(['']);
         }
+
         this.loading = false;
       });
   }
 
+  /**
+   * Checks if a route is in the list of allowlisted routes
+   */
   isCurrentPathAllowlisted(currentPath: string): boolean {
     return this.allowlistedRoutes.includes(currentPath);
   }
 
+  /**
+   * Returns the current path once navigation ends
+   */
   getCurrentPath(): Observable<string> {
     return this.router.events.pipe(
-      filter((event) => event instanceof NavigationEnd),
+      filter(event => event instanceof NavigationEnd),
       take(1),
       map(() => {
-        const currentPath = this.router.url.split('?')[0].split('#')[0];
-        return currentPath;
+        const path = this.router.url.split('?')[0].split('#')[0];
+        return path;
       })
     );
   }
 
-  private readonly allowlistedRoutes = ['/verify-email', '/reset-password'];
-
+  /**
+   * Conditionally pings the backend to keep the session alive.
+   * Only pings if logged in and enough time has passed.
+   */
   pingIfNeeded(): void {
     if (!this.currentStateService.loggedInSubject.value) {
-      //console.log('Not logged in.. ping not needed');
       this.currentStateService.lastPingSubject.next(new Date());
       return;
     }
 
-    const timeNow = new Date();
-    //console.log('timeNow: ' + timeNow);
+    const now = new Date();
+    const lastPing = this.currentStateService.lastPingSubject.value;
+    const timeDifferenceMs = now.getTime() - lastPing.getTime();
+    const thresholdMs = 0; // Change to e.g., 300000 (5 min) in prod
 
-    const timeLastPinged = this.currentStateService.lastPingSubject.value;
-    //console.log('timeLastPinged: ' + timeLastPinged);
+    const shouldPing = (timeDifferenceMs > thresholdMs) && this.currentStateService.systemStatus.value;
 
-    const msNeededToPing = 0;//300000;
-    //console.log('msNeededToPing: ' + msNeededToPing);
-
-    const timeDifferenceInMs = timeNow.getTime() - timeLastPinged.getTime();
-    //console.log('timeDifferenceInMs: ' + timeDifferenceInMs);
-
-    const minutesNeededToPing = msNeededToPing / (1000 * 60);
-    //console.log('minutesNeededToPing: ' + minutesNeededToPing);
-
-    const timeDifferenceInMin = timeDifferenceInMs / 60000;
-    //console.log('timeDifferenceInMin: ' + timeDifferenceInMin);
-
-    if (
-      minutesNeededToPing < timeDifferenceInMin &&
-      this.currentStateService.systemStatus.value == true
-    ) {
-      //console.log('Ping performed...');
-      this.identityService.pingAsync().subscribe((result) => {
+    if (shouldPing) {
+      this.identityService.pingAsync().subscribe(() => {
         this.currentStateService.lastPingSubject.next(new Date());
       });
-    } else {
-      //console.log('Not time yet or system offline... ping not needed');
     }
-    //console.log('');
   }
 }
