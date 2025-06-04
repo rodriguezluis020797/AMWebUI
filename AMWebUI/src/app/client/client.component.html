@@ -7,11 +7,11 @@
 <am-client-details *ngIf="selectedClient && !loading" [clientDto]="selectedClient"
     (back)="goBackToList()"></am-client-details>
 
-<!-- List and Add View -->
+<!-- List & Add View -->
 <div *ngIf="!loading && !selectedClient" class="client-container">
-    <h1 *ngIf="!add">Clients</h1>
-    <h1 *ngIf="add">Add Client</h1>
+    <h1>{{ add ? 'Add Client' : 'Clients' }}</h1>
 
+    <!-- Error Message -->
     <div *ngIf="clientToAdd?.errorMessage" class="error-message">
         <p>{{ clientToAdd.errorMessage }}</p>
     </div>
@@ -19,15 +19,18 @@
     <!-- List View -->
     <div *ngIf="!add">
         <button (click)="addClient()">Add New Client</button>
-        <br />
-        <br />
-        <div *ngIf="clients.length <= 0">
+        <br /><br />
+
+        <div *ngIf="clients.length === 0">
             <h2>You have no clients.</h2>
         </div>
+
         <div *ngIf="clients.length > 0">
             <div *ngFor="let client of clients" class="client-item">
                 <h3>
-                    {{ client.firstName }} {{ client.middleName ? client.middleName + ' ' : '' }}{{ client.lastName }}
+                    {{ client.firstName }}
+                    {{ client.middleName ? client.middleName + ' ' : '' }}
+                    {{ client.lastName }}
                 </h3>
                 <button (click)="selectClient(client)">View</button>
             </div>

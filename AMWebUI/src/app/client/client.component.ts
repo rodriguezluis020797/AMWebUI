@@ -1,23 +1,28 @@
 import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { ClientService } from '../_services/client.service';
 import { ClientDTO } from '../models/ClientDTO';
-import { CommonModule } from '@angular/common';
-import { LoadingScreenComponent } from "../partials/loading-screen/loading-screen.component";
-import { FormsModule } from '@angular/forms';
+import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { ClientDetailsComponent } from '../client-details/client-details.component';
 
 @Component({
   selector: 'am-clients',
-  imports: [FormsModule, CommonModule, LoadingScreenComponent, ClientDetailsComponent],
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    LoadingScreenComponent,
+    ClientDetailsComponent
+  ],
   templateUrl: './client.component.html',
-  styleUrl: './client.component.css'
+  styleUrls: ['./client.component.css']
 })
 export class ClientComponent implements OnInit {
-
   clients: ClientDTO[] = [];
   clientToAdd: ClientDTO = new ClientDTO();
-  add: boolean = false;
-  loading: boolean = true;
+  add = false;
+  loading = true;
   selectedClient: ClientDTO | null = null;
 
   constructor(private clientService: ClientService) { }
@@ -26,54 +31,53 @@ export class ClientComponent implements OnInit {
     this.getClients();
   }
 
-  getClients() {
+  getClients(): void {
     this.loading = true;
-    this.clientService.getClientsAsync().subscribe((result) => {
-      if (result === null) {
-        this.loading = false;
-        return;
+    this.clientService.getClientsAsync().subscribe(result => {
+      if (result !== null) {
+        this.clients = result;
       }
-      this.clients = result;
       this.loading = false;
     });
   }
 
-  addClient() {
-    this.loading = true;
+  addClient(): void {
     this.add = true;
-    this.loading = false;
   }
 
-  save() {
+  save(): void {
     this.loading = true;
     this.clientToAdd.errorMessage = null;
-    this.clientService.createClientAsync(this.clientToAdd).subscribe((result) => {
+
+    this.clientService.createClientAsync(this.clientToAdd).subscribe(result => {
       if (result === null) {
         this.loading = false;
         return;
       }
-      if (result.errorMessage && result.errorMessage.trim() !== '') {
+
+      if (result.errorMessage?.trim()) {
         this.clientToAdd.errorMessage = result.errorMessage;
       } else {
         this.add = false;
         this.clientToAdd = new ClientDTO();
         this.getClients();
       }
+
       this.loading = false;
     });
   }
 
-  cancel() {
+  cancel(): void {
     this.clientToAdd = new ClientDTO();
     this.add = false;
   }
 
-  selectClient(client: ClientDTO) {
+  selectClient(client: ClientDTO): void {
     this.selectedClient = client;
   }
 
-  goBackToList() {
-    this.getClients();
+  goBackToList(): void {
     this.selectedClient = null;
+    this.getClients();
   }
 }
