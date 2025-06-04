@@ -1,31 +1,32 @@
 <!-- Loading State -->
-<div class="reset-email" *ngIf="loading && !success">
+<div class="container py-4" style="max-width: 400px;" *ngIf="loading && !success">
   <am-loading-screen></am-loading-screen>
 </div>
 
 <!-- Success State -->
-<div class="reset-email" *ngIf="!loading && success">
+<div class="container py-4" style="max-width: 400px;" *ngIf="!loading && success">
   <h2>Update E-Mail</h2>
-  <p>Please check your inbox to verify your new e-mail.</p>
-  <a routerLink="/provider-profile">Back To Profile</a>
+  <p class="alert alert-success">Please check your inbox to verify your new e-mail.</p>
+  <a routerLink="/provider-profile" class="btn btn-outline-primary">Back To Profile</a>
 </div>
 
 <!-- Form State -->
-<div class="reset-email" *ngIf="!loading && !success">
+<div class="container py-4" style="max-width: 400px;" *ngIf="!loading && !success">
   <h2>Update E-Mail</h2>
 
-  <div *ngIf="dto.errorMessage" class="error-message">
-    <p>{{ dto.errorMessage }}</p>
+  <div *ngIf="dto.errorMessage" class="alert alert-danger">
+    {{ dto.errorMessage }}
   </div>
 
-  <div>
-    <label for="email">E-Mail:</label>
-    <input type="email" id="email" [(ngModel)]="dto.eMail" name="email" required />
+  <div class="mb-3">
+    <label for="email" class="form-label">E-Mail</label>
+    <input type="email" id="email" [(ngModel)]="dto.eMail" name="email" class="form-control" required />
   </div>
 
-  <button type="submit" [disabled]="disableSubmit" (click)="submit()">
-    Update E-Mail
-  </button>
-
-  <a routerLink="/provider-profile">Cancel</a>
+  <div class="d-grid gap-2">
+    <button type="submit" class="btn btn-primary" [disabled]="disableSubmit" (click)="submit()">
+      Update E-Mail
+    </button>
+    <a routerLink="/provider-profile" class="text-center text-decoration-none">Cancel</a>
+  </div>
 </div>
