@@ -8,51 +8,65 @@
     (back)="goBackToList()"></am-client-details>
 
 <!-- List & Add View -->
-<div *ngIf="!loading && !selectedClient" class="client-container">
+<div *ngIf="!loading && !selectedClient" class="container py-4">
     <h1>{{ add ? 'Add Client' : 'Clients' }}</h1>
 
     <!-- Error Message -->
-    <div *ngIf="clientToAdd?.errorMessage" class="error-message">
-        <p>{{ clientToAdd.errorMessage }}</p>
+    <div *ngIf="clientToAdd?.errorMessage" class="alert alert-danger">
+        {{ clientToAdd.errorMessage }}
     </div>
 
     <!-- List View -->
-    <div *ngIf="!add">
-        <button (click)="addClient()">Add New Client</button>
-        <br /><br />
-
-        <div *ngIf="clients.length === 0">
-            <h2>You have no clients.</h2>
+    <ng-container *ngIf="!add">
+        <div class="mb-3">
+            <button class="btn btn-primary" (click)="addClient()">Add New Client</button>
         </div>
 
-        <div *ngIf="clients.length > 0">
-            <div *ngFor="let client of clients" class="client-item">
-                <h3>
-                    {{ client.firstName }}
-                    {{ client.middleName ? client.middleName + ' ' : '' }}
-                    {{ client.lastName }}
-                </h3>
-                <button (click)="selectClient(client)">View</button>
+        <div *ngIf="clients.length === 0" class="alert alert-info">
+            You have no clients.
+        </div>
+
+        <div class="row row-cols-1 row-cols-md-2 g-3" *ngIf="clients.length > 0">
+            <div class="col" *ngFor="let client of clients">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ client.firstName }}
+                            {{ client.middleName ? client.middleName + ' ' : '' }}
+                            {{ client.lastName }}
+                        </h5>
+                        <button class="btn btn-outline-primary btn-sm mt-2" (click)="selectClient(client)">View</button>
+                    </div>
+                </div>
             </div>
         </div>
-    </div>
+    </ng-container>
 
     <!-- Add View -->
-    <div *ngIf="add">
-        <label for="firstName">First Name</label>
-        <input id="firstName" [(ngModel)]="clientToAdd.firstName" />
+    <ng-container *ngIf="add">
+        <div class="mb-3">
+            <label for="firstName" class="form-label">First Name</label>
+            <input id="firstName" [(ngModel)]="clientToAdd.firstName" name="firstName" class="form-control" />
+        </div>
 
-        <label for="middleName">Middle Name</label>
-        <input id="middleName" [(ngModel)]="clientToAdd.middleName" />
+        <div class="mb-3">
+            <label for="middleName" class="form-label">Middle Name</label>
+            <input id="middleName" [(ngModel)]="clientToAdd.middleName" name="middleName" class="form-control" />
+        </div>
 
-        <label for="lastName">Last Name</label>
-        <input id="lastName" [(ngModel)]="clientToAdd.lastName" />
+        <div class="mb-3">
+            <label for="lastName" class="form-label">Last Name</label>
+            <input id="lastName" [(ngModel)]="clientToAdd.lastName" name="lastName" class="form-control" />
+        </div>
 
-        <label for="phone">Phone Number</label>
-        <input id="phone" [(ngModel)]="clientToAdd.phoneNumber" />
+        <div class="mb-3">
+            <label for="phone" class="form-label">Phone Number</label>
+            <input id="phone" [(ngModel)]="clientToAdd.phoneNumber" name="phoneNumber" class="form-control" />
+        </div>
 
-        <br />
-        <button (click)="save()">Save</button>
-        <button (click)="cancel()">Cancel</button>
-    </div>
+        <div class="d-flex gap-2 mt-3">
+            <button class="btn btn-primary" (click)="save()">Save</button>
+            <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
+        </div>
+    </ng-container>
 </div>

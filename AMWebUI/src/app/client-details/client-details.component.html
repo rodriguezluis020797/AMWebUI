@@ -1,85 +1,110 @@
-<!-- Show detailed note -->
-<am-client-note-details *ngIf="selectedClientNote && !loading" [clientNoteDto]="selectedClientNote"
-    (back)="goBackToClient()"></am-client-note-details>
-
-<!-- Main client container -->
-<div *ngIf="!selectedClientNote && !loading" class="client-container">
+<!-- Main Client Notes Container -->
+<div *ngIf="!selectedClientNote && !loading" class="container py-4">
 
     <!-- Add Note Form -->
-    <div *ngIf="addClientNote">
-        <label for="note">Note</label>
-        <textarea id="note" [(ngModel)]="clientNoteToAdd.note" rows="5" cols="40"></textarea>
-        <br />
-        <button (click)="saveNote()">Save</button>
-        <button (click)="cancelNote()">Cancel</button>
+    <div *ngIf="addClientNote" class="mb-4">
+        <h2 class="mb-3">Add Note</h2>
+        <div class="mb-3">
+            <label for="note" class="form-label">Note</label>
+            <textarea id="note" [(ngModel)]="clientNoteToAdd.note" rows="5" class="form-control"></textarea>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-primary" (click)="saveNote()">Save</button>
+            <button class="btn btn-secondary" (click)="cancelNote()">Cancel</button>
+        </div>
     </div>
 
     <!-- Client View / Edit -->
     <div *ngIf="!addClientNote">
+        <!-- Removed card and shadow classes -->
+
         <!-- View Mode -->
         <ng-container *ngIf="!editClient; else editClientTemplate">
-            <button (click)="goBackToClientList()">Back to List</button>
-            <br /><br />
-            <h3>
+            <button class="btn btn-outline-secondary mb-3 w-100" (click)="goBackToClientList()">
+                &larr; Back to List
+            </button>
+
+            <h2 class="mb-3">
                 {{ clientDto.firstName }}
                 <ng-container *ngIf="clientDto.middleName">{{ clientDto.middleName + ' ' }}</ng-container>
                 {{ clientDto.lastName }}
-            </h3>
+            </h2>
             <p><strong>Phone:</strong> {{ clientDto.phoneNumber }}</p>
 
-            <button (click)="editClientFunc()">Edit</button>
-            <button (click)="addNote()">Add Note</button>
+            <div class="mb-3">
+                <button class="btn btn-outline-primary me-2" (click)="editClientFunc()">Edit</button>
+            </div>
 
-            <br /><br />
-            <div *ngIf="clientNotes.length === 0">
-                <h2>No client notes</h2>
+            <hr />
+
+            <div class="mb-3">
+                <button class="btn btn-primary" (click)="addNote()">Add Note</button>
+            </div>
+
+            <div *ngIf="clientNotes.length === 0" class="text-muted">
+                <h4>No client notes</h4>
             </div>
 
             <div *ngIf="clientNotes.length > 0">
-                <h2>Notes</h2>
-                <div *ngFor="let note of clientNotes; trackBy: trackByNoteId" class="client-item">
-                    <h3>
-                        {{ note.createDate }}
-                        <ng-container *ngIf="note.updateDate"> - Updated: {{ note.updateDate }}</ng-container>
-                    </h3>
-                    <p>{{ note.note }}</p>
-                    <button (click)="editNote(note)">View</button>
+                <h3 class="mb-3">Notes</h3>
+                <div *ngFor="let note of clientNotes; trackBy: trackByNoteId" class="card mb-3 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            {{ note.createDate }}
+                            <ng-container *ngIf="note.updateDate">
+                                - Updated: {{ note.updateDate }}
+                            </ng-container>
+                        </h5>
+                        <p class="card-text">{{ note.note }}</p>
+                        <button class="btn btn-outline-primary btn-sm" (click)="editNote(note)">View</button>
+                    </div>
                 </div>
             </div>
         </ng-container>
 
         <!-- Edit Mode Template -->
         <ng-template #editClientTemplate>
-            <div *ngIf="clientEditDto.errorMessage" class="error-message">
-                <p>{{ clientEditDto.errorMessage }}</p>
+            <div *ngIf="clientEditDto.errorMessage" class="alert alert-danger">
+                {{ clientEditDto.errorMessage }}
             </div>
 
-            <label for="firstName">First Name</label>
-            <input id="firstName" [(ngModel)]="clientEditDto.firstName" />
+            <div class="mb-3">
+                <label for="firstName" class="form-label">First Name</label>
+                <input id="firstName" [(ngModel)]="clientEditDto.firstName" class="form-control" />
+            </div>
 
-            <label for="middleName">Middle Name</label>
-            <input id="middleName" [(ngModel)]="clientEditDto.middleName" />
+            <div class="mb-3">
+                <label for="middleName" class="form-label">Middle Name</label>
+                <input id="middleName" [(ngModel)]="clientEditDto.middleName" class="form-control" />
+            </div>
 
-            <label for="lastName">Last Name</label>
-            <input id="lastName" [(ngModel)]="clientEditDto.lastName" />
+            <div class="mb-3">
+                <label for="lastName" class="form-label">Last Name</label>
+                <input id="lastName" [(ngModel)]="clientEditDto.lastName" class="form-control" />
+            </div>
 
-            <label for="phone">Phone Number</label>
-            <input id="phone" [(ngModel)]="clientEditDto.phoneNumber" />
+            <div class="mb-3">
+                <label for="phone" class="form-label">Phone Number</label>
+                <input id="phone" [(ngModel)]="clientEditDto.phoneNumber" class="form-control" />
+            </div>
 
-            <br />
-            <button (click)="saveClient()">Save</button>
-            <button (click)="cancelEditClient()">Cancel</button>
-            <button (click)="deleteClient()">Delete</button>
+            <div class="d-flex gap-2">
+                <button class="btn btn-success" (click)="saveClient()">Save</button>
+                <button class="btn btn-secondary" (click)="cancelEditClient()">Cancel</button>
+                <button class="btn btn-outline-danger" (click)="deleteClient()">Delete</button>
+            </div>
         </ng-template>
+
     </div>
 
     <!-- Delete Confirmation Modal -->
     <am-delete-entity *ngIf="showDeleteModal && !loading" [header]="'Delete Client'"
         [message]="'Are you sure you want to delete this client?'"
         (confirm)="onConfirmDelete($event)"></am-delete-entity>
+
 </div>
 
-<!-- Loading Screen -->
-<div *ngIf="loading">
-    <am-loading-screen></am-loading-screen>
-</div>
+<am-client-note-details *ngIf="selectedClientNote && !loading" [clientNoteDto]="selectedClientNote"
+    (back)="goBackToClient()"></am-client-note-details>
+
+<am-loading-screen *ngIf="loading"></am-loading-screen>
