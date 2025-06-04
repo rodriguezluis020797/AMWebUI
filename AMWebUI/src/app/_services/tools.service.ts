@@ -191,8 +191,4 @@ export class ToolsService {
       label: TimeZoneCodeEnum[tz].replaceAll('_', ' '),
     }));
   }
-
-  IsNullOrEmpty(str: string | null | undefined): boolean {
-    return !str || str.trim().length === 0;
-  }
 }

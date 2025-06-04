@@ -153,7 +153,7 @@ export class ProviderProfileComponent implements OnInit {
           return;
         }
 
-        if (!this.toolsService.IsNullOrEmpty(result.errorMessage)) {
+        if (result.errorMessage && result.errorMessage !== '') {
           this.dto.errorMessage = result.errorMessage;
         }
         else {

@@ -25,7 +25,7 @@ export class ResetPasswordComponent implements OnInit {
     const guidParam = this.route.snapshot.queryParamMap.get('guid');
     this.guid = guidRegex.test(guidParam ?? '') ? guidParam : null;
 
-    if (!this.tools.IsNullOrEmpty(this.guid)) {
+    if (this.guid && this.guid !== '') {
       this.passwordReset = true;
     }
   }
