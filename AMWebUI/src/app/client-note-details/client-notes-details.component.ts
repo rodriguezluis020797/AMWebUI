@@ -1,6 +1,5 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { ClientNoteDTO } from '../models/ClientNoteDTO';
-
 import { ClientService } from '../_services/client.service';
 import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -10,6 +9,7 @@ import { LoadingScreenComponent } from '../partials/loading-screen/loading-scree
 
 @Component({
   selector: 'am-client-note-details',
+  standalone: true,
   imports: [CommonModule, LoadingScreenComponent, FormsModule, DeleteEntityComponent],
   templateUrl: './client-note-details.component.html',
   styleUrl: './client-note-details.component.css'
@@ -18,43 +18,42 @@ export class ClientNoteDetailsComponent implements OnInit {
   @Input() clientNoteDto: ClientNoteDTO | null = new ClientNoteDTO();
   @Output() back = new EventEmitter<void>();
 
-  loading: boolean = false;
+  loading = false;
   clientNoteEditDto: ClientNoteDTO = new ClientNoteDTO();
-  editNote: boolean = false;
-  showDeleteModal: boolean = false;
+  editNote = false;
+  showDeleteModal = false;
 
   constructor(private clientService: ClientService, private router: Router) { }
-  ngOnInit(): void {
 
-  }
+  ngOnInit(): void { }
 
-  edit() {
+  edit(): void {
     this.loading = true;
     this.editNote = true;
     this.clientNoteEditDto = JSON.parse(JSON.stringify(this.clientNoteDto));
     this.loading = false;
   }
 
-  save() {
-
+  save(): void {
+    // Implement as needed
   }
 
-  cancel() {
+  cancel(): void {
     this.loading = true;
     this.clientNoteEditDto = new ClientNoteDTO();
     this.editNote = false;
     this.loading = false;
   }
 
-  delete() {
+  delete(): void {
     this.loading = true;
     this.showDeleteModal = true;
     this.loading = false;
   }
 
-  onConfirmDelete(confirm: boolean) {
+  onConfirmDelete(confirm: boolean): void {
+    this.loading = true;
     if (confirm) {
-      this.loading = true;
       this.clientService.deleteClientNoteAsync(this.clientNoteDto).subscribe(() => {
         this.showDeleteModal = false;
         this.goBackToClient();
@@ -66,8 +65,7 @@ export class ClientNoteDetailsComponent implements OnInit {
     }
   }
 
-  goBackToClient() {
+  goBackToClient(): void {
     this.back.emit();
   }
-
 }
