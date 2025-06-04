@@ -1,88 +1,113 @@
 <ng-container *ngIf="!loading; else loadingScreen">
-  <div class="provider-container">
-    <h1>{{ editProvider ? 'Edit Details' : 'Details' }}</h1>
+  <div class="container py-4">
+    <h2 class="mb-4">{{ editProvider ? 'Edit Details' : 'Details' }}</h2>
 
-    <div *ngIf="editDTO.errorMessage && editProvider" class="error-message">
-      <p>{{ editDTO.errorMessage }}</p>
+    <!-- Error Message -->
+    <div *ngIf="editDTO.errorMessage && editProvider" class="alert alert-danger">
+      {{ editDTO.errorMessage }}
     </div>
 
     <!-- Display Mode -->
     <ng-container *ngIf="!editProvider; else editMode">
-      <h2>Personal Details</h2>
-      <ng-container *ngFor="let field of [
-        { label: 'Business Name', value: dto.businessName },
-        { label: 'First Name', value: dto.firstName },
-        { label: 'Middle Name', value: dto.middleName || '—' },
-        { label: 'Last Name', value: dto.lastName },
-        { label: 'E-Mail', value: dto.eMail },
-        { label: 'Address Line 1', value: dto.addressLine1 },
-        { label: 'Address Line 2', value: dto.addressLine2 || '—' },
-        { label: 'City', value: dto.city },
-        { label: 'Zip Code', value: dto.zipCode }
-      ]">
-        <div><strong>{{ field.label }}:</strong> {{ field.value }}</div>
-      </ng-container>
+      <h4 class="mb-3 text-muted">Personal Details</h4>
 
-      <div><strong>Country:</strong> {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}</div>
-      <div><strong>State:</strong> {{ getEnumLabel(StateCodeEnum, dto.stateCode) }}</div>
-      <div><strong>Time Zone:</strong> {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}</div>
+      <div class="row g-3 mb-3">
+        <div *ngFor="let field of [
+            { label: 'Business Name', value: dto.businessName },
+            { label: 'First Name', value: dto.firstName },
+            { label: 'Middle Name', value: dto.middleName || '—' },
+            { label: 'Last Name', value: dto.lastName },
+            { label: 'E-Mail', value: dto.eMail },
+            { label: 'Address Line 1', value: dto.addressLine1 },
+            { label: 'Address Line 2', value: dto.addressLine2 || '—' },
+            { label: 'City', value: dto.city },
+            { label: 'Zip Code', value: dto.zipCode }
+          ]" class="col-12 col-md-6">
+          <div><strong>{{ field.label }}:</strong> {{ field.value }}</div>
+        </div>
 
-      <button (click)="edit()">Edit</button>
-      <a [href]="dto.payEngineInfoUrl" target="_blank" rel="noopener noreferrer">
-        Edit Payment Method or View Invoices
-      </a>
-
-      <div *ngIf="!dto.subscriptionToBeCancelled">
-        <p><strong>Next Billing Date:</strong> {{ dto.nextBillingDate | date: 'MM/dd/yyyy' }}</p>
-        <a (click)="cancelSubscription()">Cancel Subscription</a>
+        <div class="col-12 col-md-6"><strong>Country:</strong> {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}
+        </div>
+        <div class="col-12 col-md-6"><strong>State:</strong> {{ getEnumLabel(StateCodeEnum, dto.stateCode) }}</div>
+        <div class="col-12 col-md-6"><strong>Time Zone:</strong> {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}
+        </div>
       </div>
 
-      <div *ngIf="dto.subscriptionToBeCancelled">
-        <p *ngIf="dto.errorMessage">{{ dto.errorMessage }}</p>
+      <div class="d-flex flex-wrap gap-2 mb-3">
+        <button class="btn btn-primary" (click)="edit()">Edit</button>
+        <a class="btn btn-outline-secondary" [href]="dto.payEngineInfoUrl" target="_blank" rel="noopener noreferrer">
+          Payment & Invoices
+        </a>
+      </div>
+
+      <div *ngIf="!dto.subscriptionToBeCancelled" class="mt-3">
+        <p><strong>Next Billing Date:</strong> {{ dto.nextBillingDate | date: 'MM/dd/yyyy' }}</p>
+        <a role="button" class="text-danger" (click)="cancelSubscription()">Cancel Subscription</a>
+      </div>
+
+      <div *ngIf="dto.subscriptionToBeCancelled" class="mt-3">
+        <p *ngIf="dto.errorMessage" class="text-danger">{{ dto.errorMessage }}</p>
         <p><strong>Cancellation Date:</strong> {{ dto.nextBillingDate | date: 'MM/dd/yyyy' }}</p>
-        <a (click)="reActivateSubscription()">Reactivate Service</a>
+        <a role="button" (click)="reActivateSubscription()">Reactivate Service</a>
       </div>
     </ng-container>
 
     <!-- Edit Mode -->
     <ng-template #editMode>
       <form>
-        <div *ngFor="let input of [
-          { id: 'businessName', label: 'Business Name', model: editDTO.businessName },
-          { id: 'firstName', label: 'First Name', model: editDTO.firstName },
-          { id: 'middleName', label: 'Middle Name', model: editDTO.middleName },
-          { id: 'lastName', label: 'Last Name', model: editDTO.lastName },
-          { id: 'addressLine1', label: 'Address Line 1', model: editDTO.addressLine1 },
-          { id: 'addressLine2', label: 'Address Line 2', model: editDTO.addressLine2 },
-          { id: 'city', label: 'City', model: editDTO.city },
-          { id: 'zipCode', label: 'Zip Code', model: editDTO.zipCode }
-        ]">
-          <label [for]="input.id">{{ input.label }}:</label>
-          <input type="text" [id]="input.id" [(ngModel)]="input.model" [name]="input.id" required />
+        <div class="row g-3 mb-3">
+          <div *ngFor="let input of [
+              { id: 'businessName', label: 'Business Name', model: editDTO.businessName },
+              { id: 'firstName', label: 'First Name', model: editDTO.firstName },
+              { id: 'middleName', label: 'Middle Name', model: editDTO.middleName },
+              { id: 'lastName', label: 'Last Name', model: editDTO.lastName },
+              { id: 'addressLine1', label: 'Address Line 1', model: editDTO.addressLine1 },
+              { id: 'addressLine2', label: 'Address Line 2', model: editDTO.addressLine2 },
+              { id: 'city', label: 'City', model: editDTO.city },
+              { id: 'zipCode', label: 'Zip Code', model: editDTO.zipCode }
+            ]" class="col-12 col-md-6">
+            <label [for]="input.id" class="form-label">{{ input.label }}</label>
+            <input type="text" [id]="input.id" class="form-control" [(ngModel)]="input.model" [name]="input.id"
+              required />
+          </div>
         </div>
 
-        <p>Address used only for billing and tax purposes.</p>
+        <p class="small text-muted">Address used only for billing and tax purposes.</p>
 
-        <label>Country:</label>
-        <select [(ngModel)]="editDTO.countryCode" name="countryCode" (change)="onCountryChange()">
-          <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">{{ opt.label }}</option>
-        </select>
+        <div class="row g-3 mb-3">
+          <div class="col-md-4">
+            <label class="form-label">Country</label>
+            <select class="form-select" [(ngModel)]="editDTO.countryCode" name="countryCode"
+              (change)="onCountryChange()">
+              <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">{{ opt.label }}</option>
+            </select>
+          </div>
 
-        <label>State:</label>
-        <select [(ngModel)]="editDTO.stateCode" name="stateCode">
-          <option *ngFor="let opt of stateOptions" [value]="opt.key">{{ getEditLabel(opt.label) }}</option>
-        </select>
+          <div class="col-md-4">
+            <label class="form-label">State</label>
+            <select class="form-select" [(ngModel)]="editDTO.stateCode" name="stateCode">
+              <option *ngFor="let opt of stateOptions" [value]="opt.key">{{ getEditLabel(opt.label) }}</option>
+            </select>
+          </div>
 
-        <label>Time Zone:</label>
-        <select [(ngModel)]="editDTO.timeZoneCode" name="timeZoneCode">
-          <option *ngFor="let opt of timeZoneOptions" [value]="opt.key">{{ opt.label }}</option>
-        </select>
+          <div class="col-md-4">
+            <label class="form-label">Time Zone</label>
+            <select class="form-select" [(ngModel)]="editDTO.timeZoneCode" name="timeZoneCode">
+              <option *ngFor="let opt of timeZoneOptions" [value]="opt.key">{{ opt.label }}</option>
+            </select>
+          </div>
+        </div>
 
-        <a routerLink="/reset-email">Update E-Mail</a>
-        <a routerLink="/update-password">Update Password</a>
+        <div class="d-flex flex-wrap gap-2 mb-3">
+          <a routerLink="/reset-email" class="btn btn-link p-0">Update E-Mail</a>
+          <a routerLink="/update-password" class="btn btn-link p-0">Update Password</a>
+        </div>
 
-        <button type="button" (click)="editSave()">Save</button>
-        <button type="button" *ngIf="!disableCancel" (click)="cancelEdit()">Cancel</button>
+        <div class="d-flex gap-2">
+          <button type="button" class="btn btn-success" (click)="editSave()">Save</button>
+          <button type="button" class="btn btn-outline-secondary" *ngIf="!disableCancel"
+            (click)="cancelEdit()">Cancel</button>
+        </div>
       </form>
     </ng-template>
   </div>
