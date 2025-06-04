@@ -1,8 +1,11 @@
-<div class="modal-backdrop">
-    <div class="modal-content">
-        <h2>{{header}}</h2>
-        <p>{{message}}</p>
-        <button (click)="onConfirm()">Yes, {{header}}</button>
-        <button (click)="onCancel()">Cancel</button>
+<div class="modal-backdrop d-flex justify-content-center align-items-center"
+    style="position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.5); z-index: 1050;">
+    <div class="modal-content bg-white p-4 rounded shadow" style="max-width: 400px; width: 90%;">
+        <h2 class="mb-3">{{ header }}</h2>
+        <p class="mb-4">{{ message }}</p>
+        <div class="d-flex justify-content-end gap-2">
+            <button class="btn btn-danger" (click)="onConfirm()">Yes, {{ header }}</button>
+            <button class="btn btn-secondary" (click)="onCancel()">Cancel</button>
+        </div>
     </div>
 </div>
