@@ -58,7 +58,6 @@ export class AppComponent implements OnInit {
           if (!this.isCurrentPathAllowlisted(validPath)) {
             return this.identityService.isLoggedInAsync();
           } else {
-            this.currentStateService.loggedInSubject.next(false);
             this.loading = false;
             return EMPTY;
           }
