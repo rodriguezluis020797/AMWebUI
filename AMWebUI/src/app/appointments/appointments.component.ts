@@ -33,144 +33,122 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class AppointmentsComponent implements OnInit {
   editDTO: AppointmentDTO = new AppointmentDTO();
-  editAppointmentBool: boolean = false;
-  isNewAppointment: boolean = false;
-  loading: boolean = true;
-  showDeleteModal: boolean = false;
+  editAppointmentBool = false;
+  isNewAppointment = false;
+  loading = true;
+  showDeleteModal = false;
   pendingDeleteId: string | null = null;
-  servicePrice: number = 0;
+  servicePrice = 0;
   AppointmentStatusEnum = AppointmentStatusEnum;
 
   appointments: (AppointmentDTO & { clientName?: string, serviceName?: string })[] = [];
   clients: ClientDTO[] = [];
   clientName: string | null = null;
   services: ServiceDTO[] = [];
-  originalServicePrice: number = 0;
-  timeEditDTO = {
-    startDateOnly: '',  // yyyy-MM-dd
-    startTimeOnly: '',  // HH:mm
-    endDateOnly: '',
-    endTimeOnly: ''
-  };
+  originalServicePrice = 0;
 
-  constructor(private appointmentService: AppointmentService,
+  constructor(
+    private appointmentService: AppointmentService,
     private clientService: ClientService,
-    private serviceService: ServiceService) { }
+    private serviceService: ServiceService
+  ) { }
 
   ngOnInit(): void {
     this.loading = true;
-    this.appointmentService
-      .getAllAppointmentsAsync().pipe(
-        switchMap((result) => {
-          if (result === null) {
-            this.loading = false;
-            return EMPTY;
-          }
-          this.appointments = result;
-          return this.clientService.getClientsAsync();
-        }),
-        switchMap((result) => {
-          if (result === null) {
-            this.loading = false;
-            return EMPTY;
-          }
-          this.clients = result;
-          return this.serviceService.getServicesAsync();
-        })
-      ).subscribe((result) => {
-        if (result === null) {
+    this.appointmentService.getAllAppointmentsAsync().pipe(
+      switchMap(result => {
+        if (!result) {
           this.loading = false;
-          return;
+          return EMPTY;
         }
-        this.services = result;
-        this.mapClientAndServiceNames();
-      });
+        this.appointments = result;
+        return this.clientService.getClientsAsync();
+      }),
+      switchMap(result => {
+        if (!result) {
+          this.loading = false;
+          return EMPTY;
+        }
+        this.clients = result;
+        return this.serviceService.getServicesAsync();
+      })
+    ).subscribe(result => {
+      if (!result) {
+        this.loading = false;
+        return;
+      }
+      this.services = result;
+      this.mapClientAndServiceNames();
+    });
   }
 
   get selectedServiceName(): string {
-    const match = this.services.find(s => s.serviceId === this.editDTO?.serviceId);
-    return match ? match.name : '—';
+    return this.services.find(s => s.serviceId === this.editDTO?.serviceId)?.name ?? '—';
   }
 
   onServiceChange() {
     this.loading = true;
     this.editDTO.overridePrice = false;
+
     const serviceDto = new ServiceDTO();
     serviceDto.serviceId = this.editDTO.serviceId;
 
-    this.serviceService
-      .getServicePriceAsync(serviceDto)
-      .subscribe((result) => {
-        if (result == null) {
-          this.loading = false;
-          return;
-        }
-        this.editDTO.price = result.price;
-        this.originalServicePrice = this.editDTO.price;
+    this.serviceService.getServicePriceAsync(serviceDto).subscribe(result => {
+      if (!result) {
         this.loading = false;
-      });
+        return;
+      }
+      this.editDTO.price = result.price;
+      this.originalServicePrice = result.price;
+      this.loading = false;
+    });
   }
 
   onOverridePrice() {
     if (this.editDTO.overridePrice) {
       this.servicePrice = 0;
-    }
-    else {
-      this.editDTO.price = this.services.find(x => x.serviceId === this.editDTO.serviceId)?.price ?? 0;
+    } else {
+      this.editDTO.price = this.services.find(s => s.serviceId === this.editDTO.serviceId)?.price ?? 0;
     }
   }
 
   mapClientAndServiceNames() {
-    for (const appointment of this.appointments) {
-      const client = this.clients.find(c => c.clientId === appointment.clientId);
-      const service = this.services.find(s => s.serviceId === appointment.serviceId);
+    const clientMap = new Map(this.clients.map(c => [c.clientId, c]));
+    const serviceMap = new Map(this.services.map(s => [s.serviceId, s]));
 
-      appointment.clientName = client
+    this.appointments.forEach(appt => {
+      const client = clientMap.get(appt.clientId);
+      const service = serviceMap.get(appt.serviceId);
+
+      appt.clientName = client
         ? `${client.firstName} ${client.middleName ?? ''} ${client.lastName}`.trim().replace(/\s+/g, ' ')
         : 'Unknown Client';
-
-      appointment.serviceName = service ? service.name : 'Unknown Service';
-    }
-
+      appt.serviceName = service?.name ?? 'Unknown Service';
+    });
     this.loading = false;
   }
 
   getAppointments() {
     this.loading = true;
-    this.appointmentService.getAllAppointmentsAsync().subscribe(
-      (result) => {
-        if (result === null) {
-          this.loading = false;
-          return;
-        }
-        this.appointments = result;
-        this.loading = false;
-      })
+    this.appointmentService.getAllAppointmentsAsync().subscribe(result => {
+      this.appointments = result ?? [];
+      this.loading = false;
+    });
   }
 
   addAppointment() {
     this.loading = true;
 
     const now = new Date();
-
-    // Round UP to the next 30-minute increment
-    const minutes = now.getMinutes();
-    const remainder = 30 - (minutes % 30);
-    const adjustedMinutes = (minutes + remainder) % 60;
-    now.setMinutes(adjustedMinutes);
-    now.setSeconds(0);
-    now.setMilliseconds(0);
-
-    if (minutes + remainder >= 60) {
-      now.setHours(now.getHours() + 1);
-      now.setMinutes(0);
-    }
+    // Round up to next 30-minute increment
+    const remainder = 30 - (now.getMinutes() % 30);
+    now.setMinutes(now.getMinutes() + remainder, 0, 0);
 
     const end = new Date(now);
     end.setHours(end.getHours() + 1);
 
     this.editDTO = new AppointmentDTO();
-    this.editDTO.startDate = this.formatDateLocal(now); // Local format for datetime-local input
+    this.editDTO.startDate = this.formatDateLocal(now);
     this.editDTO.endDate = this.formatDateLocal(end);
 
     this.editAppointmentBool = true;
@@ -178,7 +156,6 @@ export class AppointmentsComponent implements OnInit {
     this.loading = false;
   }
 
-  // Helper to format date as yyyy-MM-ddTHH:mm
   private formatDateLocal(date: Date): string {
     const pad = (n: number) => n.toString().padStart(2, '0');
     return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
@@ -190,9 +167,11 @@ export class AppointmentsComponent implements OnInit {
     this.editAppointmentBool = true;
 
     const appt = this.appointments.find(x => x.appointmentId === appointmentId);
-    if (!appt) return;
+    if (!appt) {
+      this.loading = false;
+      return;
+    }
 
-    // Clone and reformat
     this.editDTO = new AppointmentDTO();
     Object.assign(this.editDTO, appt);
 
@@ -203,8 +182,8 @@ export class AppointmentsComponent implements OnInit {
     this.clientName = client
       ? `${client.firstName} ${client.middleName ?? ''} ${client.lastName}`.trim().replace(/\s+/g, ' ')
       : 'Unknown Client';
-    this.loading = false;
 
+    this.loading = false;
   }
 
   save() {
@@ -213,41 +192,27 @@ export class AppointmentsComponent implements OnInit {
     this.editDTO.status = Number(this.editDTO.status);
 
     if (this.editDTO.overridePrice) {
-      (this.editDTO.overridePrice, this.servicePrice)
       this.editDTO.price = this.servicePrice;
     }
 
-    if (!this.editDTO.appointmentId || this.editDTO.appointmentId === '') {
-      this.appointmentService.createAppointmentAsync(this.editDTO).subscribe(result => {
-        if (result === null) {
-          this.loading = false;
-          return;
-        }
-        if (result.errorMessage && result.errorMessage.trim() !== '') {
-          this.editDTO.errorMessage = result.errorMessage;
-          this.loading = false;
-        } else {
-          this.editAppointmentBool = false;
-          this.editDTO = new AppointmentDTO();
-          this.getAppointments();
-        }
-      });
-    } else {
-      this.appointmentService.updateAppointmentAsync(this.editDTO).subscribe(result => {
-        if (result === null) {
-          this.loading = false;
-          return;
-        }
-        if (result.errorMessage && result.errorMessage.trim() !== '') {
-          this.editDTO.errorMessage = result.errorMessage;
-          this.loading = false;
-        } else {
-          this.editAppointmentBool = false;
-          this.editDTO = new AppointmentDTO();
-          this.getAppointments();
-        }
-      });
-    }
+    const obs = (!this.editDTO.appointmentId || this.editDTO.appointmentId === '')
+      ? this.appointmentService.createAppointmentAsync(this.editDTO)
+      : this.appointmentService.updateAppointmentAsync(this.editDTO);
+
+    obs.subscribe(result => {
+      if (!result) {
+        this.loading = false;
+        return;
+      }
+      if (result.errorMessage?.trim()) {
+        this.editDTO.errorMessage = result.errorMessage;
+        this.loading = false;
+      } else {
+        this.editAppointmentBool = false;
+        this.editDTO = new AppointmentDTO();
+        this.getAppointments();
+      }
+    });
   }
 
   delete(appointmentId: string) {
@@ -260,19 +225,17 @@ export class AppointmentsComponent implements OnInit {
       this.loading = true;
       const dto = new AppointmentDTO();
       dto.appointmentId = this.pendingDeleteId;
-      this.appointmentService.deleteAppointmentAsync(dto).subscribe((result) => {
 
-        if (result === null) {
+      this.appointmentService.deleteAppointmentAsync(dto).subscribe(result => {
+        if (!result) {
           this.loading = false;
           return;
         }
-
-        if (result.errorMessage && result.errorMessage.trim() !== '') {
+        if (result.errorMessage?.trim()) {
           dto.errorMessage = result.errorMessage;
           this.loading = false;
           return;
         }
-
         this.editAppointmentBool = false;
         this.editDTO = new AppointmentDTO();
         this.showDeleteModal = false;
