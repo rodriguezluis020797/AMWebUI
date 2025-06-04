@@ -15,29 +15,27 @@ import { ProviderService } from '../_services/provider.service';
 })
 export class ResetEMailComponent implements OnInit {
   dto: ProviderDTO = new ProviderDTO();
-  loading: Boolean = true;
-  disableSubmit: Boolean = false;
-  success: Boolean = false;
+  loading = true;
+  disableSubmit = false;
+  success = false;
 
   constructor(private providerService: ProviderService) { }
+
   ngOnInit(): void {
     this.loading = false;
   }
 
-  submit() {
+  submit(): void {
     this.disableSubmit = true;
     this.loading = true;
 
     this.providerService.requestUpdateEMailAsync(this.dto).subscribe((result) => {
-      if (result === null) {
-        this.loading = false;
-        return;
-      }
-      this.dto = result;
-      if (this.dto.errorMessage === '' || !this.dto.errorMessage) {
-        this.success = true;
-      }
       this.loading = false;
+
+      if (!result) return;
+
+      this.dto = result;
+      this.success = !this.dto.errorMessage;
       this.disableSubmit = false;
     });
   }
