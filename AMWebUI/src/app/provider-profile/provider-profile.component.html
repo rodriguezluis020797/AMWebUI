@@ -1,113 +1,104 @@
-<div *ngIf="!loading" class="provider-container">
-  <h1 *ngIf="!editProvider">Details</h1>
-  <h1 *ngIf="editProvider">Edit Details</h1>
+<ng-container *ngIf="!loading; else loadingScreen">
+  <div class="provider-container">
+    <h1>{{ editProvider ? 'Edit Details' : 'Details' }}</h1>
 
-  <div *ngIf="editDTO.errorMessage && editProvider" class="error-message">
-    <p>{{ editDTO.errorMessage }}</p>
+    <div *ngIf="editDTO.errorMessage && editProvider" class="error-message">
+      <p>{{ editDTO.errorMessage }}</p>
+    </div>
+
+    <!-- Display Mode -->
+    <ng-container *ngIf="!editProvider; else editMode">
+      <h2>Personal Details</h2>
+      <ng-container *ngFor="let field of [
+        { label: 'Business Name', value: dto.businessName },
+        { label: 'First Name', value: dto.firstName },
+        { label: 'Middle Name', value: dto.middleName || '—' },
+        { label: 'Last Name', value: dto.lastName },
+        { label: 'E-Mail', value: dto.eMail },
+        { label: 'Address Line 1', value: dto.addressLine1 },
+        { label: 'Address Line 2', value: dto.addressLine2 || '—' },
+        { label: 'City', value: dto.city },
+        { label: 'Zip Code', value: dto.zipCode }
+      ]">
+        <div><strong>{{ field.label }}:</strong> {{ field.value }}</div>
+      </ng-container>
+
+      <div><strong>Country:</strong> {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}</div>
+      <div><strong>State:</strong> {{ getEnumLabel(StateCodeEnum, dto.stateCode) }}</div>
+      <div><strong>Time Zone:</strong> {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}</div>
+
+      <button (click)="edit()">Edit</button>
+      <a [href]="dto.payEngineInfoUrl" target="_blank" rel="noopener noreferrer">
+        Edit Payment Method or View Invoices
+      </a>
+
+      <div *ngIf="!dto.subscriptionToBeCancelled">
+        <p><strong>Next Billing Date:</strong> {{ dto.nextBillingDate | date: 'MM/dd/yyyy' }}</p>
+        <a (click)="cancelSubscription()">Cancel Subscription</a>
+      </div>
+
+      <div *ngIf="dto.subscriptionToBeCancelled">
+        <p *ngIf="dto.errorMessage">{{ dto.errorMessage }}</p>
+        <p><strong>Cancellation Date:</strong> {{ dto.nextBillingDate | date: 'MM/dd/yyyy' }}</p>
+        <a (click)="reActivateSubscription()">Reactivate Service</a>
+      </div>
+    </ng-container>
+
+    <!-- Edit Mode -->
+    <ng-template #editMode>
+      <form>
+        <div *ngFor="let input of [
+          { id: 'businessName', label: 'Business Name', model: editDTO.businessName },
+          { id: 'firstName', label: 'First Name', model: editDTO.firstName },
+          { id: 'middleName', label: 'Middle Name', model: editDTO.middleName },
+          { id: 'lastName', label: 'Last Name', model: editDTO.lastName },
+          { id: 'addressLine1', label: 'Address Line 1', model: editDTO.addressLine1 },
+          { id: 'addressLine2', label: 'Address Line 2', model: editDTO.addressLine2 },
+          { id: 'city', label: 'City', model: editDTO.city },
+          { id: 'zipCode', label: 'Zip Code', model: editDTO.zipCode }
+        ]">
+          <label [for]="input.id">{{ input.label }}:</label>
+          <input type="text" [id]="input.id" [(ngModel)]="input.model" [name]="input.id" required />
+        </div>
+
+        <p>Address used only for billing and tax purposes.</p>
+
+        <label>Country:</label>
+        <select [(ngModel)]="editDTO.countryCode" name="countryCode" (change)="onCountryChange()">
+          <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">{{ opt.label }}</option>
+        </select>
+
+        <label>State:</label>
+        <select [(ngModel)]="editDTO.stateCode" name="stateCode">
+          <option *ngFor="let opt of stateOptions" [value]="opt.key">{{ getEditLabel(opt.label) }}</option>
+        </select>
+
+        <label>Time Zone:</label>
+        <select [(ngModel)]="editDTO.timeZoneCode" name="timeZoneCode">
+          <option *ngFor="let opt of timeZoneOptions" [value]="opt.key">{{ opt.label }}</option>
+        </select>
+
+        <a routerLink="/reset-email">Update E-Mail</a>
+        <a routerLink="/update-password">Update Password</a>
+
+        <button type="button" (click)="editSave()">Save</button>
+        <button type="button" *ngIf="!disableCancel" (click)="cancelEdit()">Cancel</button>
+      </form>
+    </ng-template>
   </div>
 
-  <!-- Display Mode -->
-  <div *ngIf="!editProvider">
-    <h2>Personal Details</h2>
-    <div><strong>Business Name:</strong> {{ dto.businessName }}</div>
-    <div><strong>First Name:</strong> {{ dto.firstName }}</div>
-    <div><strong>Middle Name:</strong> {{ dto.middleName || "—" }}</div>
-    <div><strong>Last Name:</strong> {{ dto.lastName }}</div>
-    <div><strong>E-Mail:</strong> {{ dto.eMail }}</div>
-    <div><strong>Address Line 1:</strong> {{ dto.addressLine1 }}</div>
-    <div><strong>Address Line 2:</strong> {{ dto.addressLine2 || "—" }}</div>
-    <div><strong>City:</strong> {{ dto.city }}</div>
-    <div><strong>Zip Code:</strong> {{ dto.zipCode }}</div>
-    <div>
-      <strong>Country:</strong>
-      {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}
-    </div>
-    <div>
-      <strong>State:</strong> {{ getEnumLabel(StateCodeEnum, dto.stateCode) }}
-    </div>
-    <div>
-      <strong>Time Zone:</strong>
-      {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}
-    </div>
-    <button (click)="edit()">Edit</button>
-    <a [href]="dto.payEngineInfoUrl" target="_blank" rel="noopener noreferrer">Edit Payment Method or View
-      Invoices</a>
-    <br>
-    <br>
+  <!-- Modals -->
+  <am-delete-entity *ngIf="showDeleteModal" [header]="'Cancel Subscription'"
+    [message]="'You’ll keep access through your current billing period. Any messages set to go out afterward won’t be delivered unless you reactivate in time.'"
+    (confirm)="onCancelSubscription($event)">
+  </am-delete-entity>
 
-    <p *ngIf="dto.subscriptionToBeCancelled == false">
-      <strong>Next Billing Date</strong>: {{ dto.nextBillingDate | date:'MM/dd/yyyy' }}
-    </p>
-    <a *ngIf="dto.subscriptionToBeCancelled == false" (click)="cancelSubscription()">Cancel Subscription</a>
-    <p *ngIf="dto.subscriptionToBeCancelled == true && dto.errorMessage != ''">
-      {{dto.errorMessage}}
-    </p>
+  <am-delete-entity *ngIf="showReSubscribeModal" [header]="'Reactivate Subscription'"
+    [message]="'Your subscription will be reactivated right away. If your last billing cycle has ended, your default payment method will be charged automatically.'"
+    (confirm)="onReActivateSubscription($event)">
+  </am-delete-entity>
+</ng-container>
 
-    <p *ngIf="dto.subscriptionToBeCancelled == true">
-      <strong>Cancellation Date</strong>: {{ dto.nextBillingDate | date:'MM/dd/yyyy' }}
-    </p>
-    <a *ngIf="dto.subscriptionToBeCancelled == true" (click)="reActivateSubscription()">Reactivate Service</a>
-  </div>
-
-  <!-- Edit Mode -->
-  <div *ngIf="editProvider">
-    <label for="businessName">Business Name:</label>
-    <input type="text" id="businessName" [(ngModel)]="editDTO.businessName" name="businessName" required />
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" [(ngModel)]="editDTO.firstName" name="firstName" required />
-    <label for="middleName">Middle Name:</label>
-    <input type="text" id="middleName" [(ngModel)]="editDTO.middleName" name="middleName" required />
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" [(ngModel)]="editDTO.lastName" name="lastName" required />
-    <p>Address used only for billing and tax purposes.</p>
-    <label for="addressLine1">Address Line 1:</label>
-    <input type="text" id="addressLine1" [(ngModel)]="editDTO.addressLine1" name="addressLine1" required />
-    <label for="addressLine2">Address Line 2:</label>
-    <input type="text" id="addressLine2" [(ngModel)]="editDTO.addressLine2" name="addressLine2" required />
-    <label for="city">City:</label>
-    <input type="text" id="city" [(ngModel)]="editDTO.city" name="city" required />
-    <label for="zipCode">Zip Code:</label>
-    <input type="text" id="zipCode" [(ngModel)]="editDTO.zipCode" name="zipCode" required />
-
-    <label for="countryDropdown">Country:</label>
-    <select [(ngModel)]="editDTO.countryCode" (change)="onCountryChange()" name="countryCode">
-      <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">
-        {{ opt.label }}
-      </option>
-    </select>
-
-    <label for="stateDropdown">State:</label>
-    <select [(ngModel)]="editDTO.stateCode" name="stateCode" id="stateDropdown">
-      <option *ngFor="let opt of stateOptions" [value]="opt.key">
-        {{ getEditLabel(opt.label) }}
-      </option>
-    </select>
-
-    <label for="stateDropdown">Time Zone:</label>
-    <select [(ngModel)]="editDTO.timeZoneCode">
-      <option *ngFor="let option of timeZoneOptions" [value]="option.key">
-        {{ option.label }}
-      </option>
-    </select>
-
-    <a routerLink="/reset-email">Update E-Mail</a>
-    <a routerLink="/update-password">Update Password</a>
-    <br />
-    <button (click)="editSave()">Save</button>
-    <button *ngIf="!disableCancel" (click)="cancelEdit()">Cancel</button>
-  </div>
-</div>
-
-<am-delete-entity *ngIf="showDeleteModal && !loading" [header]="'Cancel Subsciption'"
-  [message]="'You’ll keep access through your current billing period. Any messages set to go out afterward won’t be delivered unless you reactivate in time.'"
-  (confirm)="onCancelSubscription($event)">
-</am-delete-entity>
-
-<am-delete-entity *ngIf="showReSubscribeModal && !loading" [header]="'Reactivate Subsciption'"
-  [message]="'Your subscription will be reactivated right away. If your last billing cycle has ended, your default payment method will be charged automatically.'"
-  (confirm)="onReActivateSubscription($event)">
-</am-delete-entity>
-
-<div *ngIf="loading">
+<ng-template #loadingScreen>
   <am-loading-screen></am-loading-screen>
-</div>
+</ng-template>
