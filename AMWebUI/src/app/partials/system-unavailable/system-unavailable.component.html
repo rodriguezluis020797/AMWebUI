@@ -1,17 +1,17 @@
-<div *ngIf="!loading" class="system-unavailable">
-  <h1 class="brand">AM Tech</h1>
-  <h2>System Unavailable</h2>
-  <p>
-    We’re sorry, but our system is currently unavailable. Please try again
-    later.
+<div *ngIf="!loading" class="system-unavailable text-center p-4">
+  <h1 class="brand mb-3">AM Tech</h1>
+  <h2 class="text-danger mb-3">System Unavailable</h2>
+  <p class="mb-4 text-muted">
+    We’re sorry, but our system is currently unavailable.<br />
+    Please try again later.
     <br />
-    {{ message }}
+    <span class="d-block mt-2">{{ message }}</span>
   </p>
-  <button type="button" (click)="reCheckSytemstatus()">
+  <button type="button" class="btn btn-primary" (click)="reCheckSytemstatus()">
     Check System Status
   </button>
 </div>
 
-<div *ngIf="loading" class="system-unavailable">
+<div *ngIf="loading" class="system-unavailable text-center p-4">
   <am-loading-screen></am-loading-screen>
 </div>

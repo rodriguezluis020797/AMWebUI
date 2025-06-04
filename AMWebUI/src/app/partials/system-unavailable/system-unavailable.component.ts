@@ -22,6 +22,7 @@ export class SystemUnavailableComponent implements OnInit {
   ) { }
   ngOnInit(): void {
     this.currentStateService.systemStatus.next(false);
+    this.currentStateService.loggedInSubject.next(false);
   }
 
   loading: Boolean = false;
