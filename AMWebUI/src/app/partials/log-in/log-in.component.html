@@ -1,33 +1,35 @@
-<div class="login-container" *ngIf="!loading">
+<!-- Login Form -->
+<div *ngIf="!loading" class="container py-4" style="max-width: 400px;">
   <h2>Login</h2>
-  <div *ngIf="message" class="error-message">
-    <p>{{ message }}</p>
+
+  <div *ngIf="message" class="alert alert-danger">
+    {{ message }}
   </div>
-  <div>
-    <label for="username">E-Mail:</label>
-    <input
-      type="text"
-      id="username"
-      [(ngModel)]="dto.eMail"
-      name="username"
-      required
-    />
+
+  <div class="mb-3">
+    <label for="username" class="form-label">E-Mail</label>
+    <input type="text" id="username" [(ngModel)]="dto.eMail" name="username" required class="form-control" />
   </div>
-  <div>
-    <label for="password">Password:</label>
-    <input
-      type="password"
-      id="password"
-      [(ngModel)]="dto.currentPassword"
-      name="password"
-      required
-    />
+
+  <div class="mb-3">
+    <label for="password" class="form-label">Password</label>
+    <input type="password" id="password" [(ngModel)]="dto.currentPassword" name="password" required
+      class="form-control" />
   </div>
-  <button type="submit" (click)="submit($event)">Login</button>
-  <a routerLink="/sign-up">Request Access Here</a>
-  <a routerLink="/reset-password">Forgot Password</a>
+
+  <div class="d-grid mb-3">
+    <button type="submit" (click)="submit($event)" class="btn btn-primary">
+      Login
+    </button>
+  </div>
+
+  <div class="d-flex flex-column gap-1">
+    <a routerLink="/sign-up" class="text-decoration-none">Request Access Here</a>
+    <a routerLink="/reset-password" class="text-decoration-none">Forgot Password</a>
+  </div>
 </div>
 
-<div class="login-container" *ngIf="loading">
+<!-- Loading Screen -->
+<div *ngIf="loading" class="login-container">
   <am-loading-screen></am-loading-screen>
 </div>
