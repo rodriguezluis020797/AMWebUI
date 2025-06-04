@@ -1,80 +1,106 @@
+<!-- Loading Screen -->
 <div *ngIf="loading" class="login-container">
   <am-loading-screen></am-loading-screen>
 </div>
 
+<!-- Sign Up Content -->
 <div *ngIf="!loading">
-  <div *ngIf="!signUpSuccessful; else successTemplate" class="login-container">
+  <div *ngIf="!signUpSuccessful; else successTemplate" class="container py-4" style="max-width: 600px;">
     <h2>Sign Up</h2>
 
-    <div *ngIf="result.errorMessage" class="error-message">
-      <p>{{ result.errorMessage }}</p>
+    <div *ngIf="result.errorMessage" class="alert alert-danger">
+      {{ result.errorMessage }}
     </div>
 
     <form (ngSubmit)="submit()" #signUpForm="ngForm" novalidate>
-      <label for="username">E-Mail:</label>
-      <input id="username" name="username" type="email" [(ngModel)]="dto.eMail" required email />
+      <div class="mb-3">
+        <label for="username" class="form-label">E-Mail</label>
+        <input id="username" name="username" type="email" [(ngModel)]="dto.eMail" class="form-control" required email />
+      </div>
 
-      <label for="businessName">Business Name:</label>
-      <input id="businessName" name="businessName" type="text" [(ngModel)]="dto.businessName" required />
+      <div class="mb-3">
+        <label for="businessName" class="form-label">Business Name</label>
+        <input id="businessName" name="businessName" type="text" [(ngModel)]="dto.businessName" class="form-control"
+          required />
+      </div>
 
-      <label for="firstName">First Name:</label>
-      <input id="firstName" name="firstName" type="text" [(ngModel)]="dto.firstName" required />
+      <div class="mb-3">
+        <label for="firstName" class="form-label">First Name</label>
+        <input id="firstName" name="firstName" type="text" [(ngModel)]="dto.firstName" class="form-control" required />
+      </div>
 
-      <label for="lastName">Last Name:</label>
-      <input id="lastName" name="lastName" type="text" [(ngModel)]="dto.lastName" required />
+      <div class="mb-3">
+        <label for="lastName" class="form-label">Last Name</label>
+        <input id="lastName" name="lastName" type="text" [(ngModel)]="dto.lastName" class="form-control" required />
+      </div>
 
-      <p>Address used only for billing and tax purposes.</p>
+      <p class="text-muted">Address used only for billing and tax purposes.</p>
 
-      <label for="addressLine1">Address Line 1:</label>
-      <input id="addressLine1" name="addressLine1" type="text" [(ngModel)]="dto.addressLine1" required />
+      <div class="mb-3">
+        <label for="addressLine1" class="form-label">Address Line 1</label>
+        <input id="addressLine1" name="addressLine1" type="text" [(ngModel)]="dto.addressLine1" class="form-control"
+          required />
+      </div>
 
-      <label for="addressLine2">Address Line 2:</label>
-      <input id="addressLine2" name="addressLine2" type="text" [(ngModel)]="dto.addressLine2" />
+      <div class="mb-3">
+        <label for="addressLine2" class="form-label">Address Line 2</label>
+        <input id="addressLine2" name="addressLine2" type="text" [(ngModel)]="dto.addressLine2" class="form-control" />
+      </div>
 
-      <label for="city">City:</label>
-      <input id="city" name="city" type="text" [(ngModel)]="dto.city" required />
+      <div class="mb-3">
+        <label for="city" class="form-label">City</label>
+        <input id="city" name="city" type="text" [(ngModel)]="dto.city" class="form-control" required />
+      </div>
 
-      <label for="zipCode">Zip Code:</label>
-      <input id="zipCode" name="zipCode" type="text" [(ngModel)]="dto.zipCode" required />
+      <div class="mb-3">
+        <label for="zipCode" class="form-label">Zip Code</label>
+        <input id="zipCode" name="zipCode" type="text" [(ngModel)]="dto.zipCode" class="form-control" required />
+      </div>
 
-      <label for="stateCode">State:</label>
-      <select id="stateCode" name="stateCode" [(ngModel)]="dto.stateCode" required>
-        <option *ngFor="let opt of stateOptions" [ngValue]="opt.key">{{ getEditLabel(opt.label) }}</option>
-      </select>
+      <div class="mb-3">
+        <label for="stateCode" class="form-label">State</label>
+        <select id="stateCode" name="stateCode" [(ngModel)]="dto.stateCode" class="form-select" required>
+          <option *ngFor="let opt of stateOptions" [ngValue]="opt.key">
+            {{ getEditLabel(opt.label) }}
+          </option>
+        </select>
+      </div>
 
-      <label>Country:</label>
-      <p>United States</p>
+      <div class="mb-3">
+        <label class="form-label">Country</label>
+        <p class="form-control-plaintext">United States</p>
+      </div>
 
-      <p>Time zone used for proper scheduling services.</p>
+      <p class="text-muted">Time zone used for proper scheduling services.</p>
 
-      <label for="timeZoneCode">Time Zone:</label>
-      <select id="timeZoneCode" name="timeZoneCode" [(ngModel)]="dto.timeZoneCode" required>
-        <option *ngFor="let opt of timeZoneOptions" [ngValue]="opt.key">
-          {{ opt.label }}
-        </option>
-      </select>
+      <div class="mb-3">
+        <label for="timeZoneCode" class="form-label">Time Zone</label>
+        <select id="timeZoneCode" name="timeZoneCode" [(ngModel)]="dto.timeZoneCode" class="form-select" required>
+          <option *ngFor="let opt of timeZoneOptions" [ngValue]="opt.key">
+            {{ opt.label }}
+          </option>
+        </select>
+      </div>
 
-      <br /><br />
-
-      <button type="submit" [disabled]="signUpForm.invalid || loading">
-        Sign Up
-      </button>
-
-      <a routerLink="" tabindex="0">Login Here</a>
+      <div class="d-grid gap-2 mt-4">
+        <button type="submit" [disabled]="signUpForm.invalid || loading" class="btn btn-primary">
+          Sign Up
+        </button>
+        <a routerLink="" class="text-decoration-none text-center">Login Here</a>
+      </div>
     </form>
   </div>
 
+  <!-- Success Template -->
   <ng-template #successTemplate>
-    <div class="login-container">
+    <div class="container py-4" style="max-width: 600px;">
       <h2>Thank You!</h2>
-      <p class="message">
-        Thank you for requesting access!
-        <br />
-        Please verify your email using the link sent to your inbox. Once
-        verified, you’ll receive a follow-up email letting you know when you’re
-        ready to start using our system!
+      <p class="alert alert-success">
+        Thank you for requesting access!<br />
+        Please verify your email using the link sent to your inbox. Once verified,
+        you’ll receive a follow-up email letting you know when you’re ready to start using our system!
       </p>
-      <a routerLink="/">Home</a>
+      <a routerLink="/" class="btn btn-outline-primary">Home</a>
     </div>
   </ng-template>
 </div>
