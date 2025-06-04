@@ -53,3 +53,17 @@ a:hover {
     font-weight: 600;
     color: #2D3748;
 }
+
+@media (max-width: 576px) {
+    h2 {
+        font-size: 1.5rem;
+    }
+
+    .card-custom {
+        padding: 1rem;
+    }
+
+    .metric-value {
+        font-size: 1.25rem;
+    }
+}
