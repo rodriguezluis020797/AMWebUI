@@ -1,0 +1,27 @@
+.loading-screen {
+    height: 100vh;
+    background-color: #F7FAFC;
+    color: #2D3748;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+}
+
+.spinner {
+    width: 3rem;
+    height: 3rem;
+    border: 0.4rem solid #CBD5E0;
+    border-top: 0.4rem solid #3182CE;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+.brand {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #2B6CB0;
+}
+
+@keyframes spin {
+    to {
+        transform: rotate(360deg);
+    }
+}
