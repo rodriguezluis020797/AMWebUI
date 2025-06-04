@@ -16,150 +16,144 @@ import { ToolsService } from '../_services/tools.service';
   templateUrl: './client-details.component.html',
   styleUrl: './client-details.component.css'
 })
-
 export class ClientDetailsComponent implements OnInit {
   @Input() clientDto: ClientDTO = new ClientDTO();
   @Output() back = new EventEmitter<void>();
 
-
   clientNotes: ClientNoteDTO[] = [];
   selectedClientNote: ClientNoteDTO | null = null;
   clientNoteToAdd: ClientNoteDTO = new ClientNoteDTO();
-  addClientNote: boolean = false;
+  addClientNote = false;
 
   clientEditDto: ClientDTO = new ClientDTO();
-  editClient: boolean = false;
+  editClient = false;
 
-  loading: boolean = false;
-  showDeleteModal: boolean = false;
+  loading = false;
+  showDeleteModal = false;
 
-  constructor(private clientService: ClientService, private router: Router, private tools: ToolsService) { }
+  constructor(
+    private clientService: ClientService,
+    private router: Router,
+    private tools: ToolsService
+  ) { }
+
   ngOnInit(): void {
     this.getClientNotes();
   }
 
-  getClientNotes() {
+  getClientNotes(): void {
     this.loading = true;
-    this.clientService
-      .getClientNotesAsync(this.clientDto)
-      .subscribe((result) => {
-        if (result === null) {
-          this.loading = false
-          return;
-        }
-        this.clientNotes = result;
+    this.clientService.getClientNotesAsync(this.clientDto).subscribe({
+      next: (result) => {
+        this.clientNotes = result ?? [];
         this.loading = false;
-      });
-  }
-
-  editClientFunc() {
-    this.loading = true;
-    this.editClient = true;
-    this.clientEditDto = JSON.parse(JSON.stringify(this.clientDto));
-
-    this.loading = false;
-  }
-
-  cancelEditClient() {
-    this.loading = true;
-    this.clientEditDto = new ClientDTO();
-    this.editClient = false;
-    this.loading = false;
-  }
-
-  saveClient() {
-    this.loading = true;
-    this.clientDto.errorMessage = null;
-    this.clientService.updateClientAsync(this.clientDto).subscribe((result) => {
-      if (result === null) {
+      },
+      error: () => {
         this.loading = false;
-        return;
+        this.clientNotes = [];
       }
-      if (result.errorMessage && result.errorMessage.trim() !== '') {
-        this.clientDto.errorMessage = result.errorMessage;
-      } else {
-        this.editClient = false;
-      }
-      this.loading = false;
     });
   }
 
-  deleteClient() {
-    this.loading = true;
-    this.showDeleteModal = true;
-    this.loading = false;
+  editClientFunc(): void {
+    this.editClient = true;
+    this.clientEditDto = JSON.parse(JSON.stringify(this.clientDto));
   }
 
-  onConfirmDelete(confirm: boolean) {
-    if (confirm) {
-      this.loading = true;
-      this.clientService.deleteClientAsync(this.clientDto).subscribe((result) => {
-        if (result === null) {
-          this.loading = false;
-          return;
+  cancelEditClient(): void {
+    this.clientEditDto = new ClientDTO();
+    this.editClient = false;
+  }
+
+  saveClient(): void {
+    this.loading = true;
+    this.clientDto.errorMessage = null;
+    this.clientService.updateClientAsync(this.clientEditDto).subscribe({
+      next: (result) => {
+        if (result && result.errorMessage?.trim()) {
+          this.clientDto.errorMessage = result.errorMessage;
+        } else if (result) {
+          // Update original clientDto with edits if successful
+          this.clientDto = { ...this.clientEditDto };
+          this.editClient = false;
         }
-
-        this.clientDto.errorMessage = result.errorMessage;
-
-        if (!this.clientDto.errorMessage || this.clientDto.errorMessage.trim() === '') {
-          this.showDeleteModal = false;
-          this.router.navigate(['/clients'])
-          this.loading = false;
-          return;
-        }
-
-        this.showDeleteModal = false;
         this.loading = false;
-
-      });
-    } else {
-      this.showDeleteModal = false;
-      this.loading = false;
-    }
+      },
+      error: () => {
+        this.loading = false;
+      }
+    });
   }
 
-  addNote() {
+  deleteClient(): void {
+    this.showDeleteModal = true;
+  }
+
+  onConfirmDelete(confirm: boolean): void {
+    if (!confirm) {
+      this.showDeleteModal = false;
+      return;
+    }
     this.loading = true;
+    this.clientService.deleteClientAsync(this.clientDto).subscribe({
+      next: (result) => {
+        this.clientDto.errorMessage = result?.errorMessage ?? null;
+        if (!this.clientDto.errorMessage?.trim()) {
+          this.showDeleteModal = false;
+          this.router.navigate(['/clients']);
+        } else {
+          this.showDeleteModal = false;
+        }
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
+        this.showDeleteModal = false;
+      }
+    });
+  }
+
+  addNote(): void {
     this.clientNoteToAdd = new ClientNoteDTO();
     this.addClientNote = true;
-    this.loading = false;
   }
 
-  saveNote() {
+  saveNote(): void {
     this.loading = true;
     this.clientNoteToAdd.clientId = this.clientDto.clientId;
-    this.clientService
-      .createClientNoteAsync(this.clientNoteToAdd)
-      .subscribe((result) => {
-        if (result === null) {
-          this.addClientNote = false;
-          this.loading = false;
-          return;
+    this.clientService.createClientNoteAsync(this.clientNoteToAdd).subscribe({
+      next: (result) => {
+        if (result) {
+          this.getClientNotes();
         }
-        this.getClientNotes();
         this.addClientNote = false;
         this.loading = false;
-      });
+      },
+      error: () => {
+        this.addClientNote = false;
+        this.loading = false;
+      }
+    });
   }
 
-  cancelNote() {
-    this.loading = true;
+  cancelNote(): void {
     this.addClientNote = false;
-    this.loading = false;
   }
 
-  editNote(note: ClientNoteDTO) {
-    this.loading = true;
+  editNote(note: ClientNoteDTO): void {
     this.selectedClientNote = JSON.parse(JSON.stringify(note));
-    this.loading = false;
   }
 
-  goBackToClientList() {
+  goBackToClientList(): void {
     this.back.emit();
   }
 
-  goBackToClient() {
+  goBackToClient(): void {
     this.selectedClientNote = null;
     this.getClientNotes();
+  }
+
+  trackByNoteId(index: number, note: ClientNoteDTO): string | number {
+    return note.clientNoteId ?? index;
   }
 }
