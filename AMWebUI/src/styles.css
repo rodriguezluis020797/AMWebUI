@@ -4,6 +4,8 @@ body {
     font-family: 'Inter', 'Segoe UI', sans-serif;
     background-color: #F7FAFC;
     color: #1A202C;
+    margin: 0;
+    padding: 0;
 }
 
 h1,
@@ -66,4 +68,27 @@ a:hover {
     .metric-value {
         font-size: 1.25rem;
     }
+}
+
+/* === Footer placement fix === */
+html,
+body {
+    height: 100%;
+}
+
+.page-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+}
+
+.main-content {
+    flex: 1;
+}
+
+footer {
+    flex-shrink: 0;
+    background-color: #f8f9fa;
+    padding: 1rem 0;
+    border-top: 1px solid #dee2e6;
 }
