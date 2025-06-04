@@ -9,11 +9,20 @@ import { ToolsService } from '../_services/tools.service';
 
 @Component({
   selector: 'am-reset-password',
+  standalone: true,
   imports: [FormsModule, CommonModule, RouterLink, LoadingScreenComponent],
   templateUrl: './reset-password.component.html',
-  styleUrl: './reset-password.component.css',
+  styleUrls: ['./reset-password.component.css'],
 })
 export class ResetPasswordComponent implements OnInit {
+  dto: ProviderDTO = new ProviderDTO();
+  loading = false;
+  success = false;
+  guid: string | null = null;
+  passwordReset = false;
+  confirmPassword = '';
+  message = '';
+
   constructor(
     private identityService: IdentityService,
     private route: ActivatedRoute,
@@ -21,58 +30,42 @@ export class ResetPasswordComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const guid = this.route.snapshot.queryParamMap.get('guid');
     const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
-    const guidParam = this.route.snapshot.queryParamMap.get('guid');
-    this.guid = guidRegex.test(guidParam ?? '') ? guidParam : null;
-
-    if (this.guid && this.guid !== '') {
-      this.passwordReset = true;
-    }
+    this.guid = guidRegex.test(guid ?? '') ? guid : null;
+    this.passwordReset = !!this.guid;
   }
 
-  dto: ProviderDTO = new ProviderDTO();
-  loading: Boolean = false;
-  success: Boolean = false;
-  guid: string | null = null;
-  passwordReset: boolean = false;
-  confirmPassword: string = '';
-  message: string = '';
-
-
-
-  submit() {
+  submit(): void {
     this.loading = true;
-    this.identityService.resetPasswordRequestAsync(this.dto).subscribe((result) => {
+    this.identityService.resetPasswordRequestAsync(this.dto).subscribe(() => {
       this.dto.eMail = '';
       this.success = true;
       this.loading = false;
     });
   }
 
-  submitPasswordReset() {
+  submitPasswordReset(): void {
     this.loading = true;
+
     if (this.dto.newPassword !== this.confirmPassword) {
       this.message = 'Passwords do not match';
       this.loading = false;
       return;
     }
 
-
     this.identityService.resetPasswordAsync(this.dto, this.guid!).subscribe((result) => {
-      if (result === null) {
-        return;
-      }
+      if (!result) return;
 
-      if (result.errorMessage !== null) {
+      if (result.errorMessage) {
         this.message = result.errorMessage;
-        this.loading = false;
         this.success = false;
         this.confirmPassword = '';
-        return;
+      } else {
+        this.success = true;
       }
+
       this.loading = false;
-      this.success = true;
     });
   }
-
 }
