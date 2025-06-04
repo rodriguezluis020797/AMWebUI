@@ -1,69 +1,80 @@
+<div *ngIf="loading" class="login-container">
+  <am-loading-screen></am-loading-screen>
+</div>
+
 <div *ngIf="!loading">
-  <div *ngIf="!signUpSuccessful" class="login-container">
+  <div *ngIf="!signUpSuccessful; else successTemplate" class="login-container">
     <h2>Sign Up</h2>
+
     <div *ngIf="result.errorMessage" class="error-message">
       <p>{{ result.errorMessage }}</p>
     </div>
 
-    <label for="username">E-Mail:</label>
-    <input type="text" id="username" [(ngModel)]="dto.eMail" name="username" required />
-    <label for="businessName">Business Name:</label>
-    <input type="text" id="businessName" [(ngModel)]="dto.businessName" name="businessName" required />
-    <label for="firstName">First Name:</label>
-    <input type="text" id="firstName" [(ngModel)]="dto.firstName" name="firstName" required />
-    <label for="lastName">Last Name:</label>
-    <input type="text" id="lastName" [(ngModel)]="dto.lastName" name="lastName" required />
-    <p>Address used only for billing and tax purposes.</p>
-    <label for="addressLine1">Address Line 1:</label>
-    <input type="text" id="addressLine1" [(ngModel)]="dto.addressLine1" name="addressLine1" required />
-    <label for="addressLine2">Address Line 2:</label>
-    <input type="text" id="addressLine2" [(ngModel)]="dto.addressLine2" name="addressLine2" required />
-    <label for="city">City:</label>
-    <input type="text" id="city" [(ngModel)]="dto.city" name="city" required />
-    <label for="zipCode">Zip Code:</label>
-    <input type="text" id="zipCode" [(ngModel)]="dto.zipCode" name="zipCode" required />
-    <label for="stateCode">State:</label>
-    <select [(ngModel)]="dto.stateCode" name="stateCode">
-      <option *ngFor="let opt of stateOptions" [value]="opt.key">
-        {{ getEditLabel(opt.label) }}
-      </option>
-    </select>
-    <label for="countryCode">Country:</label>
-    <p>United States</p>
-    <!--
-    <select [(ngModel)]="dto.countryCode" (change)="onCountryChange()" name="countryCode">
-      <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">
-        {{ opt.label }}
-      </option>
-    </select>
-  -->
-    <p>Time zone used for proper scheduling services.</p>
-    <label for="stateDropdown">Time Zone:</label>
-    <select [(ngModel)]="dto.timeZoneCode">
-      <option *ngFor="let option of timeZoneOptions" [value]="option.key">
-        {{ option.label }}
-      </option>
-    </select>
+    <form (ngSubmit)="submit()" #signUpForm="ngForm" novalidate>
+      <label for="username">E-Mail:</label>
+      <input id="username" name="username" type="email" [(ngModel)]="dto.eMail" required email />
 
-    <br />
-    <br />
-    <button type="submit" (click)="submit()">Sign Up</button>
-    <a routerLink="">Login Here</a>
+      <label for="businessName">Business Name:</label>
+      <input id="businessName" name="businessName" type="text" [(ngModel)]="dto.businessName" required />
+
+      <label for="firstName">First Name:</label>
+      <input id="firstName" name="firstName" type="text" [(ngModel)]="dto.firstName" required />
+
+      <label for="lastName">Last Name:</label>
+      <input id="lastName" name="lastName" type="text" [(ngModel)]="dto.lastName" required />
+
+      <p>Address used only for billing and tax purposes.</p>
+
+      <label for="addressLine1">Address Line 1:</label>
+      <input id="addressLine1" name="addressLine1" type="text" [(ngModel)]="dto.addressLine1" required />
+
+      <label for="addressLine2">Address Line 2:</label>
+      <input id="addressLine2" name="addressLine2" type="text" [(ngModel)]="dto.addressLine2" />
+
+      <label for="city">City:</label>
+      <input id="city" name="city" type="text" [(ngModel)]="dto.city" required />
+
+      <label for="zipCode">Zip Code:</label>
+      <input id="zipCode" name="zipCode" type="text" [(ngModel)]="dto.zipCode" required />
+
+      <label for="stateCode">State:</label>
+      <select id="stateCode" name="stateCode" [(ngModel)]="dto.stateCode" required>
+        <option *ngFor="let opt of stateOptions" [ngValue]="opt.key">{{ getEditLabel(opt.label) }}</option>
+      </select>
+
+      <label>Country:</label>
+      <p>United States</p>
+
+      <p>Time zone used for proper scheduling services.</p>
+
+      <label for="timeZoneCode">Time Zone:</label>
+      <select id="timeZoneCode" name="timeZoneCode" [(ngModel)]="dto.timeZoneCode" required>
+        <option *ngFor="let opt of timeZoneOptions" [ngValue]="opt.key">
+          {{ opt.label }}
+        </option>
+      </select>
+
+      <br /><br />
+
+      <button type="submit" [disabled]="signUpForm.invalid || loading">
+        Sign Up
+      </button>
+
+      <a routerLink="" tabindex="0">Login Here</a>
+    </form>
   </div>
 
-  <div *ngIf="signUpSuccessful" class="login-container">
-    <h2>Thank You!</h2>
-    <p class="message">
-      Thank you for requesting access!
-      <br />
-      Please verify your email using the link sent to your inbox. Once verified,
-      you’ll receive a follow-up email letting you know when you’re ready to
-      start using our system!
-    </p>
-    <a routerLink="/">Home</a>
-  </div>
-</div>
-
-<div *ngIf="loading" class="login-container">
-  <am-loading-screen></am-loading-screen>
+  <ng-template #successTemplate>
+    <div class="login-container">
+      <h2>Thank You!</h2>
+      <p class="message">
+        Thank you for requesting access!
+        <br />
+        Please verify your email using the link sent to your inbox. Once
+        verified, you’ll receive a follow-up email letting you know when you’re
+        ready to start using our system!
+      </p>
+      <a routerLink="/">Home</a>
+    </div>
+  </ng-template>
 </div>

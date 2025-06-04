@@ -18,22 +18,27 @@ import { ToolsService } from '../_services/tools.service';
   selector: 'am-sign-up',
   imports: [CommonModule, FormsModule, RouterLink, LoadingScreenComponent],
   templateUrl: './sign-up.component.html',
-  styleUrl: './sign-up.component.css',
+  styleUrls: ['./sign-up.component.css'],
 })
 export class SignUpComponent {
-  constructor(private providerService: ProviderService, private toolsService: ToolsService) { }
   dto = new ProviderDTO();
-  signUpSuccessful: boolean = false;
+  signUpSuccessful = false;
   result = new BaseDTO();
-  loading: Boolean = true;
+  loading = true;
 
-  get countryCodeOptions(): { key: CountryCodeEnum; label: string }[] {
-    return this.toolsService.getCountryCodes();
-  }
+  // Cache country codes once since it doesn't change dynamically here
+  countryCodeOptions: { key: CountryCodeEnum; label: string }[] = [];
   stateOptions: { key: StateCodeEnum; label: string }[] = [];
   timeZoneOptions: { key: TimeZoneCodeEnum; label: string }[] = [];
 
+
+  constructor(
+    private providerService: ProviderService,
+    private toolsService: ToolsService
+  ) { }
+
   ngOnInit() {
+    this.countryCodeOptions = this.toolsService.getCountryCodes();
     this.dto = {
       firstName: 'Luis',
       middleName: null,
@@ -55,49 +60,44 @@ export class SignUpComponent {
       isSpecialCase: false,
       payEngineInfoUrl: '',
       nextBillingDate: null,
-      subscriptionToBeCancelled: false
+      subscriptionToBeCancelled: false,
     };
 
-    this.onCountryChange();
+    this.updateStateAndTimeZoneOptions(this.dto.countryCode);
 
     this.loading = false;
   }
 
-  public getEditLabel(label: string): string {
+  getEditLabel(label: string): string {
     if (!label) return '';
-    if (label === "Select") {
-      return label;
-    }
-    return label.substring(3).trim();
+    return label === 'Select' ? label : label.substring(3).trim();
   }
 
-  onCountryChange() {
-    this.stateOptions = this.toolsService.getStateCodes(
-      this.dto.countryCode
-    );
-    this.timeZoneOptions = this.toolsService.getTimeZoneCodes(
-      this.dto.countryCode
-    );
+  updateStateAndTimeZoneOptions(countryCode: CountryCodeEnum): void {
+    this.stateOptions = this.toolsService.getStateCodes(countryCode);
+    this.timeZoneOptions = this.toolsService.getTimeZoneCodes(countryCode);
     this.dto.stateCode = StateCodeEnum.Select;
     this.dto.timeZoneCode = TimeZoneCodeEnum.Select;
   }
 
-  submit() {
-    this.loading = true;
-    this.dto.countryCode = Number(CountryCodeEnum.United_States);
-    this.dto.stateCode = Number(StateCodeEnum.US_WA);
-    this.dto.timeZoneCode = Number(TimeZoneCodeEnum.Pacific_Standard_Time);
-    this.providerService.createProviderAsync(this.dto).subscribe((result) => {
-      if (result === null) {
-        this.loading = false;
-        return;
-      }
+  onCountryChange(): void {
+    // Although country select is disabled, keep this method for future flexibility
+    this.updateStateAndTimeZoneOptions(this.dto.countryCode);
+  }
 
-      this.result = result;
-      if (this.result.errorMessage === null) {
-        this.signUpSuccessful = true;
-      }
+  submit(): void {
+    this.loading = true;
+
+    // Hardcoding US codes as per your logic
+    this.dto.countryCode = CountryCodeEnum.United_States;
+    this.dto.stateCode = StateCodeEnum.US_WA;
+    this.dto.timeZoneCode = TimeZoneCodeEnum.Pacific_Standard_Time;
+
+    this.providerService.createProviderAsync(this.dto).subscribe((res) => {
       this.loading = false;
+      if (!res) return;
+      this.result = res;
+      this.signUpSuccessful = !this.result.errorMessage;
     });
   }
 }
