@@ -1,8 +1,8 @@
-<div class="unauthorized-container">
-  <h2>Unauthorized</h2>
-  <div class="message">
-    <p>You are not authorized to view this page.</p>
+<div class="unauthorized-container text-center p-4">
+  <h1 class="text-danger mb-3">Unauthorized</h1>
+  <div class="message mb-4 text-muted">
+    <p class="mb-2">You are not authorized to view this page.</p>
     <p>You will be redirected to the home page in {{ countdown }} seconds.</p>
   </div>
-  <button (click)="redirectNow()">Go Home Now</button>
+  <button class="btn btn-primary" (click)="redirectNow()">Go Home Now</button>
 </div>

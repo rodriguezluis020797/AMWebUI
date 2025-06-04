@@ -1,0 +1,39 @@
+.unauthorized-container {
+    min-height: 70vh;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Inter', 'Segoe UI', sans-serif;
+    background-color: #fff;
+    color: #2D3748;
+}
+
+h1 {
+    font-size: 2rem;
+    font-weight: 600;
+    color: #E53E3E;
+    /* red-600 */
+}
+
+.message {
+    max-width: 600px;
+    font-size: 1rem;
+    line-height: 1.5;
+}
+
+button {
+    padding: 0.5rem 1.25rem;
+    font-size: 1rem;
+    font-weight: 500;
+    border: none;
+    border-radius: 6px;
+    background-color: #3182CE;
+    color: white;
+    transition: background-color 0.2s ease;
+}
+
+button:hover {
+    background-color: #2B6CB0;
+    cursor: pointer;
+}
