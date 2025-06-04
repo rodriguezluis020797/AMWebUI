@@ -3,47 +3,54 @@ import { CommonModule } from '@angular/common';
 import { ProviderService } from '../_services/provider.service';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
 import { ProviderDTO } from '../models/ProviderDTO';
-import { Router } from '@angular/router';
-import { CurrentStateService } from '../_services/current-state.service';
-import { EMPTY, switchMap } from 'rxjs';
-import { AppointmentService } from '../_services/appointment.service';
 import { AppointmentDTO } from '../models/AppointmentDTO';
+import { AppointmentService } from '../_services/appointment.service';
+import { EMPTY, switchMap } from 'rxjs';
 
 @Component({
   selector: 'am-dashboard',
+  standalone: true,
   imports: [CommonModule, LoadingScreenComponent],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
 export class DashboardComponent implements OnInit {
-  constructor(
-    private providerService: ProviderService,
-    private appointmentService: AppointmentService
-  ) { }
   provider: ProviderDTO = new ProviderDTO();
   appointments: AppointmentDTO[] = [];
   loading = true;
 
-  ngOnInit() {
-    this.getProvider();
+  constructor(
+    private providerService: ProviderService,
+    private appointmentService: AppointmentService
+  ) { }
+
+  ngOnInit(): void {
+    this.loadDashboardData();
   }
 
-  getProvider() {
+  private loadDashboardData(): void {
     this.loading = true;
+
     this.providerService.getProviderAsync(false).pipe(
-      switchMap((result) => {
-        if (result === null) {
+      switchMap((provider) => {
+        if (!provider) {
           this.loading = false;
           return EMPTY;
         }
-        this.provider = result;
+
+        this.provider = provider;
         return this.appointmentService.getUpcomingAppointmentsAsync();
-      }),
-    ).subscribe((result) => {
-      if (result !== null) {
-        this.appointments = result;
+      })
+    ).subscribe({
+      next: (appointments) => {
+        if (appointments) {
+          this.appointments = appointments;
+        }
+        this.loading = false;
+      },
+      error: () => {
+        this.loading = false;
       }
-      this.loading = false;
     });
   }
 }
