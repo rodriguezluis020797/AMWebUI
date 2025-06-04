@@ -15,6 +15,14 @@ export class NavBarComponent implements OnInit {
   isMenuOpen = false;
   loggedIn = false;
 
+  navItems = [
+    { label: 'Dashboard', link: '/dashboard' },
+    { label: 'Profile', link: '/provider-profile' },
+    { label: 'Services', link: '/services' },
+    { label: 'Clients', link: '/clients' },
+    { label: 'Appointments', link: '/appointments' }
+  ];
+
   constructor(
     private identityService: IdentityService,
     private router: Router,
