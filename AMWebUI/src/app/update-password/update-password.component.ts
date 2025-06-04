@@ -12,9 +12,14 @@ import { LoadingScreenComponent } from '../partials/loading-screen/loading-scree
   selector: 'am-update-password',
   imports: [FormsModule, CommonModule, RouterLink, LoadingScreenComponent],
   templateUrl: './update-password.component.html',
-  styleUrl: './update-password.component.css',
+  styleUrls: ['./update-password.component.css'],  // fixed typo styleUrl -> styleUrls
 })
 export class UpdatePasswordComponent implements OnInit {
+  dto = new ProviderDTO();
+  confirmPassword = '';
+  loading = true;
+  message: string | null = null;
+
   constructor(
     private identityService: IdentityService,
     private router: Router,
@@ -22,36 +27,30 @@ export class UpdatePasswordComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.dto.isTempPassword =
-      this.currentStateService.temporaryPasswordSubject.value;
+    this.dto.isTempPassword = this.currentStateService.temporaryPasswordSubject.value;
     this.loading = false;
   }
-  dto = new ProviderDTO();
-  confirmPassword: string = '';
-  loading: Boolean = true;
-  message: string | null = null;
 
-  submit() {
-    this.loading = true;
+  submit(): void {
+    this.message = null;  // reset message on each submit
     if (this.dto.newPassword !== this.confirmPassword) {
       this.message = 'Passwords do not match';
-      this.loading = false;
       return;
     }
 
+    this.loading = true;
+
     this.identityService.updatePasswordAsync(this.dto).subscribe((result) => {
-      if (result === null) {
+      this.loading = false;
+
+      if (!result) {
         return;
       }
 
       if (result.errorMessage !== null) {
-        if (result.isSpecialCase) {
-          this.message = 'Password does not meet requirements.';
-        } else {
-          this.message =
-            'Current password is wrong, new password has been used too recently, or new password does not meet requirements.';
-        }
-        this.loading = false;
+        this.message = result.isSpecialCase
+          ? 'Password does not meet requirements.'
+          : 'Current password is wrong, new password has been used too recently, or new password does not meet requirements.';
         return;
       }
 
@@ -61,7 +60,6 @@ export class UpdatePasswordComponent implements OnInit {
       } else {
         this.router.navigate(['provider-profile']);
       }
-      this.loading = false;
     });
   }
 }
