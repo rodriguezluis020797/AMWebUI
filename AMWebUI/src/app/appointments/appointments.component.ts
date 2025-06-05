@@ -12,22 +12,11 @@ import { EMPTY, switchMap } from 'rxjs';
 import { ServiceService } from '../_services/service.service';
 import { ServiceDTO } from '../models/ServiceDTO';
 import { AppointmentStatusEnum } from '../models/Enums';
-import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatInputModule } from '@angular/material/input';
-import { MatDatepickerModule } from '@angular/material/datepicker';
-import { MatNativeDateModule } from '@angular/material/core';
-import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button';
 
 @Component({
   selector: 'am-appointments',
   standalone: true,
-  imports: [FormsModule, CommonModule, LoadingScreenComponent, DeleteEntityComponent, AppointmentStatusPipe, MatFormFieldModule,
-    MatInputModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatIconModule,
-    MatButtonModule],
+  imports: [FormsModule, CommonModule, LoadingScreenComponent, DeleteEntityComponent, AppointmentStatusPipe],
   templateUrl: './appointments.component.html',
   styleUrl: './appointments.component.css'
 })
