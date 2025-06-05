@@ -1,1 +1,41 @@
-<p>metrics works!</p>
+<ng-container *ngIf="!loading; else loadingScreen">
+    <div class="container py-4">
+        <h2 class="mb-4">Metrics</h2>
+
+        <!-- Date Range Filters -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-6">
+                <label for="startDate" class="form-label">Start Date</label>
+                <input type="date" id="startDate" class="form-control" [(ngModel)]="dto.startDate"
+                    (change)="onDateRangeChange()" />
+            </div>
+            <div class="col-md-6">
+                <label for="endDate" class="form-label">End Date</label>
+                <input type="date" id="endDate" class="form-control" [(ngModel)]="dto.endDate"
+                    (change)="onDateRangeChange()" />
+            </div>
+        </div>
+
+        <!-- Totals Summary -->
+        <div class="row g-3 mb-4">
+            <div class="col-md-4">
+                <div><strong>Total Earnings:</strong> {{ dto.totalEarnings | currency }}</div>
+            </div>
+            <div class="col-md-4">
+                <div><strong>Projected Scheduled Earnings:</strong> {{ dto.totalScheduledProjectedEarnings | currency }}
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div><strong>Completed Appointment Earnings:</strong> {{ dto.totalCompletedEarnings | currency }}</div>
+            </div>
+        </div>
+
+        <div *ngIf="!dto.appointments?.length" class="text-muted mt-3">
+            No appointments found for the selected date range.
+        </div>
+    </div>
+</ng-container>
+
+<ng-template #loadingScreen>
+    <am-loading-screen></am-loading-screen>
+</ng-template>
