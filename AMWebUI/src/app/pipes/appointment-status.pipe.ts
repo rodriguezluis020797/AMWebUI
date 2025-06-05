@@ -5,9 +5,10 @@ import { Pipe, PipeTransform } from '@angular/core';
 })
 export class AppointmentStatusPipe implements PipeTransform {
   transform(value: number): string {
-    switch (value) {
+    //const num = Number(value);
+    switch (Number(value)) {
       case 0:
-        return 'Unknown';
+        return 'Select';
       case 1:
         return 'Scheduled';
       case 2:
