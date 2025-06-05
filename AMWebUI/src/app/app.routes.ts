@@ -14,6 +14,7 @@ import { ServicesComponent } from './services/services.component';
 import { ClientComponent } from './client/client.component';
 import { AppointmentsComponent } from './appointments/appointments.component';
 import { ClientDetailsComponent } from './client-details/client-details.component';
+import { MetricsComponent } from './metrics/metrics.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -56,6 +57,11 @@ export const routes: Routes = [
   {
     path: 'appointments',
     component: AppointmentsComponent,
+    canActivate: [authorizationGuard]
+  },
+  {
+    path: 'metrics',
+    component: MetricsComponent,
     canActivate: [authorizationGuard]
   }
 ];

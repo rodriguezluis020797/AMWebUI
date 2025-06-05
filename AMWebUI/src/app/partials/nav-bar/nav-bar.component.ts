@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { IdentityService } from '../../_services/identity.service';
 import { CurrentStateService } from '../../_services/current-state.service';
+import { link } from 'fs';
 
 @Component({
   standalone: true,
@@ -20,7 +21,8 @@ export class NavBarComponent implements OnInit {
     { label: 'Profile', link: '/provider-profile' },
     { label: 'Services', link: '/services' },
     { label: 'Clients', link: '/clients' },
-    { label: 'Appointments', link: '/appointments' }
+    { label: 'Appointments', link: '/appointments' },
+    { label: 'Metrics', link: '/metrics' }
   ];
 
   constructor(
