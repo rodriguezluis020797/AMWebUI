@@ -59,7 +59,7 @@
 
     <div class="mb-3">
         <label class="form-label">Service</label>
-        <ng-container *ngIf="editDTO.status === 0 || editDTO.status === 1; else viewService">
+        <ng-container *ngIf="isEditable(); else viewService">
             <select class="form-select" [(ngModel)]="editDTO.serviceId" (change)="onServiceChange()">
                 <option *ngFor="let service of services" [ngValue]="service.serviceId">{{ service.name }}</option>
             </select>
@@ -71,7 +71,7 @@
 
     <div class="mb-3">
         <label class="form-label">Start Date</label>
-        <ng-container *ngIf="editDTO.status === 0 || editDTO.status === 1; else viewStart">
+        <ng-container *ngIf="isEditable(); else viewService">
             <input type="datetime-local" class="form-control" [(ngModel)]="editDTO.startDate" step="900" />
         </ng-container>
         <ng-template #viewStart>
@@ -81,7 +81,7 @@
 
     <div class="mb-3">
         <label class="form-label">End Date</label>
-        <ng-container *ngIf="editDTO.status === 0 || editDTO.status === 1; else viewEnd">
+        <ng-container *ngIf="isEditable(); else viewService">
             <input type="datetime-local" class="form-control" [(ngModel)]="editDTO.endDate" step="900" />
         </ng-container>
         <ng-template #viewEnd>
@@ -91,7 +91,7 @@
 
     <div class="mb-3">
         <label class="form-label">Notes</label>
-        <ng-container *ngIf="editDTO.status === 0 || editDTO.status === 1; else viewNotes">
+        <ng-container *ngIf="isEditable(); else viewService">
             <textarea class="form-control" [(ngModel)]="editDTO.notes"></textarea>
         </ng-container>
         <ng-template #viewNotes>
@@ -99,15 +99,15 @@
         </ng-template>
     </div>
 
-    <div class="form-check mb-3" *ngIf="editDTO.status === 0 || editDTO.status === 1">
+    <ng-container *ngIf="isEditable(); else viewService">
         <input type="checkbox" class="form-check-input" id="overridePrice" [(ngModel)]="editDTO.overridePrice"
             (change)="onOverridePrice()" />
         <label for="overridePrice" class="form-check-label">Override Price</label>
-    </div>
+    </ng-container>
 
     <div class="mb-3">
         <label class="form-label">Price</label>
-        <ng-container *ngIf="editDTO.status === 0 || editDTO.status === 1; else viewPrice">
+        <ng-container *ngIf="isEditable(); else viewService">
             <ng-container *ngIf="!editDTO.overridePrice">
                 <p>{{ editDTO.price | currency }}</p>
             </ng-container>
@@ -122,7 +122,7 @@
 
     <div class="mb-3">
         <label class="form-label">Status</label>
-        <ng-container *ngIf="editDTO.status === 0 || editDTO.status === 1; else viewStatus">
+        <ng-container *ngIf="isEditable(); else viewService">
             <select class="form-select" [(ngModel)]="editDTO.status">
                 <option *ngFor="let status of [0,1,2,3]" [value]="status">{{ status | appointmentStatus }}</option>
             </select>
@@ -135,13 +135,13 @@
     <div class="d-flex gap-2 mt-3">
         <button class="btn btn-primary" (click)="save()">Save</button>
         <button class="btn btn-secondary" (click)="cancel()">Cancel</button>
-        <button *ngIf="!isNewAppointment && editDTO.status === AppointmentStatusEnum.Cancelled" class="btn btn-danger"
-            (click)="delete(editDTO.appointmentId)">
+        <button *ngIf="!isNewAppointment" class="btn btn-danger" (click)="delete(editDTO.appointmentId)">
             Delete
         </button>
     </div>
 </div>
 
 <am-delete-entity *ngIf="showDeleteModal && !loading" [header]="'Delete Appointment'"
-    [message]="'Are you sure you want to delete this appointment?'" (confirm)="onConfirmDelete($event)">
+    [message]="'Are you sure you want to delete this appointment? Deleting it will permanently remove all associated data, including metrics. This action cannot be undone.'"
+    (confirm)="onConfirmDelete($event)">
 </am-delete-entity>

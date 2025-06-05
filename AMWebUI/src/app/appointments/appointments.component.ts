@@ -22,6 +22,7 @@ import { AppointmentStatusEnum } from '../models/Enums';
 })
 export class AppointmentsComponent implements OnInit {
   editDTO: AppointmentDTO = new AppointmentDTO();
+  originalStatus: number = 0;
   editAppointmentBool = false;
   isNewAppointment = false;
   loading = true;
@@ -129,7 +130,6 @@ export class AppointmentsComponent implements OnInit {
     this.loading = true;
 
     const now = new Date();
-    // Round up to next 30-minute increment
     const remainder = 30 - (now.getMinutes() % 30);
     now.setMinutes(now.getMinutes() + remainder, 0, 0);
 
@@ -139,6 +139,7 @@ export class AppointmentsComponent implements OnInit {
     this.editDTO = new AppointmentDTO();
     this.editDTO.startDate = this.formatDateLocal(now);
     this.editDTO.endDate = this.formatDateLocal(end);
+    this.originalStatus = this.editDTO.status;
 
     this.editAppointmentBool = true;
     this.isNewAppointment = true;
@@ -163,6 +164,7 @@ export class AppointmentsComponent implements OnInit {
 
     this.editDTO = new AppointmentDTO();
     Object.assign(this.editDTO, appt);
+    this.originalStatus = appt.status;
 
     this.editDTO.startDate = this.formatDateLocal(new Date(appt.startDate));
     this.editDTO.endDate = this.formatDateLocal(new Date(appt.endDate));
@@ -173,6 +175,10 @@ export class AppointmentsComponent implements OnInit {
       : 'Unknown Client';
 
     this.loading = false;
+  }
+
+  isEditable(): boolean {
+    return this.originalStatus === 0 || this.originalStatus === 1;
   }
 
   save() {
