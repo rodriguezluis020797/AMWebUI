@@ -66,8 +66,21 @@ export class DashboardComponent implements OnInit {
           return;
         }
         this.alerts = result;
-        console.log(this.alerts)
         this.loading = false;
       })
+  }
+
+  acknowledgeAlert(alert: ProviderAlertDTO) {
+    this.loading = true;
+    this.providerService
+      .acknowledgeProviderAlertAsync(alert)
+      .subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
+        this.alerts = this.alerts.filter(a => a.providerAlertId !== alert.providerAlertId);
+        this.loading = false;
+      });
   }
 }

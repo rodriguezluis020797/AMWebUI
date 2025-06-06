@@ -56,6 +56,24 @@ export class ProviderService {
       );
   }
 
+  acknowledgeProviderAlertAsync(dto: ProviderAlertDTO): Observable<ProviderAlertDTO | null> {
+    return this.http
+      .post<ProviderAlertDTO>('/api/Provider/AcknowledgeProviderAlert', dto, {
+        withCredentials: true,
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
+  }
+
   updateProviderAsync(provider: ProviderDTO): Observable<BaseDTO | null> {
     return this.http
       .post<BaseDTO>('/api/Provider/UpdateProvider', provider, {

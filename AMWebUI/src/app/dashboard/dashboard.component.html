@@ -2,6 +2,7 @@
   <div class="container py-4">
     <h2 class="mb-4">Welcome, {{ provider.firstName }}!</h2>
 
+    <!-- Alerts Section -->
     <h4 class="mb-3 text-muted">Alerts</h4>
 
     <ng-container *ngIf="alerts.length === 0; else alertList">
@@ -11,15 +12,20 @@
     <ng-template #alertList>
       <div class="row gy-4 mb-5">
         <div *ngFor="let alert of alerts" class="col-12 col-md-6 col-lg-4">
-          <div class="card-custom h-100">
-            <p class="mb-1">
+          <div class="card-custom h-100 d-flex flex-column justify-content-between p-3">
+            <p class="mb-3">
               {{ alert.alert }}
             </p>
+            <a (click)="acknowledgeAlert(alert)" class="text-primary text-decoration-underline cursor-pointer"
+              role="button">
+              Dismiss
+            </a>
           </div>
         </div>
       </div>
     </ng-template>
 
+    <!-- Appointments Section -->
     <h4 class="mb-3 text-muted">Next 24 Hours At A Glance</h4>
 
     <ng-container *ngIf="appointments.length === 0; else appointmentsList">
@@ -29,7 +35,7 @@
     <ng-template #appointmentsList>
       <div class="row gy-4">
         <div *ngFor="let appt of appointments" class="col-12 col-md-6 col-lg-4">
-          <div class="card-custom h-100">
+          <div class="card-custom h-100 p-3">
             <h5 class="mb-2">
               {{ appt.startDate | date: 'M/d/yy h:mm a' }} –
               {{ appt.endDate | date: 'h:mm a' }}
