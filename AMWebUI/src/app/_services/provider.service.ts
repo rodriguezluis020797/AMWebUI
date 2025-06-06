@@ -5,6 +5,7 @@ import { ProviderDTO } from '../models/ProviderDTO';
 import { BaseDTO } from '../models/BaseDTO';
 import { Router } from '@angular/router';
 import { CurrentStateService } from './current-state.service';
+import { ProviderAlertDTO } from '../models/ProviderAlertDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -23,6 +24,24 @@ export class ProviderService {
         params: {
           generateUrl: generateUrl
         }
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
+  }
+
+  getProviderAlertsAsync(): Observable<ProviderAlertDTO[] | null> {
+    return this.http
+      .get<ProviderAlertDTO[]>('/api/Provider/GetProviderAlerts', {
+        withCredentials: true,
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {

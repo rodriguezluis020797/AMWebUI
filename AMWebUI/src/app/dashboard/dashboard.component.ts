@@ -6,6 +6,7 @@ import { ProviderDTO } from '../models/ProviderDTO';
 import { AppointmentDTO } from '../models/AppointmentDTO';
 import { AppointmentService } from '../_services/appointment.service';
 import { EMPTY, switchMap } from 'rxjs';
+import { ProviderAlertDTO } from '../models/ProviderAlertDTO';
 
 @Component({
   selector: 'am-dashboard',
@@ -17,6 +18,7 @@ import { EMPTY, switchMap } from 'rxjs';
 export class DashboardComponent implements OnInit {
   provider: ProviderDTO = new ProviderDTO();
   appointments: AppointmentDTO[] = [];
+  alerts: ProviderAlertDTO[] = [];
   loading = true;
 
   constructor(
@@ -26,6 +28,7 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDashboardData();
+    this.getAlerts();
   }
 
   private loadDashboardData(): void {
@@ -52,5 +55,19 @@ export class DashboardComponent implements OnInit {
         this.loading = false;
       }
     });
+  }
+
+  private getAlerts() {
+    this.providerService
+      .getProviderAlertsAsync()
+      .subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
+        this.alerts = result;
+        console.log(this.alerts)
+        this.loading = false;
+      })
   }
 }
