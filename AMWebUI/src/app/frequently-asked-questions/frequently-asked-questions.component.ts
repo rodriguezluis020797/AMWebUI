@@ -8,8 +8,6 @@ import { Component } from '@angular/core';
 })
 export class FrequentlyAskedQuestionsComponent {
   scrollTo(id: string) {
-    console.clear()
-    console.log('id', id)
     const el = document.getElementById(id);
     if (el) {
       el.scrollIntoView({ behavior: 'smooth' });

@@ -26,9 +26,6 @@ export class ProviderReviewComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
-    console.clear();
-
-    console.log('ng OnInit dto: ', this.dto)
 
     const guidRegex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
     const guidParam = this.route.snapshot.queryParamMap.get('guid') ?? '';
@@ -47,7 +44,6 @@ export class ProviderReviewComponent implements OnInit {
         return;
       }
       this.dto = result;
-      console.log('result: ', result)
       this.loading = false;
     })
   }
