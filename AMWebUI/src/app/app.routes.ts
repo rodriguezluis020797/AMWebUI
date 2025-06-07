@@ -15,6 +15,7 @@ import { ClientComponent } from './client/client.component';
 import { AppointmentsComponent } from './appointments/appointments.component';
 import { ClientDetailsComponent } from './client-details/client-details.component';
 import { MetricsComponent } from './metrics/metrics.component';
+import { AboutUsComponent } from './about-us/about-us.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -24,6 +25,7 @@ export const routes: Routes = [
   { path: 'unauthorized', component: UnauthorizedComponent },
   { path: 'verify-email', component: VerifyEMailComponent },
   { path: 'reset-password', component: ResetPasswordComponent },
+  { path: 'about-us', component: AboutUsComponent },
   {
     path: 'dashboard',
     component: DashboardComponent,
