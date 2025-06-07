@@ -1,0 +1,51 @@
+<!-- Review Section -->
+<div *ngIf="!loading" class="container py-4">
+    <h4 class="mb-3 text-muted">We Value Your Feedback</h4>
+
+    <ng-container *ngIf="!dto.errorMessage; else errorBlock">
+        <ng-container *ngIf="!success; else successBlock">
+            <div class="card-custom p-4">
+                <p class="mb-4">
+                    We'd love to hear about your experience with <strong>{{ dto.providerName }}</strong>. Your honest
+                    feedback helps us improve and better serve clients like you.
+                </p>
+
+                <div class="mb-3">
+                    <label for="reviewText" class="form-label">Your Review</label>
+                    <textarea id="reviewText" [(ngModel)]="dto.reviewText" name="reviewText" class="form-control"
+                        rows="4" placeholder="Share your thoughts about your recent appointment..."></textarea>
+                </div>
+
+                <!-- Star Rating -->
+                <div class="mb-4">
+                    <label class="form-label d-block">Your Rating</label>
+                    <div class="star-rating">
+                        <ng-container *ngFor="let star of [1,2,3,4,5]">
+                            <i class="bi" [class.bi-star-fill]="dto.rating >= star" [class.bi-star]="dto.rating < star"
+                                (click)="dto.rating = star" class="me-1 text-warning"
+                                style="font-size: 1.5rem; cursor: pointer;"></i>
+                        </ng-container>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-end">
+                    <button class="btn btn-primary" (click)="submit()">Submit Review</button>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #successBlock>
+            <div class="alert alert-success">
+                Thank you! Your review has been submitted successfully.
+            </div>
+        </ng-template>
+    </ng-container>
+
+    <ng-template #errorBlock>
+        <div class="alert alert-danger">
+            {{ dto.errorMessage }}
+        </div>
+    </ng-template>
+</div>
+
+<am-loading-screen *ngIf="loading"></am-loading-screen>

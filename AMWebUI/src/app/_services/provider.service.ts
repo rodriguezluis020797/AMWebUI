@@ -6,6 +6,7 @@ import { BaseDTO } from '../models/BaseDTO';
 import { Router } from '@angular/router';
 import { CurrentStateService } from './current-state.service';
 import { ProviderAlertDTO } from '../models/ProviderAlertDTO';
+import { ProviderReviewDTO } from '../models/ProviderReviewDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -24,6 +25,40 @@ export class ProviderService {
         params: {
           generateUrl: generateUrl
         }
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
+  }
+
+  GetProviderReviewForSubmissionAsync(dto: ProviderReviewDTO): Observable<ProviderReviewDTO | null> {
+    return this.http
+      .post<ProviderReviewDTO>('/api/Provider/GetProviderReviewForSubmission', dto, {
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
+  }
+
+  updateProviderReviewAsync(dto: ProviderReviewDTO): Observable<ProviderReviewDTO | null> {
+    return this.http
+      .post<ProviderReviewDTO>('/api/Provider/UpdateProviderReview', dto, {
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
