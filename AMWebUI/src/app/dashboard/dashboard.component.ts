@@ -28,7 +28,6 @@ export class DashboardComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadDashboardData();
-    this.getAlerts();
   }
 
   private loadDashboardData(): void {
@@ -43,31 +42,26 @@ export class DashboardComponent implements OnInit {
 
         this.provider = provider;
         return this.appointmentService.getUpcomingAppointmentsAsync();
-      })
-    ).subscribe({
-      next: (appointments) => {
-        if (appointments) {
-          this.appointments = appointments;
-        }
-        this.loading = false;
-      },
-      error: () => {
-        this.loading = false;
-      }
-    });
-  }
-
-  private getAlerts() {
-    this.providerService
-      .getProviderAlertsAsync()
-      .subscribe((result) => {
+      }),
+      switchMap((result) => {
         if (result === null) {
           this.loading = false;
-          return;
+          return EMPTY;
         }
-        this.alerts = result;
-        this.loading = false;
+        this.appointments = result;
+
+        return this.providerService
+          .getProviderAlertsAsync();
+
       })
+    ).subscribe((result) => {
+      if (result === null) {
+        this.loading = false;
+        return;
+      }
+      this.alerts = result;
+      this.loading = false;
+    });
   }
 
   acknowledgeAlert(alert: ProviderAlertDTO) {
