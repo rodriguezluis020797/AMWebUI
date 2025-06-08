@@ -55,7 +55,7 @@
         <div *ngIf="reviews?.length; else noReviews">
             <div *ngFor="let review of reviews" class="card mb-3 p-3">
                 <div class="mb-2">
-                    <strong>Rating:</strong>
+                    <strong>Rating: </strong>
                     <ng-container *ngFor="let star of [1,2,3,4,5]">
                         <i class="bi" [class.bi-star-fill]="review.rating >= star"
                             [class.bi-star]="review.rating < star" style="color: #f0ad4e;"></i>

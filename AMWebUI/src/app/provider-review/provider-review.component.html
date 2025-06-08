@@ -2,8 +2,6 @@
 <div *ngIf="!loading" class="container py-4">
     <h4 class="mb-1 text-muted">We Value Your Feedback</h4>
 
-    <!-- Show validation or other messages -->
-
     <ng-container *ngIf="displayReviewForm; else successBlock">
         <div class="card-custom p-4">
             <p class="mb-4">
@@ -12,6 +10,7 @@
                 feedback helps us improve and better serve clients like you.
             </p>
             <p *ngIf="dto.errorMessage" class="alert alert-danger mt-3">{{ dto.errorMessage }}</p>
+
             <div class="mb-3">
                 <label for="reviewText" class="form-label">Your Review</label>
                 <textarea id="reviewText" [(ngModel)]="dto.reviewText" name="reviewText" class="form-control" rows="4"
@@ -37,12 +36,13 @@
     </ng-container>
 
     <ng-template #successBlock>
-        <div *ngIf="!dto.errorMessage && dto.errorMessage === ''; else errorMessageBlock" class="alert alert-success">
+        <div *ngIf="!dto.errorMessage; else errorMessageBlock" class="alert alert-success">
             Thank you, <strong>{{ dto.clientName }}</strong>! Your review has been submitted successfully.
             We truly appreciate you taking the time to share your experience with <strong>{{ dto.providerName
                 }}</strong>.
         </div>
     </ng-template>
+
     <ng-template #errorMessageBlock>
         <p *ngIf="dto.errorMessage" class="alert alert-danger mt-3">{{ dto.errorMessage }}</p>
     </ng-template>
