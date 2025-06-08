@@ -30,7 +30,7 @@ export class AppComponent implements OnInit {
   loading: boolean = true;
 
   // Routes that are publicly accessible when entered directly into the browser's address bar
-  private readonly allowlistedRoutes: string[] = ['/verify-email', '/reset-password', '/faq', '/provider-review'];
+  private readonly allowlistedRoutes: string[] = ['/verify-email', '/reset-password', '/faq', '/provider-review', '/provider-public-view'];
 
   constructor(
     private systemStatusService: SystemStatusService,

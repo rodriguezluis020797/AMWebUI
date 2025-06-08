@@ -17,6 +17,7 @@ import { ClientDetailsComponent } from './client-details/client-details.componen
 import { MetricsComponent } from './metrics/metrics.component';
 import { FrequentlyAskedQuestionsComponent } from './frequently-asked-questions/frequently-asked-questions.component';
 import { ProviderReviewComponent } from './provider-review/provider-review.component';
+import { ProviderPublicViewComponent } from './provider-public-view/provider-public-view.component';
 
 export const routes: Routes = [
   { path: '', component: HomeComponent },
@@ -28,6 +29,7 @@ export const routes: Routes = [
   { path: 'reset-password', component: ResetPasswordComponent },
   { path: 'faq', component: FrequentlyAskedQuestionsComponent },
   { path: 'provider-review', component: ProviderReviewComponent },
+  { path: 'provider-public-view', component: ProviderPublicViewComponent },
   {
     path: 'dashboard',
     component: DashboardComponent,
