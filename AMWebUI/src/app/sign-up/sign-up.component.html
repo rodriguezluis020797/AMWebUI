@@ -18,6 +18,9 @@
         <input id="username" name="username" type="email" [(ngModel)]="dto.eMail" class="form-control" required email />
       </div>
 
+      <p class="text-muted">No business name? Use the name your clients know you by — even if it’s just your own name.
+      </p>
+
       <div class="mb-3">
         <label for="businessName" class="form-label">Business Name</label>
         <input id="businessName" name="businessName" type="text" [(ngModel)]="dto.businessName" class="form-control"
@@ -34,7 +37,8 @@
         <input id="lastName" name="lastName" type="text" [(ngModel)]="dto.lastName" class="form-control" required />
       </div>
 
-      <p class="text-muted">Address used only for billing and tax purposes.</p>
+      <p class="text-muted">
+        This address is only used for billing and tax purposes.</p>
 
       <div class="mb-3">
         <label for="addressLine1" class="form-label">Address Line 1</label>
@@ -71,7 +75,8 @@
         <p class="form-control-plaintext">United States</p>
       </div>
 
-      <p class="text-muted">Time zone used for proper scheduling services.</p>
+      <p class="text-muted">
+        Your time zone helps ensure your appointments are scheduled correctly. </p>
 
       <div class="mb-3">
         <label for="timeZoneCode" class="form-label">Time Zone</label>
@@ -96,10 +101,8 @@
     <div class="container py-4" style="max-width: 600px;">
       <h2>Thank You!</h2>
       <p class="alert alert-success">
-        Thank you for requesting access!<br />
-        Please verify your email using the link sent to your inbox. Once verified,
-        you’ll receive a follow-up email letting you know when you’re ready to start using our system!
-      </p>
+        Thanks for signing up!<br />
+        Please check your inbox to verify your email. Once confirmed, we’ll follow up when your account is ready. </p>
       <a routerLink="/" class="btn btn-outline-primary">Home</a>
     </div>
   </ng-template>
