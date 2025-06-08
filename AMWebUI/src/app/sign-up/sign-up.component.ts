@@ -26,11 +26,9 @@ export class SignUpComponent {
   result = new BaseDTO();
   loading = true;
 
-  // Cache country codes once since it doesn't change dynamically here
   countryCodeOptions: { key: CountryCodeEnum; label: string }[] = [];
   stateOptions: { key: StateCodeEnum; label: string }[] = [];
   timeZoneOptions: { key: TimeZoneCodeEnum; label: string }[] = [];
-
 
   constructor(
     private providerService: ProviderService,
@@ -38,31 +36,10 @@ export class SignUpComponent {
   ) { }
 
   ngOnInit() {
-    this.countryCodeOptions = this.toolsService.getCountryCodes();
-    this.dto = {
-      firstName: 'Luis',
-      middleName: null,
-      lastName: 'Rodriguez',
-      businessName: 'AM Tech',
-      addressLine1: '6619 Gehrig Dr.',
-      addressLine2: '',
-      city: 'Pasco',
-      zipCode: '99301',
-      eMail: 'rodriguez.luis020797@gmail.com',
-      countryCode: CountryCodeEnum.United_States,
-      stateCode: StateCodeEnum.Select,
-      timeZoneCode: TimeZoneCodeEnum.Select,
-      hasLoggedIn: false,
-      currentPassword: '',
-      newPassword: '',
-      isTempPassword: false,
-      errorMessage: '',
-      isSpecialCase: false,
-      payEngineInfoUrl: '',
-      nextBillingDate: null,
-      subscriptionToBeCancelled: false,
-    };
+    // Set default country code to ensure dropdowns are populated
+    this.dto.countryCode = CountryCodeEnum.United_States;
 
+    this.countryCodeOptions = this.toolsService.getCountryCodes();
     this.updateStateAndTimeZoneOptions(this.dto.countryCode);
 
     this.loading = false;
@@ -74,6 +51,8 @@ export class SignUpComponent {
   }
 
   updateStateAndTimeZoneOptions(countryCode: CountryCodeEnum): void {
+    if (!countryCode) return;
+
     this.stateOptions = this.toolsService.getStateCodes(countryCode);
     this.timeZoneOptions = this.toolsService.getTimeZoneCodes(countryCode);
     this.dto.stateCode = StateCodeEnum.Select;
@@ -81,14 +60,13 @@ export class SignUpComponent {
   }
 
   onCountryChange(): void {
-    // Although country select is disabled, keep this method for future flexibility
     this.updateStateAndTimeZoneOptions(this.dto.countryCode);
   }
 
   submit(): void {
     this.loading = true;
 
-    // Hardcoding US codes as per your logic
+    // Hardcoding US codes as per current business logic
     this.dto.countryCode = CountryCodeEnum.United_States;
     this.dto.stateCode = StateCodeEnum.US_WA;
     this.dto.timeZoneCode = TimeZoneCodeEnum.Pacific_Standard_Time;

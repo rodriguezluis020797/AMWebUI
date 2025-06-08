@@ -15,50 +15,63 @@
     <form (ngSubmit)="submit()" #signUpForm="ngForm" novalidate>
       <div class="mb-3">
         <label for="username" class="form-label">E-Mail</label>
-        <input id="username" name="username" type="email" [(ngModel)]="dto.eMail" class="form-control" required email />
+        <input id="username" name="username" type="email" [(ngModel)]="dto.eMail" class="form-control" required email
+          placeholder="E-Mail" />
       </div>
-
-      <p class="text-muted">No business name? Use the name your clients know you by — even if it’s just your own name.
-      </p>
 
       <div class="mb-3">
         <label for="businessName" class="form-label">Business Name</label>
+        <p class="text-muted">No business name? Use the name your clients know you by — even if it’s just your own name.
+        </p>
         <input id="businessName" name="businessName" type="text" [(ngModel)]="dto.businessName" class="form-control"
-          required />
+          required placeholder="Business Name" />
+      </div>
+
+      <div class="mb-3">
+        <label for="description" class="form-label">Business Description</label>
+        <p class="text-muted">
+          This description will be visible on your public profile and help potential clients learn more about your
+          business.
+        </p>
+        <textarea id="description" name="description" [(ngModel)]="dto.description" rows="4" class="form-control"
+          placeholder="Business Description"></textarea>
       </div>
 
       <div class="mb-3">
         <label for="firstName" class="form-label">First Name</label>
-        <input id="firstName" name="firstName" type="text" [(ngModel)]="dto.firstName" class="form-control" required />
+        <input id="firstName" name="firstName" type="text" [(ngModel)]="dto.firstName" class="form-control" required
+          placeholder="First Name" />
       </div>
 
       <div class="mb-3">
         <label for="lastName" class="form-label">Last Name</label>
-        <input id="lastName" name="lastName" type="text" [(ngModel)]="dto.lastName" class="form-control" required />
+        <input id="lastName" name="lastName" type="text" [(ngModel)]="dto.lastName" class="form-control" required
+          placeholder="Last Name" />
       </div>
-
-      <p class="text-muted">
-        This address is only used for billing and tax purposes.</p>
 
       <div class="mb-3">
         <label for="addressLine1" class="form-label">Address Line 1</label>
+        <p class="text-muted">This address is only used for billing and tax purposes.</p>
         <input id="addressLine1" name="addressLine1" type="text" [(ngModel)]="dto.addressLine1" class="form-control"
-          required />
+          required placeholder="Address Line 1" />
       </div>
 
       <div class="mb-3">
         <label for="addressLine2" class="form-label">Address Line 2</label>
-        <input id="addressLine2" name="addressLine2" type="text" [(ngModel)]="dto.addressLine2" class="form-control" />
+        <input id="addressLine2" name="addressLine2" type="text" [(ngModel)]="dto.addressLine2" class="form-control"
+          placeholder="Address Line 2" />
       </div>
 
       <div class="mb-3">
         <label for="city" class="form-label">City</label>
-        <input id="city" name="city" type="text" [(ngModel)]="dto.city" class="form-control" required />
+        <input id="city" name="city" type="text" [(ngModel)]="dto.city" class="form-control" required
+          placeholder="City" />
       </div>
 
       <div class="mb-3">
         <label for="zipCode" class="form-label">Zip Code</label>
-        <input id="zipCode" name="zipCode" type="text" [(ngModel)]="dto.zipCode" class="form-control" required />
+        <input id="zipCode" name="zipCode" type="text" [(ngModel)]="dto.zipCode" class="form-control" required
+          placeholder="Zip Code" />
       </div>
 
       <div class="mb-3">
@@ -72,14 +85,16 @@
 
       <div class="mb-3">
         <label class="form-label">Country</label>
-        <p class="form-control-plaintext">United States</p>
+        <p class="text-muted">
+          Currently available in <strong>United States</strong>. Additional countries will be available soon!
+        </p>
       </div>
-
-      <p class="text-muted">
-        Your time zone helps ensure your appointments are scheduled correctly. </p>
 
       <div class="mb-3">
         <label for="timeZoneCode" class="form-label">Time Zone</label>
+        <p class="text-muted">
+          Your time zone helps ensure your appointments are scheduled correctly.
+        </p>
         <select id="timeZoneCode" name="timeZoneCode" [(ngModel)]="dto.timeZoneCode" class="form-select" required>
           <option *ngFor="let opt of timeZoneOptions" [ngValue]="opt.key">
             {{ opt.label }}
@@ -102,7 +117,8 @@
       <h2>Thank You!</h2>
       <p class="alert alert-success">
         Thanks for signing up!<br />
-        Please check your inbox to verify your email. Once confirmed, we’ll follow up when your account is ready. </p>
+        Please check your inbox to verify your email. Once confirmed, we’ll follow up when your account is ready.
+      </p>
       <a routerLink="/" class="btn btn-outline-primary">Home</a>
     </div>
   </ng-template>

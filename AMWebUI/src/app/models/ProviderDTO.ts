@@ -21,6 +21,7 @@ export class ProviderDTO extends BaseDTO {
   payEngineInfoUrl: string;
   nextBillingDate: Date | null;
   subscriptionToBeCancelled: boolean;
+  description: string;
 
   constructor() {
     super();
@@ -43,5 +44,6 @@ export class ProviderDTO extends BaseDTO {
     this.payEngineInfoUrl = '';
     this.nextBillingDate = null;
     this.subscriptionToBeCancelled = false;
+    this.description = '';
   }
 }
