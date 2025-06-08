@@ -38,7 +38,7 @@ export class ProviderReviewComponent implements OnInit {
 
   getProviderReview() {
     this.loading = true;
-    this.providerService.GetProviderReviewForSubmissionAsync(this.dto).subscribe((result) => {
+    this.providerService.getProviderReviewForSubmissionAsync(this.dto).subscribe((result) => {
       this.loading = false;
 
       if (result === null) return;

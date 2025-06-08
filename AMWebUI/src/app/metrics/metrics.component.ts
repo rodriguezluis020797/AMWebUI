@@ -62,7 +62,7 @@ export class MetricsComponent implements OnInit {
     this.loading = false;
     const dto = new ProviderReviewDTO();
 
-    this.providerService.GetProviderReviewsForProviderAsync(dto).subscribe((result) => {
+    this.providerService.getProviderReviewsForProviderAsync(dto).subscribe((result) => {
       if (result === null) {
         this.loading = false;
         return;

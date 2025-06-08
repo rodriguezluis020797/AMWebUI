@@ -7,6 +7,7 @@ import { Router } from '@angular/router';
 import { CurrentStateService } from './current-state.service';
 import { ProviderAlertDTO } from '../models/ProviderAlertDTO';
 import { ProviderReviewDTO } from '../models/ProviderReviewDTO';
+import { PoviderPublicViewDTO } from '../models/ProviderPublicViewDTO';
 
 @Injectable({
   providedIn: 'root',
@@ -39,7 +40,7 @@ export class ProviderService {
       );
   }
 
-  GetProviderReviewForSubmissionAsync(dto: ProviderReviewDTO): Observable<ProviderReviewDTO | null> {
+  getProviderReviewForSubmissionAsync(dto: ProviderReviewDTO): Observable<ProviderReviewDTO | null> {
     return this.http
       .post<ProviderReviewDTO>('/api/Provider/GetProviderReviewForSubmission', dto, {
       })
@@ -56,7 +57,7 @@ export class ProviderService {
       );
   }
 
-  GetProviderReviewsForProviderAsync(dto: ProviderReviewDTO): Observable<ProviderReviewDTO[] | null> {
+  getProviderReviewsForProviderAsync(dto: ProviderReviewDTO): Observable<ProviderReviewDTO[] | null> {
     return this.http
       .post<ProviderReviewDTO[]>('/api/Provider/GetProviderReviewsForProvider', dto, {
       })
@@ -94,6 +95,24 @@ export class ProviderService {
     return this.http
       .get<ProviderAlertDTO[]>('/api/Provider/GetProviderAlerts', {
         withCredentials: true,
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
+  }
+
+  getProviderPublicViewAsync(guid: string): Observable<PoviderPublicViewDTO | null> {
+    return this.http
+      .get<PoviderPublicViewDTO>('/api/Provider/GetProviderPublicView', {
+        params: { guid }
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
