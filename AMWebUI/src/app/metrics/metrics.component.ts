@@ -4,6 +4,8 @@ import { MetricsDTO } from '../models/MetricsDTO';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
+import { ProviderService } from '../_services/provider.service';
+import { ProviderReviewDTO } from '../models/ProviderReviewDTO';
 
 @Component({
   selector: 'am-metrics',
@@ -13,10 +15,12 @@ import { LoadingScreenComponent } from '../partials/loading-screen/loading-scree
   styleUrl: './metrics.component.css'
 })
 export class MetricsComponent implements OnInit {
-  constructor(private metericsService: MetericsService) { }
+  constructor(private metericsService: MetericsService, private providerService: ProviderService) { }
 
   loading = false;
   dto = new MetricsDTO();
+  reviews: ProviderReviewDTO[] = [];
+  averageRating: number = 0;
 
   ngOnInit(): void {
     const now = new Date();
@@ -27,6 +31,7 @@ export class MetricsComponent implements OnInit {
     this.dto.endDate = this.formatDateForInput(end);
 
     this.getMetrics();
+    this.getReviews();
   }
 
   getMetrics() {
@@ -51,6 +56,32 @@ export class MetricsComponent implements OnInit {
 
       this.loading = false;
     });
+  }
+
+  getReviews() {
+    this.loading = false;
+    const dto = new ProviderReviewDTO();
+
+    this.providerService.GetProviderReviewsForProviderAsync(dto).subscribe((result) => {
+      if (result === null) {
+        this.loading = false;
+        return;
+      }
+
+      console.log(result);
+      this.reviews = result;
+      this.calculateAverageRating()
+      this.loading = false;
+    })
+  }
+
+  calculateAverageRating(): void {
+    if (this.reviews?.length) {
+      const sum = this.reviews.reduce((acc, review) => acc + (review.rating || 0), 0);
+      this.averageRating = sum / this.reviews.length;
+    } else {
+      this.averageRating = 0;
+    }
   }
 
   onDateRangeChange() {

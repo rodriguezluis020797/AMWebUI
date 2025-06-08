@@ -5,6 +5,7 @@ import { ProviderReviewDTO } from '../models/ProviderReviewDTO';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoadingScreenComponent } from "../partials/loading-screen/loading-screen.component";
+import { EMPTY } from 'rxjs';
 
 @Component({
   selector: 'am-provider-review',
@@ -22,7 +23,7 @@ export class ProviderReviewComponent implements OnInit {
   loading: boolean = false;
   guid: string = '';
   dto: ProviderReviewDTO = new ProviderReviewDTO();
-  success: boolean = false;
+  displayReviewForm: boolean = true;
 
   ngOnInit(): void {
     this.loading = true;
@@ -44,20 +45,34 @@ export class ProviderReviewComponent implements OnInit {
         return;
       }
       this.dto = result;
+      if (this.dto.errorMessage && this.dto.errorMessage !== '') {
+        this.displayReviewForm = false;
+        this.loading = false;
+        return;
+      }
       this.loading = false;
     })
   }
 
   submit(): void {
     this.loading = true;
-    this.providerService.updateProviderReviewAsync(this.dto).subscribe((result) => {
-      if (result === null) {
+    this.dto.errorMessage = '';
+    this.displayReviewForm = false;
+    this.providerService
+      .updateProviderReviewAsync(this.dto)
+      .subscribe((result) => {
+        if (result === null) {
+          this.loading = false;
+          return;
+        }
+
+        this.dto = result;
+        if (this.dto.errorMessage && this.dto.errorMessage !== '') {
+          this.displayReviewForm = true;
+          this.loading = false;
+          return;
+        }
         this.loading = false;
-        return;
-      }
-      this.dto = result;
-      this.success = true;
-      this.loading = false;
-    })
+      })
   }
 }

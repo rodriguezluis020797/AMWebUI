@@ -56,6 +56,23 @@ export class ProviderService {
       );
   }
 
+  GetProviderReviewsForProviderAsync(dto: ProviderReviewDTO): Observable<ProviderReviewDTO[] | null> {
+    return this.http
+      .post<ProviderReviewDTO[]>('/api/Provider/GetProviderReviewsForProvider', dto, {
+      })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
+  }
+
   updateProviderReviewAsync(dto: ProviderReviewDTO): Observable<ProviderReviewDTO | null> {
     return this.http
       .post<ProviderReviewDTO>('/api/Provider/UpdateProviderReview', dto, {

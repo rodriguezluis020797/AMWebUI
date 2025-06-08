@@ -2,7 +2,9 @@ import { BaseDTO } from "./BaseDTO";
 
 export class ProviderReviewDTO extends BaseDTO {
     providerReviewId: string;
+    providerGuid: string;
     providerName: string;
+    clientName: string;
     guidQuery: string;
     reviewText: string;
     rating: number;
@@ -11,7 +13,9 @@ export class ProviderReviewDTO extends BaseDTO {
     constructor() {
         super()
         this.providerReviewId = '';
-        this.providerName = 'A Name';
+        this.providerGuid = '';
+        this.providerName = '';
+        this.clientName = '';
         this.guidQuery = '';
         this.reviewText = '';
         this.rating = 0;
