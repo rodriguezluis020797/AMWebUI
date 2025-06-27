@@ -9,6 +9,7 @@ import {
   CountryCodeEnum,
   StateCodeEnum,
   TimeZoneCodeEnum,
+  AccountStatusEnum
 } from '../models/Enums';
 import { ToolsService } from '../_services/tools.service';
 import { CurrentStateService } from '../_services/current-state.service';
@@ -39,6 +40,7 @@ export class ProviderProfileComponent implements OnInit {
   CountryCodeEnum = CountryCodeEnum;
   StateCodeEnum = StateCodeEnum;
   TimeZoneCodeEnum = TimeZoneCodeEnum;
+  AccountStatusEnum = AccountStatusEnum;
 
   stateOptions: { key: StateCodeEnum; label: string }[] = [];
   timeZoneOptions: { key: TimeZoneCodeEnum; label: string }[] = [];
@@ -99,6 +101,7 @@ export class ProviderProfileComponent implements OnInit {
     this.editDTO.stateCode = +this.editDTO.stateCode;
     this.editDTO.timeZoneCode = +this.editDTO.timeZoneCode;
 
+    console.log(this.editDTO)
     this.providerService.updateProviderAsync(this.editDTO).subscribe(result => {
       this.loading = false;
       if (!result) return;

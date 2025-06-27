@@ -1,5 +1,5 @@
 import { BaseDTO } from './BaseDTO';
-import { CountryCodeEnum, StateCodeEnum, TimeZoneCodeEnum } from './Enums';
+import { AccountStatusEnum, CountryCodeEnum, StateCodeEnum, TimeZoneCodeEnum } from './Enums';
 
 export class ProviderDTO extends BaseDTO {
   firstName: string;
@@ -20,7 +20,7 @@ export class ProviderDTO extends BaseDTO {
   isTempPassword: boolean;
   payEngineInfoUrl: string;
   nextBillingDate: Date | null;
-  subscriptionToBeCancelled: boolean;
+  accountStatus: AccountStatusEnum;
   description: string;
 
   constructor() {
@@ -43,7 +43,7 @@ export class ProviderDTO extends BaseDTO {
     this.isTempPassword = false;
     this.payEngineInfoUrl = '';
     this.nextBillingDate = null;
-    this.subscriptionToBeCancelled = false;
+    this.accountStatus = AccountStatusEnum.Unknown;
     this.description = '';
   }
 }

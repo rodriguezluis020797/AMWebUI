@@ -41,6 +41,8 @@ export class LogInComponent implements OnInit {
         return;
       }
 
+      console.log(result)
+
       if (result.errorMessage !== null) {
         this.message = result.errorMessage;
         this.dto.currentPassword = '';
@@ -50,6 +52,7 @@ export class LogInComponent implements OnInit {
 
       this.currentStateService.loggedInSubject.next(true);
       this.currentStateService.lastPingSubject.next(new Date());
+      this.currentStateService.accountStatusSubject.next(result.accountStatus);
 
       if (result.isSpecialCase === true) {
         this.currentStateService.temporaryPasswordSubject.next(true);

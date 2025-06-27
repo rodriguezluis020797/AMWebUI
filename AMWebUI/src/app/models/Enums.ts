@@ -10,6 +10,14 @@ export enum HttpStatusCodeEnum {
   SystemUnavailable = 501,
 }
 
+export enum AccountStatusEnum {
+  Unknown = 0,
+  Active,
+  ToBeDeactivated,
+  Inactive,
+  Suspended,
+}
+
 export enum CountryCodeEnum {
   Select,
   United_States,
