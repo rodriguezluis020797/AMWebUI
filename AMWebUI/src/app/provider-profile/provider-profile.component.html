@@ -48,7 +48,7 @@
 
       <div *ngIf="dto.accountStatus !== AccountStatusEnum.Active" class="mt-3">
         <p *ngIf="dto.errorMessage" class="text-danger">{{ dto.errorMessage }}</p>
-        <p><strong>Cancellation Date:</strong> {{ dto.nextBillingDate | date: 'MM/dd/yyyy' }}</p>
+        <p><strong>Final Date of Service:</strong> {{ dto.nextBillingDate | date: 'MM/dd/yyyy' }}</p>
         <a role="button" (click)="reActivateSubscription()">Reactivate Service</a>
       </div>
     </ng-container>

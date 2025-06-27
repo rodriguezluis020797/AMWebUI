@@ -65,6 +65,7 @@ export class ProviderProfileComponent implements OnInit {
       this.loading = false;
       if (!result) return;
       this.dto = result;
+      this.currentStateService.accountStatusSubject.next(this.dto.accountStatus);
       this.disableCancel = false;
     });
   }
@@ -101,7 +102,6 @@ export class ProviderProfileComponent implements OnInit {
     this.editDTO.stateCode = +this.editDTO.stateCode;
     this.editDTO.timeZoneCode = +this.editDTO.timeZoneCode;
 
-    console.log(this.editDTO)
     this.providerService.updateProviderAsync(this.editDTO).subscribe(result => {
       this.loading = false;
       if (!result) return;

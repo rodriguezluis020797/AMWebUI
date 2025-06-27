@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
-import { Router } from '@angular/router';
-import { CookiesService } from './cookies.service';
 import { AccountStatusEnum } from '../models/Enums';
 
 @Injectable({
@@ -13,9 +11,9 @@ export class CurrentStateService {
   readonly isLoggedIn$ = this.loggedInSubject.asObservable();
   //#endregion
 
-  //#region Logged In Subject
+  //#region Account Status Subject
   readonly accountStatusSubject = new BehaviorSubject<AccountStatusEnum>(AccountStatusEnum.Unknown);
-  readonly accountStatus$ = this.loggedInSubject.asObservable();
+  readonly accountStatus$ = this.accountStatusSubject.asObservable();
   //#endregion
 
   //#region Temporary Password Subject
@@ -29,5 +27,5 @@ export class CurrentStateService {
   //#region Should Ping Subject
   readonly systemStatus = new BehaviorSubject<boolean>(true);
   //#endregion
-  constructor(private readonly router: Router) { }
+  constructor() { }
 }

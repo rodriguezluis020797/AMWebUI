@@ -4,6 +4,7 @@ import { Router, RouterLink } from '@angular/router';
 import { IdentityService } from '../../_services/identity.service';
 import { CurrentStateService } from '../../_services/current-state.service';
 import { link } from 'fs';
+import { AccountStatusEnum } from '../../models/Enums';
 
 @Component({
   standalone: true,
@@ -15,8 +16,11 @@ import { link } from 'fs';
 export class NavBarComponent implements OnInit {
   isMenuOpen = false;
   loggedIn = false;
+  accountStatus = AccountStatusEnum.Unknown;
 
-  navItems = [
+  AccountStatusEnum = AccountStatusEnum;
+
+  activeAccountNavItems = [
     { label: 'Dashboard', link: '/dashboard' },
     { label: 'Profile', link: '/provider-profile' },
     { label: 'Services', link: '/services' },
@@ -34,6 +38,9 @@ export class NavBarComponent implements OnInit {
   ngOnInit() {
     this.currentStateService.isLoggedIn$.subscribe((status) => {
       this.loggedIn = status;
+    });
+    this.currentStateService.accountStatus$.subscribe((status) => {
+      this.accountStatus = status;
     });
   }
 

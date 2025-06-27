@@ -68,7 +68,6 @@ export class MetricsComponent implements OnInit {
         return;
       }
 
-      console.log(result);
       this.reviews = result;
       this.calculateAverageRating()
       this.loading = false;

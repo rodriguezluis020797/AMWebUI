@@ -9,9 +9,16 @@
 
     <div *ngIf="loggedIn" [class.collapse]="!isMenuOpen" class="navbar-collapse" id="navbarNav">
       <ul class="navbar-nav ms-auto">
-        <li class="nav-item" *ngFor="let item of navItems">
-          <a [routerLink]="item.link" class="nav-link">{{ item.label }}</a>
+        <li class="nav-item">
+          <a [routerLink]="'/provider-profile'" class="nav-link">Profile</a>
         </li>
+
+        <ng-container *ngIf="accountStatus === AccountStatusEnum.Active">
+          <li class="nav-item" *ngFor="let item of activeAccountNavItems">
+            <a [routerLink]="item.link" class="nav-link">{{ item.label }}</a>
+          </li>
+        </ng-container>
+
         <li class="nav-item">
           <a (click)="logOut()" class="nav-link" style="cursor: pointer">Logout</a>
         </li>

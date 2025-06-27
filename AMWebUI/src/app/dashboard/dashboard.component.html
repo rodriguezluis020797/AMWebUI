@@ -1,59 +1,83 @@
 <ng-container *ngIf="!loading; else loadingTemplate">
-  <div class="container py-4">
-    <h2 class="mb-4">Welcome, {{ provider.firstName }}!</h2>
+  <ng-container *ngIf="provider.accountStatus === AccountStatus.Active; else inactiveStatus">
+    <div class="container py-4">
+      <h2 class="mb-4">Welcome, {{ provider.firstName }}!</h2>
 
-    <!-- Alerts Section -->
-    <h4 class="mb-3 text-muted">Alerts</h4>
+      <!-- Alerts Section -->
+      <h4 class="mb-3 text-muted">Alerts</h4>
 
-    <ng-container *ngIf="alerts.length === 0; else alertList">
-      <div class="alert alert-info">No Alerts</div>
-    </ng-container>
+      <ng-container *ngIf="alerts.length === 0; else alertList">
+        <div class="alert alert-info">No Alerts</div>
+      </ng-container>
 
-    <ng-template #alertList>
-      <div class="row gy-4 mb-5">
-        <div *ngFor="let alert of alerts" class="col-12 col-md-6 col-lg-4">
-          <div class="card-custom h-100 d-flex flex-column justify-content-between p-3">
-            <p class="mb-3">
-              {{ alert.alert }}
-            </p>
-            <a (click)="acknowledgeAlert(alert)" class="text-primary text-decoration-underline cursor-pointer"
-              role="button">
-              Dismiss
-            </a>
+      <ng-template #alertList>
+        <div class="row gy-4 mb-5">
+          <div *ngFor="let alert of alerts" class="col-12 col-md-6 col-lg-4">
+            <div class="card-custom h-100 d-flex flex-column justify-content-between p-3">
+              <p class="mb-3">
+                {{ alert.alert }}
+              </p>
+              <a (click)="acknowledgeAlert(alert)" class="text-primary text-decoration-underline cursor-pointer"
+                role="button">
+                Dismiss
+              </a>
+            </div>
           </div>
         </div>
-      </div>
-    </ng-template>
+      </ng-template>
 
-    <!-- Appointments Section -->
-    <h4 class="mb-3 text-muted">Next 24 Hours At A Glance</h4>
+      <!-- Appointments Section -->
+      <h4 class="mb-3 text-muted">Next 24 Hours At A Glance</h4>
 
-    <ng-container *ngIf="appointments.length === 0; else appointmentsList">
-      <div class="alert alert-info">No Upcoming Appointments</div>
-    </ng-container>
+      <ng-container *ngIf="appointments.length === 0; else appointmentsList">
+        <div class="alert alert-info">No Upcoming Appointments</div>
+      </ng-container>
 
-    <ng-template #appointmentsList>
-      <div class="row gy-4">
-        <div *ngFor="let appt of appointments" class="col-12 col-md-6 col-lg-4">
-          <div class="card-custom h-100 p-3">
-            <h5 class="mb-2">
-              {{ appt.startDate | date: 'M/d/yy h:mm a' }} –
-              {{ appt.endDate | date: 'h:mm a' }}
-            </h5>
-            <p class="mb-1">
-              <strong>Client:</strong> {{ appt.clientName }}
-            </p>
-            <p class="mb-1">
-              <strong>Service:</strong> {{ appt.serviceName }}
-            </p>
-            <p class="mb-0">
-              <strong>Notes:</strong> {{ appt.notes || '—' }}
-            </p>
+      <ng-template #appointmentsList>
+        <div class="row gy-4">
+          <div *ngFor="let appt of appointments" class="col-12 col-md-6 col-lg-4">
+            <div class="card-custom h-100 p-3">
+              <h5 class="mb-2">
+                {{ appt.startDate | date: 'M/d/yy h:mm a' }} –
+                {{ appt.endDate | date: 'h:mm a' }}
+              </h5>
+              <p class="mb-1">
+                <strong>Client:</strong> {{ appt.clientName }}
+              </p>
+              <p class="mb-1">
+                <strong>Service:</strong> {{ appt.serviceName }}
+              </p>
+              <p class="mb-0">
+                <strong>Notes:</strong> {{ appt.notes || '—' }}
+              </p>
+            </div>
           </div>
         </div>
+      </ng-template>
+    </div>
+  </ng-container>
+
+  <ng-template #inactiveStatus>
+    <div class="container py-4">
+      <div class="alert alert-warning">
+        <h4 class="alert-heading">Heads up!</h4>
+        <p class="mb-2">
+          Your subscription has ended or is currently suspended due to a terms and conditions issue.
+        </p>
+        <p class="mb-2">
+          To get back on track, please
+          <a routerLink="/provider-profile" class="text-primary text-decoration-underline">reactivate your
+            subscription</a>
+          or reach out to us at
+          <a href="mailto:example@example.com"
+            class="text-primary text-decoration-underline">example&#64;example.com</a>.
+        </p>
+        <p class="mb-0">
+          We’re happy to help!
+        </p>
       </div>
-    </ng-template>
-  </div>
+    </div>
+  </ng-template>
 </ng-container>
 
 <ng-template #loadingTemplate>

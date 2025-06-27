@@ -7,11 +7,13 @@ import { AppointmentDTO } from '../models/AppointmentDTO';
 import { AppointmentService } from '../_services/appointment.service';
 import { EMPTY, switchMap } from 'rxjs';
 import { ProviderAlertDTO } from '../models/ProviderAlertDTO';
+import { AccountStatusEnum } from '../models/Enums';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'am-dashboard',
   standalone: true,
-  imports: [CommonModule, LoadingScreenComponent],
+  imports: [CommonModule, LoadingScreenComponent, RouterLink],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -20,6 +22,7 @@ export class DashboardComponent implements OnInit {
   appointments: AppointmentDTO[] = [];
   alerts: ProviderAlertDTO[] = [];
   loading = true;
+  AccountStatus = AccountStatusEnum;
 
   constructor(
     private providerService: ProviderService,
