@@ -52,7 +52,6 @@ export class LogInComponent implements OnInit {
       this.currentStateService.lastPingSubject.next(new Date());
       this.currentStateService.accountStatusSubject.next(result.accountStatus);
 
-      console.log("account status: " + result.accountStatus)
 
       if (result.isSpecialCase === true) {
         this.currentStateService.temporaryPasswordSubject.next(true);

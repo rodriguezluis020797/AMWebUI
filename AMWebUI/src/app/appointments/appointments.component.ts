@@ -167,7 +167,12 @@ export class AppointmentsComponent implements OnInit {
     this.originalStatus = appt.status;
 
     this.editDTO.startDate = this.formatDateLocal(new Date(appt.startDate));
-    this.editDTO.endDate = this.formatDateLocal(new Date(appt.endDate));
+    if (appt.endDate !== null) {
+      this.editDTO.endDate = this.formatDateLocal(new Date(appt.endDate));
+    }
+    else {
+      this.editDTO.endDate = null;
+    }
 
     const client = this.clients.find(x => x.clientId === this.editDTO.clientId);
     this.clientName = client
@@ -188,6 +193,10 @@ export class AppointmentsComponent implements OnInit {
 
     if (this.editDTO.overridePrice) {
       this.editDTO.price = this.servicePrice;
+    }
+
+    if (!this.editDTO.setEndDate) {
+      this.editDTO.endDate = null;
     }
 
     const obs = (!this.editDTO.appointmentId || this.editDTO.appointmentId === '')

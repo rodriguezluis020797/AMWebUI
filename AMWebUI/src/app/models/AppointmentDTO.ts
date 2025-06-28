@@ -8,7 +8,8 @@ export class AppointmentDTO extends BaseDTO {
     clientName: string;
     serviceName: string;
     startDate: string;
-    endDate: string;
+    setEndDate: boolean;
+    endDate: string | null;
     notes: string;
     status: AppointmentStatusEnum;
     price: number;
@@ -22,7 +23,8 @@ export class AppointmentDTO extends BaseDTO {
         this.clientName = '';
         this.serviceName = '';
         this.startDate = new Date().toISOString();
-        this.endDate = new Date().toISOString();
+        this.setEndDate = false;
+        this.endDate = null;
         this.notes = '';
         this.status = AppointmentStatusEnum.Select;
         this.price = 0.0;

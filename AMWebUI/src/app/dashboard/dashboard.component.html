@@ -38,8 +38,10 @@
           <div *ngFor="let appt of appointments" class="col-12 col-md-6 col-lg-4">
             <div class="card-custom h-100 p-3">
               <h5 class="mb-2">
-                {{ appt.startDate | date: 'M/d/yy h:mm a' }} –
-                {{ appt.endDate | date: 'h:mm a' }}
+                {{ appt.startDate | date: 'M/d/yy h:mm a' }}
+                <ng-container *ngIf="appt.endDate">
+                  &nbsp;–&nbsp;{{ appt.endDate | date: 'h:mm a' }}
+                </ng-container>
               </h5>
               <p class="mb-1">
                 <strong>Client:</strong> {{ appt.clientName }}

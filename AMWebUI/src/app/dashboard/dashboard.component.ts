@@ -9,6 +9,7 @@ import { EMPTY, switchMap } from 'rxjs';
 import { ProviderAlertDTO } from '../models/ProviderAlertDTO';
 import { AccountStatusEnum } from '../models/Enums';
 import { RouterLink } from '@angular/router';
+import { CurrentStateService } from '../_services/current-state.service';
 
 @Component({
   selector: 'am-dashboard',
@@ -26,7 +27,8 @@ export class DashboardComponent implements OnInit {
 
   constructor(
     private providerService: ProviderService,
-    private appointmentService: AppointmentService
+    private appointmentService: AppointmentService,
+    private currentStateService: CurrentStateService
   ) { }
 
   ngOnInit(): void {
@@ -44,6 +46,7 @@ export class DashboardComponent implements OnInit {
         }
 
         this.provider = provider;
+        this.currentStateService.accountStatusSubject.next(provider.accountStatus);
         return this.appointmentService.getUpcomingAppointmentsAsync();
       }),
       switchMap((result) => {
