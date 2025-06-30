@@ -22,7 +22,6 @@ export class NavBarComponent implements OnInit {
 
   activeAccountNavItems = [
     { label: 'Dashboard', link: '/dashboard' },
-    { label: 'Profile', link: '/provider-profile' },
     { label: 'Services', link: '/services' },
     { label: 'Clients', link: '/clients' },
     { label: 'Appointments', link: '/appointments' },
