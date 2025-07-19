@@ -4,10 +4,11 @@ import { ProviderService } from '../_services/provider.service';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { LoadingScreenComponent } from '../partials/loading-screen/loading-screen.component';
+import { DayOfTheWeekPipe } from "../pipes/day-of-the-week.pipe";
 
 @Component({
   selector: 'am-provider-public-view',
-  imports: [CommonModule, LoadingScreenComponent],
+  imports: [CommonModule, LoadingScreenComponent, DayOfTheWeekPipe],
   templateUrl: './provider-public-view.component.html',
   styleUrls: ['./provider-public-view.component.css']
 })

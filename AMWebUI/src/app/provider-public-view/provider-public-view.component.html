@@ -1,46 +1,73 @@
 <ng-container *ngIf="!loading && dto; else loadingScreen">
     <div class="container py-4">
-        <h2 class="mb-4">{{ dto.providerName }}</h2>
-        <p class="mb-4 text-muted">{{ dto.providerDescription }}</p>
 
-        <!-- Reviews Section -->
-        <div class="d-flex align-items-center justify-content-between mb-3">
-            <h3 class="mb-0">Reviews</h3>
-
-            <div *ngIf="dto.providerReviews.length > 0; else noReviews">
-                <span class="me-2">
-                    <strong>Overall Rating:</strong> {{ averageRating | number:'1.1-1' }}
-                </span>
-                <ng-container *ngFor="let star of [1,2,3,4,5]">
-                    <i class="bi" [class.bi-star-fill]="averageRating >= star"
-                        [class.bi-star-half]="averageRating >= star - 0.5 && averageRating < star"
-                        [class.bi-star]="averageRating < star - 0.5" style="color: #f0ad4e;"></i>
-                </ng-container>
-            </div>
-        </div>
-
-        <div *ngIf="dto.providerReviews.length > 0; else noReviews">
-            <div *ngFor="let review of dto.providerReviews" class="card mb-3 p-3">
-                <div class="mb-2">
-                    <strong>Rating: </strong>
-                    <ng-container *ngFor="let star of [1,2,3,4,5]">
-                        <i class="bi" [class.bi-star-fill]="review.rating >= star"
-                            [class.bi-star]="review.rating < star" style="color: #f0ad4e;"></i>
+        <!-- Header with Rating -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h2 class="mb-0">{{ dto.providerName }}</h2>
+            <ng-container *ngIf="dto.providerReviews?.length">
+                <div class="d-flex align-items-center">
+                    <span class="me-2">
+                        <strong>Overall Rating:</strong> {{ averageRating | number: '1.1-1' }}
+                    </span>
+                    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                        <i class="bi" [class.bi-star-fill]="averageRating >= star"
+                            [class.bi-star-half]="averageRating >= star - 0.5 && averageRating < star"
+                            [class.bi-star]="averageRating < star - 0.5" style="color: #f0ad4e"></i>
                     </ng-container>
                 </div>
-                <p class="mb-1">{{ review.reviewText }}</p>
-                <div class="text-muted small mb-1">
-                    <strong>Client:</strong> {{ review.clientName }}
-                </div>
-                <small class="text-muted">
-                    Reviewed on {{ review.createDate | date: 'mediumDate' }}
-                </small>
-            </div>
+            </ng-container>
         </div>
 
-        <ng-template #noReviews>
-            <div class="text-muted">No reviews available.</div>
-        </ng-template>
+        <!-- Description -->
+        <p class="mb-4 text-muted">{{ dto.providerDescription }}</p>
+
+        <!-- Availability -->
+        <div class="mb-5">
+            <h3 class="mb-3">Availability</h3>
+            <ng-container *ngIf="dto.availabilities?.length; else noAvailability">
+                <ul class="list-group">
+                    <li *ngFor="let availability of dto.availabilities"
+                        class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>{{ availability.dayOfWeek | dayOfTheWeek }}</span>
+                        <span class="text-muted" [ngClass]="{ 'text-danger': !availability.available }">
+                            {{
+                            availability.available
+                            ? (availability.startTime + ' – ' + availability.endTime)
+                            : 'Unavailable'
+                            }}
+                        </span>
+                    </li>
+                </ul>
+            </ng-container>
+            <ng-template #noAvailability>
+                <div class="text-muted">No availability data provided.</div>
+            </ng-template>
+        </div>
+
+        <!-- Reviews -->
+        <div class="mb-3">
+            <h3 class="mb-3">Reviews</h3>
+            <ng-container *ngIf="dto.providerReviews?.length; else noReviews">
+                <div *ngFor="let review of dto.providerReviews" class="card mb-3 p-3">
+                    <div class="mb-2">
+                        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                            <i class="bi" [class.bi-star-fill]="review.rating >= star"
+                                [class.bi-star]="review.rating < star" style="color: #f0ad4e"></i>
+                        </ng-container>
+                    </div>
+                    <p class="mb-1">{{ review.reviewText }}</p>
+                    <div class="text-muted small mb-1">
+                        <strong>Client:</strong> {{ review.clientName }}
+                    </div>
+                    <small class="text-muted">
+                        Reviewed on {{ review.createDate | date: 'mediumDate' }}
+                    </small>
+                </div>
+            </ng-container>
+            <ng-template #noReviews>
+                <div class="text-muted">No reviews available.</div>
+            </ng-template>
+        </div>
     </div>
 </ng-container>
 

@@ -30,10 +30,13 @@ export class MetricsComponent implements OnInit {
     this.dto.startDate = this.formatDateForInput(start);
     this.dto.endDate = this.formatDateForInput(end);
 
+    /*
+  TODO:
+  Map these calls...
+  */
     this.getMetrics();
     this.getReviews();
   }
-
   getMetrics() {
     this.loading = true;
 
