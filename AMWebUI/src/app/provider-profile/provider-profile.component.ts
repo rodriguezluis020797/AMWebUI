@@ -14,6 +14,7 @@ import {
 import { ToolsService } from '../_services/tools.service';
 import { CurrentStateService } from '../_services/current-state.service';
 import { DeleteEntityComponent } from '../partials/delete-entity/delete-entity.component';
+import { DayOfTheWeekPipe } from '../pipes/day-of-the-week.pipe';
 
 @Component({
   selector: 'am-provider-profile',
@@ -24,6 +25,7 @@ import { DeleteEntityComponent } from '../partials/delete-entity/delete-entity.c
     FormsModule,
     LoadingScreenComponent,
     DeleteEntityComponent,
+    DayOfTheWeekPipe
   ],
   templateUrl: './provider-profile.component.html',
   styleUrl: './provider-profile.component.css',

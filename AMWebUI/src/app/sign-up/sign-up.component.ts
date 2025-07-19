@@ -12,7 +12,6 @@ import {
   TimeZoneCodeEnum,
 } from '../models/Enums';
 import { ToolsService } from '../_services/tools.service';
-import { ProviderAlertDTO } from '../models/ProviderAlertDTO';
 import { ProviderAvailabilityDTO } from '../models/ProviderAvailabilityDTO';
 
 @Component({
