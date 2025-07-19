@@ -35,6 +35,27 @@
             </div>
         </div>
     </div>
+
+    <h1>Appointment Requests</h1>
+
+    <div *ngIf="appointments.length === 0" class="alert alert-info">
+        You have no appointment requests.
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 g-3" *ngIf="appointmentRequests.length > 0">
+        <div class="col" *ngFor="let req of appointmentRequests">
+            <div class="card h-100 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        {{ req.date | date: 'M/d/yy h:mm a' }}
+                    </h5>
+                    <p class="mb-1"><strong>Client:</strong>{{ req.firstName }} {{req.middleName ?? ''}}
+                        {{req.lastName}}</p>
+                    <button class="btn btn-outline-primary btn-sm mt-2">Acknowledge</button>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- Edit/Add Mode -->
