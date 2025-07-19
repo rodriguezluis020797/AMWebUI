@@ -28,7 +28,7 @@ export class LogInComponent implements OnInit {
 
   ngOnInit() {
     this.dto.eMail = 'rodriguez.luis020797@gmail.com';
-    this.dto.currentPassword = 'aHo@FSTZEbre';
+    this.dto.currentPassword = 'aHo#FSTZEbreaHo#FSTZEbre1';
   }
 
   submit(event: MouseEvent) {
