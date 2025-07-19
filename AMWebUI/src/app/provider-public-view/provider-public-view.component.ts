@@ -42,6 +42,7 @@ export class ProviderPublicViewComponent implements OnInit {
           this.loading = false;
           return;
         }
+        console.log('result', result)
         this.dto = result;
         this.calculateAverageRating();  // <-- calculate average after data loaded
         this.loading = false;
