@@ -1,7 +1,7 @@
 <ng-container *ngIf="!loading && dto; else loadingScreen">
     <div class="container py-4">
 
-        <!-- Header with Rating -->
+        <!-- Provider Header -->
         <div class="row align-items-center mb-4">
             <div class="col-12 col-md">
                 <h2 class="mb-2 mb-md-0">{{ dto.providerName }}</h2>
@@ -20,75 +20,88 @@
             </div>
         </div>
 
-        <!-- Description and Availability -->
-        <div class="row gy-4">
+        <!-- About + Availability -->
+        <div class="row gy-4 mb-4">
             <div class="col-12 col-md-6">
-                <h3 class="mb-3">About</h3>
-                <p>{{ dto.providerDescription }}</p>
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title mb-3">About</h3>
+                        <p class="card-text">{{ dto.providerDescription }}</p>
+                    </div>
+                </div>
             </div>
             <div class="col-12 col-md-6">
-                <h3 class="mb-3">Availability</h3>
-                <ng-container *ngIf="dto.availabilities?.length; else noAvailability">
-                    <ul class="list-group">
-                        <li *ngFor="let availability of dto.availabilities"
-                            class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                            <span>{{ availability.dayOfWeek | dayOfTheWeek }}</span>
-                            <span class="text-muted" [ngClass]="{ 'text-danger': !availability.available }">
-                                {{
-                                availability.available
-                                ? (availability.startTime + ' – ' + availability.endTime)
-                                : 'Unavailable'
-                                }}
-                            </span>
-                        </li>
-                    </ul>
+                <div class="card h-100">
+                    <div class="card-body">
+                        <h3 class="card-title mb-3">Availability</h3>
+                        <ng-container *ngIf="dto.availabilities?.length; else noAvailability">
+                            <ul class="list-group">
+                                <li *ngFor="let availability of dto.availabilities"
+                                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
+                                    <span>{{ availability.dayOfWeek | dayOfTheWeek }}</span>
+                                    <span class="text-muted" [ngClass]="{ 'text-danger': !availability.available }">
+                                        {{
+                                        availability.available
+                                        ? (availability.startTime + ' – ' + availability.endTime)
+                                        : 'Unavailable'
+                                        }}
+                                    </span>
+                                </li>
+                            </ul>
+                        </ng-container>
+                        <ng-template #noAvailability>
+                            <div class="text-muted">No availability data provided.</div>
+                        </ng-template>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Services Section -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h3 class="card-title mb-3">Service(s) Available</h3>
+                <ng-container *ngIf="dto.services?.length; else noServices">
+                    <div *ngFor="let service of dto.services" class="border rounded p-3 mb-3">
+                        <div class="fw-semibold mb-2">{{ service.name }}</div>
+                        <div class="text-muted">{{ service.description }}</div>
+                    </div>
                 </ng-container>
-                <ng-template #noAvailability>
-                    <div class="text-muted">No availability data provided.</div>
+                <ng-template #noServices>
+                    <div class="text-muted">No services listed.</div>
                 </ng-template>
             </div>
         </div>
 
-        <h3 class="mb-3">Service(s) Available</h3>
-        <ng-container *ngIf="dto.services?.length; else noServices">
-            <ul class="list-group">
-                <li *ngFor="let service of dto.services"
-                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                    <span>{{ service.name }}</span>
-                    <span class="text-muted">
-                        {{service.description}}
-                    </span>
-                </li>
-            </ul>
-        </ng-container>
-        <ng-template #noServices>
-            <div class="text-muted">No services listed.</div>
-        </ng-template>
 
-        <!-- Reviews -->
-        <div class="mt-5">
-            <h3 class="mb-3">Reviews</h3>
-            <ng-container *ngIf="dto.providerReviews?.length; else noReviews">
-                <div *ngFor="let review of dto.providerReviews" class="card mb-3 p-3">
-                    <div class="mb-2">
-                        <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                            <i class="bi" [class.bi-star-fill]="review.rating >= star"
-                                [class.bi-star]="review.rating < star" style="color: #f0ad4e"></i>
-                        </ng-container>
+
+        <!-- Reviews Section -->
+        <div class="card">
+            <div class="card-body">
+                <h3 class="card-title mb-3">Reviews</h3>
+                <ng-container *ngIf="dto.providerReviews?.length; else noReviews">
+                    <div *ngFor="let review of dto.providerReviews" class="border rounded p-3 mb-3">
+                        <div class="mb-2">
+                            <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                                <i class="bi" [class.bi-star-fill]="review.rating >= star"
+                                    [class.bi-star]="review.rating < star" style="color: #f0ad4e"></i>
+                            </ng-container>
+                        </div>
+                        <p class="mb-1">{{ review.reviewText }}</p>
+                        <div class="text-muted small mb-1">
+                            <strong>Client:</strong> {{ review.clientName }}
+                        </div>
+                        <small class="text-muted">
+                            Reviewed on {{ review.createDate | date: 'mediumDate' }}
+                        </small>
                     </div>
-                    <p class="mb-1">{{ review.reviewText }}</p>
-                    <div class="text-muted small mb-1">
-                        <strong>Client:</strong> {{ review.clientName }}
-                    </div>
-                    <small class="text-muted">
-                        Reviewed on {{ review.createDate | date: 'mediumDate' }}
-                    </small>
-                </div>
-            </ng-container>
-            <ng-template #noReviews>
-                <div class="text-muted">No reviews available.</div>
-            </ng-template>
+                </ng-container>
+                <ng-template #noReviews>
+                    <div class="text-muted">No reviews available.</div>
+                </ng-template>
+            </div>
         </div>
+
     </div>
 </ng-container>
 
