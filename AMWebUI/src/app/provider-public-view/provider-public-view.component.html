@@ -1,108 +1,215 @@
-<ng-container *ngIf="!loading && dto; else loadingScreen">
-    <div class="container py-4">
+<ng-container *ngIf="!loading && providerDto; else loadingScreen">
+    <ng-container *ngIf="!submitAppointmentRequest; else submitAppointmentRequestScreen">
+        <div class="container py-5">
 
-        <!-- Provider Header -->
-        <div class="row align-items-center mb-4">
-            <div class="col-12 col-md">
-                <h2 class="mb-2 mb-md-0">{{ dto.providerName }}</h2>
-            </div>
-            <div class="col-12 col-md-auto" *ngIf="dto.providerReviews?.length">
-                <div class="d-flex flex-wrap align-items-center">
-                    <span class="me-2 mb-1 mb-md-0">
+            <!-- Header -->
+            <div class="row align-items-center mb-4">
+                <div class="col-md-8">
+                    <h2 class="fw-bold">{{ providerDto.providerName }}</h2>
+                </div>
+                <div class="col-md-4 text-md-end mt-3 mt-md-0" *ngIf="providerDto.providerReviews?.length">
+                    <div>
                         <strong>Overall Rating:</strong> {{ averageRating | number: '1.1-1' }}
-                    </span>
-                    <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                        <i class="bi" [class.bi-star-fill]="averageRating >= star"
-                            [class.bi-star-half]="averageRating >= star - 0.5 && averageRating < star"
-                            [class.bi-star]="averageRating < star - 0.5" style="color: #f0ad4e"></i>
-                    </ng-container>
-                </div>
-            </div>
-        </div>
-
-        <!-- About + Availability -->
-        <div class="row gy-4 mb-4">
-            <div class="col-12 col-md-6">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="card-title mb-3">About</h3>
-                        <p class="card-text">{{ dto.providerDescription }}</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-12 col-md-6">
-                <div class="card h-100">
-                    <div class="card-body">
-                        <h3 class="card-title mb-3">Availability</h3>
-                        <ng-container *ngIf="dto.availabilities?.length; else noAvailability">
-                            <ul class="list-group">
-                                <li *ngFor="let availability of dto.availabilities"
-                                    class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
-                                    <span>{{ availability.dayOfWeek | dayOfTheWeek }}</span>
-                                    <span class="text-muted" [ngClass]="{ 'text-danger': !availability.available }">
-                                        {{
-                                        availability.available
-                                        ? (availability.startTime + ' – ' + availability.endTime)
-                                        : 'Unavailable'
-                                        }}
-                                    </span>
-                                </li>
-                            </ul>
-                        </ng-container>
-                        <ng-template #noAvailability>
-                            <div class="text-muted">No availability data provided.</div>
-                        </ng-template>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Services Section -->
-        <div class="card mb-4">
-            <div class="card-body">
-                <h3 class="card-title mb-3">Service(s) Available</h3>
-                <ng-container *ngIf="dto.services?.length; else noServices">
-                    <div *ngFor="let service of dto.services" class="border rounded p-3 mb-3">
-                        <div class="fw-semibold mb-2">{{ service.name }}</div>
-                        <div class="text-muted">{{ service.description }}</div>
-                    </div>
-                </ng-container>
-                <ng-template #noServices>
-                    <div class="text-muted">No services listed.</div>
-                </ng-template>
-            </div>
-        </div>
-
-
-
-        <!-- Reviews Section -->
-        <div class="card">
-            <div class="card-body">
-                <h3 class="card-title mb-3">Reviews</h3>
-                <ng-container *ngIf="dto.providerReviews?.length; else noReviews">
-                    <div *ngFor="let review of dto.providerReviews" class="border rounded p-3 mb-3">
-                        <div class="mb-2">
+                        <span class="ms-2">
                             <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
-                                <i class="bi" [class.bi-star-fill]="review.rating >= star"
-                                    [class.bi-star]="review.rating < star" style="color: #f0ad4e"></i>
+                                <i class="bi" [class.bi-star-fill]="averageRating >= star"
+                                    [class.bi-star-half]="averageRating >= star - 0.5 && averageRating < star"
+                                    [class.bi-star]="averageRating < star - 0.5" style="color: #f0ad4e"></i>
                             </ng-container>
-                        </div>
-                        <p class="mb-1">{{ review.reviewText }}</p>
-                        <div class="text-muted small mb-1">
-                            <strong>Client:</strong> {{ review.clientName }}
-                        </div>
-                        <small class="text-muted">
-                            Reviewed on {{ review.createDate | date: 'mediumDate' }}
-                        </small>
+                        </span>
                     </div>
-                </ng-container>
-                <ng-template #noReviews>
-                    <div class="text-muted">No reviews available.</div>
-                </ng-template>
+                </div>
+            </div>
+
+            <!-- Success Message -->
+            <div *ngIf="submitAppointmentRequestSuccess" class="alert alert-success text-center mb-4">
+                Thank you. <br />
+                Your appointment request has been recorded.
+            </div>
+
+            <!-- CTA -->
+            <div class="mb-4 text-end">
+                <button class="btn btn-primary px-4 py-2" (click)="submitAppointmentRequestFunc()">
+                    Request Appointment
+                </button>
+            </div>
+
+            <!-- About & Availability -->
+            <div class="row gy-4 mb-4">
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title mb-3">About</h4>
+                            <p class="card-text">{{ providerDto.providerDescription }}</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h4 class="card-title mb-3">Availability</h4>
+                            <ng-container *ngIf="providerDto.availabilities?.length; else noAvailability">
+                                <ul class="list-group list-group-flush">
+                                    <li *ngFor="let availability of providerDto.availabilities"
+                                        class="list-group-item d-flex justify-content-between align-items-center">
+                                        <span>{{ availability.dayOfWeek | dayOfTheWeek }}</span>
+                                        <span class="text-muted" [ngClass]="{ 'text-danger': !availability.available }">
+                                            {{
+                                            availability.available
+                                            ? (availability.startTime + ' – ' + availability.endTime)
+                                            : 'Unavailable'
+                                            }}
+                                        </span>
+                                    </li>
+                                </ul>
+                            </ng-container>
+                            <ng-template #noAvailability>
+                                <div class="text-muted">No availability data provided.</div>
+                            </ng-template>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Services -->
+            <div class="card mb-4 shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Services Available</h4>
+                    <ng-container *ngIf="providerDto.services?.length; else noServices">
+                        <div *ngFor="let service of providerDto.services" class="border rounded p-3 mb-3">
+                            <h6 class="fw-semibold mb-1">{{ service.name }}</h6>
+                            <p class="mb-0 text-muted">{{ service.description }}</p>
+                        </div>
+                    </ng-container>
+                    <ng-template #noServices>
+                        <div class="text-muted">No services listed.</div>
+                    </ng-template>
+                </div>
+            </div>
+
+            <!-- Reviews -->
+            <div class="card shadow-sm">
+                <div class="card-body">
+                    <h4 class="card-title mb-3">Reviews</h4>
+                    <ng-container *ngIf="providerDto.providerReviews?.length; else noReviews">
+                        <div *ngFor="let review of providerDto.providerReviews" class="border rounded p-3 mb-3">
+                            <div class="mb-2">
+                                <ng-container *ngFor="let star of [1, 2, 3, 4, 5]">
+                                    <i class="bi" [class.bi-star-fill]="review.rating >= star"
+                                        [class.bi-star]="review.rating < star" style="color: #f0ad4e"></i>
+                                </ng-container>
+                            </div>
+                            <p class="mb-1">{{ review.reviewText }}</p>
+                            <div class="text-muted small mb-1">
+                                <strong>Client:</strong> {{ review.clientName }}
+                            </div>
+                            <small class="text-muted">
+                                Reviewed on {{ review.createDate | date: 'mediumDate' }}
+                            </small>
+                        </div>
+                    </ng-container>
+                    <ng-template #noReviews>
+                        <div class="text-muted">No reviews available.</div>
+                    </ng-template>
+                </div>
+            </div>
+
+        </div>
+    </ng-container>
+
+    <!-- Appointment Request Form -->
+    <ng-template #submitAppointmentRequestScreen>
+        <div class="container py-5">
+            <div class="card shadow">
+                <div class="card-body">
+                    <h3 class="card-title mb-4">Request Appointment</h3>
+
+                    <form #appointmentForm="ngForm">
+                        <div class="row gy-3">
+
+                            <!-- Name Fields -->
+                            <div class="col-md-4">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" [(ngModel)]="appointmentRequestDto.firstName"
+                                    name="firstName" required />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Middle Name</label>
+                                <input type="text" class="form-control" [(ngModel)]="appointmentRequestDto.middleName"
+                                    name="middleName" />
+                            </div>
+                            <div class="col-md-4">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" [(ngModel)]="appointmentRequestDto.lastName"
+                                    name="lastName" required />
+                            </div>
+
+                            <!-- Phone -->
+                            <div class="col-md-6">
+                                <label class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" [(ngModel)]="appointmentRequestDto.phoneNumber"
+                                    name="phoneNumber" required />
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label">Confirm Phone Number</label>
+                                <input type="tel" class="form-control"
+                                    [(ngModel)]="appointmentRequestDto.confirmPhoneNumber" name="confirmPhoneNumber"
+                                    required />
+                            </div>
+
+                            <!-- Date and Flexible -->
+                            <div class="col-md-6">
+                                <label class="form-label">Preferred Date & Time</label>
+                                <input type="datetime-local" class="form-control"
+                                    [(ngModel)]="appointmentRequestDto.date" name="date" required />
+                            </div>
+                            <div class="col-md-6 d-flex align-items-end">
+                                <div class="form-check mt-3">
+                                    <input class="form-check-input" type="checkbox"
+                                        [(ngModel)]="appointmentRequestDto.flexible" name="flexible" id="flexible" />
+                                    <label class="form-check-label" for="flexible">
+                                        I'm flexible with the date
+                                    </label>
+                                </div>
+                            </div>
+
+                            <!-- Comments -->
+                            <div class="col-12">
+                                <label class="form-label">Additional Comments</label>
+                                <textarea class="form-control" rows="3" [(ngModel)]="appointmentRequestDto.comments"
+                                    name="comments"></textarea>
+                            </div>
+
+                            <!-- Acknowledgement -->
+                            <div class="col-12">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox"
+                                        [(ngModel)]="appointmentRequestDto.acknowledged" name="acknowledged"
+                                        id="acknowledged" required />
+                                    <label class="form-check-label" for="acknowledged">
+                                        I acknowledge that this is only a request and not a confirmed appointment.
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Error -->
+                        <div *ngIf="appointmentRequestDto.errorMessage" class="alert alert-danger mt-3">
+                            {{ appointmentRequestDto.errorMessage }}
+                        </div>
+
+                        <!-- Buttons -->
+                        <div class="d-flex justify-content-end gap-3 mt-4">
+                            <button type="button" class="btn btn-primary px-4" (click)="saveAppointmentRequest()"
+                                [disabled]="!appointmentForm.form.valid">Submit Request</button>
+                            <button type="button" class="btn btn-secondary px-4"
+                                (click)="cancelAppointmentRequest()">Cancel</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
-
-    </div>
+    </ng-template>
 </ng-container>
 
 <ng-template #loadingScreen>

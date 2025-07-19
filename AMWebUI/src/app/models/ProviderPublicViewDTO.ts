@@ -4,6 +4,7 @@ import { ProviderReviewDTO } from "./ProviderReviewDTO";
 import { ServiceDTO } from "./ServiceDTO";
 
 export class PoviderPublicViewDTO extends BaseDTO {
+    providerId: string;
     providerName: string;
     providerDescription: string;
     providerReviews: ProviderReviewDTO[];
@@ -12,6 +13,7 @@ export class PoviderPublicViewDTO extends BaseDTO {
 
     constructor() {
         super();
+        this.providerId = '';
         this.providerName = '';
         this.providerDescription = ''
         this.providerReviews = [];

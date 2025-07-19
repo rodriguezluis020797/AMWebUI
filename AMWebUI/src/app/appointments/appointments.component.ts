@@ -208,7 +208,7 @@ export class AppointmentsComponent implements OnInit {
         this.loading = false;
         return;
       }
-      if (result.errorMessage?.trim()) {
+      if (result.errorMessage?.trim() !== '') {
         this.editDTO.errorMessage = result.errorMessage;
         this.loading = false;
       } else {
