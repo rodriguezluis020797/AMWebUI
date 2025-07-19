@@ -28,7 +28,7 @@ import { DayOfTheWeekPipe } from '../pipes/day-of-the-week.pipe';
     DayOfTheWeekPipe
   ],
   templateUrl: './provider-profile.component.html',
-  styleUrl: './provider-profile.component.css',
+  styleUrls: ['./provider-profile.component.css'],
 })
 export class ProviderProfileComponent implements OnInit {
   dto = new ProviderDTO();
@@ -46,6 +46,10 @@ export class ProviderProfileComponent implements OnInit {
 
   stateOptions: { key: StateCodeEnum; label: string }[] = [];
   timeZoneOptions: { key: TimeZoneCodeEnum; label: string }[] = [];
+
+  // Add daysOfWeek and dayNames arrays for availability UI
+  daysOfWeek = [0, 1, 2, 3, 4, 5, 6];
+  dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   constructor(
     private providerService: ProviderService,
@@ -82,6 +86,7 @@ export class ProviderProfileComponent implements OnInit {
 
   edit(): void {
     this.editDTO = structuredClone(this.dto);
+
     this.editProvider = true;
     this.populateLocationOptions(this.editDTO.countryCode);
   }

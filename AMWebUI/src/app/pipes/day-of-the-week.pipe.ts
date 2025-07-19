@@ -6,7 +6,6 @@ import { DayOfWeek } from '../models/Enums';
 })
 export class DayOfTheWeekPipe implements PipeTransform {
     transform(value: DayOfWeek): string {
-        console.log('hit')
         switch (Number(value)) {
             case DayOfWeek.Sunday:
                 return 'Sunday';

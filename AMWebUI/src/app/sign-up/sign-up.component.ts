@@ -86,7 +86,6 @@ export class SignUpComponent {
     this.dto.countryCode = CountryCodeEnum.United_States;
     this.dto.stateCode = StateCodeEnum.US_WA;
     this.dto.timeZoneCode = TimeZoneCodeEnum.Pacific_Standard_Time;
-    console.log(this.dto);
     this.providerService.createProviderAsync(this.dto).subscribe((res) => {
       this.loading = false;
       if (!res) return;

@@ -36,9 +36,12 @@
         <div class="col-12 mt-3">
           <strong>Availability:</strong>
           <ul class="list-unstyled mb-0">
-            <li *ngFor="let availability of dto.availabilities">
-              <strong>{{ availability.dayOfWeek | dayOfTheWeek}}:</strong>
-              {{ availability.startTime }} – {{ availability.endTime }}
+            <li *ngFor="let availability of dto.availabilities"
+              class="d-flex justify-content-between align-items-center py-1 border-bottom">
+              <span>{{ availability.dayOfWeek | dayOfTheWeek }}</span>
+              <span class="text-muted" [ngClass]="{'text-danger': !availability.available}">
+                {{ availability.available ? (availability.startTime + ' – ' + availability.endTime) : 'Unavailable' }}
+              </span>
             </li>
           </ul>
         </div>
@@ -111,6 +114,34 @@
             <select class="form-select" [(ngModel)]="editDTO.timeZoneCode" name="timeZoneCode">
               <option *ngFor="let opt of timeZoneOptions" [value]="opt.key">{{ opt.label }}</option>
             </select>
+          </div>
+        </div>
+
+        <!-- Availability editing UI -->
+        <div class="mb-3">
+          <label class="form-label">Availability</label>
+
+          <div *ngFor="let day of daysOfWeek; let i = index" class="mb-2 p-2 border rounded">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="available-{{ i }}"
+                [(ngModel)]="editDTO.availabilities[i].available" name="available-{{ i }}" />
+              <label class="form-check-label" for="available-{{ i }}">
+                {{ dayNames[i] }}
+              </label>
+            </div>
+
+            <div *ngIf="editDTO.availabilities[i].available" class="row mt-2">
+              <div class="col">
+                <label for="startTime-{{ i }}" class="form-label">Start Time</label>
+                <input id="startTime-{{ i }}" name="startTime-{{ i }}" type="time" class="form-control"
+                  [(ngModel)]="editDTO.availabilities[i].startTime" />
+              </div>
+              <div class="col">
+                <label for="endTime-{{ i }}" class="form-label">End Time</label>
+                <input id="endTime-{{ i }}" name="endTime-{{ i }}" type="time" class="form-control"
+                  [(ngModel)]="editDTO.availabilities[i].endTime" />
+              </div>
+            </div>
           </div>
         </div>
 
