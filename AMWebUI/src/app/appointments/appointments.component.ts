@@ -8,10 +8,11 @@ import { AppointmentService } from '../_services/appointment.service';
 import { AppointmentStatusPipe } from "../pipes/appointment-status.pipe";
 import { ClientDTO } from '../models/ClientDTO';
 import { ClientService } from '../_services/client.service';
-import { EMPTY, switchMap } from 'rxjs';
+import { forkJoin, EMPTY, switchMap } from 'rxjs';
 import { ServiceService } from '../_services/service.service';
 import { ServiceDTO } from '../models/ServiceDTO';
 import { AppointmentStatusEnum } from '../models/Enums';
+import { AppointmentRequestDTO } from '../models/AppointmentRequestDTO';
 
 @Component({
   selector: 'am-appointments',
@@ -32,6 +33,7 @@ export class AppointmentsComponent implements OnInit {
   AppointmentStatusEnum = AppointmentStatusEnum;
 
   appointments: (AppointmentDTO & { clientName?: string, serviceName?: string })[] = [];
+  appointmentRequests: AppointmentRequestDTO[] = [];
   clients: ClientDTO[] = [];
   clientName: string | null = null;
   services: ServiceDTO[] = [];
@@ -45,31 +47,42 @@ export class AppointmentsComponent implements OnInit {
 
   ngOnInit(): void {
     this.loading = true;
+
     this.appointmentService.getAllAppointmentsAsync().pipe(
-      switchMap(result => {
-        if (!result) {
+      switchMap(appointments => {
+        if (!appointments) {
           this.loading = false;
           return EMPTY;
         }
-        this.appointments = result;
-        return this.clientService.getClientsAsync();
-      }),
-      switchMap(result => {
-        if (!result) {
-          this.loading = false;
-          return EMPTY;
-        }
-        this.clients = result;
-        return this.serviceService.getServicesAsync();
+
+        this.appointments = appointments;
+
+        return forkJoin({
+          clients: this.clientService.getClientsAsync(),
+          services: this.serviceService.getServicesAsync(),
+          appointmentRequests: this.appointmentService.getAppointmentRequestsAsync()
+        });
       })
-    ).subscribe(result => {
-      if (!result) {
+    ).subscribe({
+      next: ({ clients, services, appointmentRequests }) => {
+        if (!clients || !services || !appointmentRequests) {
+          this.loading = false;
+          return;
+        }
+
+        this.clients = clients;
+        this.services = services;
+        this.appointmentRequests = appointmentRequests;
+
+        this.mapClientAndServiceNames();
         this.loading = false;
-        return;
+      },
+      error: err => {
+        console.error('Error loading appointment data:', err);
+        this.loading = false;
       }
-      this.services = result;
-      this.mapClientAndServiceNames();
     });
+
   }
 
   get selectedServiceName(): string {
