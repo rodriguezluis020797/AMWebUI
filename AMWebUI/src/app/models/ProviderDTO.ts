@@ -1,5 +1,6 @@
 import { BaseDTO } from './BaseDTO';
 import { AccountStatusEnum, CountryCodeEnum, StateCodeEnum, TimeZoneCodeEnum } from './Enums';
+import { ProviderAvailabilityDTO } from './ProviderAvailabilityDTO';
 
 export class ProviderDTO extends BaseDTO {
   firstName: string;
@@ -22,6 +23,7 @@ export class ProviderDTO extends BaseDTO {
   nextBillingDate: Date | null;
   accountStatus: AccountStatusEnum;
   description: string;
+  availabilities: ProviderAvailabilityDTO[];
 
   constructor() {
     super();
@@ -45,5 +47,6 @@ export class ProviderDTO extends BaseDTO {
     this.nextBillingDate = null;
     this.accountStatus = AccountStatusEnum.Unknown;
     this.description = '';
+    this.availabilities = [];
   }
 }

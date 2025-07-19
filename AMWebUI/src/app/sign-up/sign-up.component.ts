@@ -12,6 +12,8 @@ import {
   TimeZoneCodeEnum,
 } from '../models/Enums';
 import { ToolsService } from '../_services/tools.service';
+import { ProviderAlertDTO } from '../models/ProviderAlertDTO';
+import { ProviderAvailabilityDTO } from '../models/ProviderAvailabilityDTO';
 
 @Component({
   standalone: true,
@@ -29,6 +31,9 @@ export class SignUpComponent {
   countryCodeOptions: { key: CountryCodeEnum; label: string }[] = [];
   stateOptions: { key: StateCodeEnum; label: string }[] = [];
   timeZoneOptions: { key: TimeZoneCodeEnum; label: string }[] = [];
+  daysOfWeek = [0, 1, 2, 3, 4, 5, 6]; // Sunday to Saturday
+  dayNames = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+
 
   constructor(
     private providerService: ProviderService,
@@ -41,6 +46,18 @@ export class SignUpComponent {
 
     this.countryCodeOptions = this.toolsService.getCountryCodes();
     this.updateStateAndTimeZoneOptions(this.dto.countryCode);
+
+    // Initialize default availability if not already done
+    if (this.dto.availabilities.length === 0) {
+      this.dto.availabilities = this.daysOfWeek.map(day => {
+        const availability = new ProviderAvailabilityDTO();
+        availability.dayOfWeek = day;
+        availability.available = true;
+        availability.startTime = '09:00'; // default
+        availability.endTime = '17:00';   // default
+        return availability;
+      });
+    }
 
     this.loading = false;
   }
@@ -70,7 +87,7 @@ export class SignUpComponent {
     this.dto.countryCode = CountryCodeEnum.United_States;
     this.dto.stateCode = StateCodeEnum.US_WA;
     this.dto.timeZoneCode = TimeZoneCodeEnum.Pacific_Standard_Time;
-
+    console.log(this.dto);
     this.providerService.createProviderAsync(this.dto).subscribe((res) => {
       this.loading = false;
       if (!res) return;

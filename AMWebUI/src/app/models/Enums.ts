@@ -32,6 +32,16 @@ export enum TimeZoneCodeEnum {
   Alaska_Standard_Time, // United States
   Hawaii_Standard_Time, // United States
 }
+export enum DayOfWeek {
+  Sunday = 0,
+  Monday = 1,
+  Tuesday = 2,
+  Wednesday = 3,
+  Thursday = 4,
+  Friday = 5,
+  Saturday = 6
+}
+
 export enum StateCodeEnum {
   Select,
 
