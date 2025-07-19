@@ -11,7 +11,7 @@ export class PoviderPublicViewDTO extends BaseDTO {
     services: ServiceDTO[];
 
     constructor() {
-        super()
+        super();
         this.providerName = '';
         this.providerDescription = ''
         this.providerReviews = [];
