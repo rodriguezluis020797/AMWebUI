@@ -45,8 +45,9 @@
     <ng-container *ngIf="appointmentRequests.length > 0">
         <ng-container *ngIf="!selectedAppointmentRequest; else selectedReqBlock">
             <div class="row row-cols-1 row-cols-md-2 g-3">
+                <h2>Not Yet Acknowledged</h2>
                 <div class="col" *ngFor="let req of appointmentRequests">
-                    <div class="card h-100 shadow-sm">
+                    <div *ngIf="!req.acknowledged" class="card h-100 shadow-sm">
                         <div class="card-body">
                             <h5 class="card-title">
                                 {{ req.date | date: 'M/d/yy h:mm a' }}
@@ -61,6 +62,26 @@
                     </div>
                 </div>
             </div>
+
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+                <h2>Acknowledged</h2>
+                <div class="col" *ngFor="let req of appointmentRequests">
+                    <div *ngIf="req.acknowledged" class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ req.date | date: 'M/d/yy h:mm a' }}
+                            </h5>
+                            <p class="mb-1">
+                                <strong>Client:</strong> {{ req.firstName }} {{ req.middleName ?? '' }} {{ req.lastName
+                                }}
+                            </p>
+                            <button class="btn btn-outline-primary btn-sm mt-2"
+                                (click)="viewAppointmentRequestDetails(req)">Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </ng-container>
 
         <ng-template #selectedReqBlock>

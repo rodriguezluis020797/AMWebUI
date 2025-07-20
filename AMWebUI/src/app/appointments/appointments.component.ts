@@ -77,7 +77,6 @@ export class AppointmentsComponent implements OnInit {
         this.appointmentRequests = appointmentRequests;
 
         this.mapClientAndServiceNames();
-        console.log(this.appointmentRequests)
         this.loading = false;
       },
       error: err => {
