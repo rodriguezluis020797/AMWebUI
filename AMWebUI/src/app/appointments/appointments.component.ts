@@ -212,6 +212,15 @@ export class AppointmentsComponent implements OnInit {
     this.loading = false;
   }
 
+  get unacknowledgedRequests() {
+    return this.appointmentRequests.filter(r => !r.acknowledged);
+  }
+
+  get acknowledgedRequests() {
+    return this.appointmentRequests.filter(r => r.acknowledged);
+  }
+
+
   acknowledgeAppointmentRequestDetails() {
     this.loading = true;
 
