@@ -34,6 +34,8 @@ export class AppointmentsComponent implements OnInit {
 
   appointments: (AppointmentDTO & { clientName?: string, serviceName?: string })[] = [];
   appointmentRequests: AppointmentRequestDTO[] = [];
+  selectedAppointmentRequestDTO: AppointmentRequestDTO = new AppointmentRequestDTO;
+  selectedAppointmentRequest: boolean = false;
   clients: ClientDTO[] = [];
   clientName: string | null = null;
   services: ServiceDTO[] = [];
@@ -75,6 +77,7 @@ export class AppointmentsComponent implements OnInit {
         this.appointmentRequests = appointmentRequests;
 
         this.mapClientAndServiceNames();
+        console.log(this.appointmentRequests)
         this.loading = false;
       },
       error: err => {
@@ -192,6 +195,21 @@ export class AppointmentsComponent implements OnInit {
       ? `${client.firstName} ${client.middleName ?? ''} ${client.lastName}`.trim().replace(/\s+/g, ' ')
       : 'Unknown Client';
 
+    this.loading = false;
+  }
+
+  viewAppointmentRequestDetails(req: AppointmentRequestDTO) {
+    this.loading = true;
+    Object.assign(this.selectedAppointmentRequestDTO, req);
+    this.selectedAppointmentRequest = true;
+
+    this.loading = false;
+  }
+
+  cancelViewAppointmentRequestDetails() {
+    this.loading = true;
+    this.selectedAppointmentRequestDTO = new AppointmentRequestDTO;
+    this.selectedAppointmentRequest = false;
     this.loading = false;
   }
 

@@ -42,20 +42,69 @@
         You have no appointment requests.
     </div>
 
-    <div class="row row-cols-1 row-cols-md-2 g-3" *ngIf="appointmentRequests.length > 0">
-        <div class="col" *ngFor="let req of appointmentRequests">
+    <ng-container *ngIf="appointmentRequests.length > 0">
+        <ng-container *ngIf="!selectedAppointmentRequest; else selectedReqBlock">
+            <div class="row row-cols-1 row-cols-md-2 g-3">
+                <div class="col" *ngFor="let req of appointmentRequests">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                {{ req.date | date: 'M/d/yy h:mm a' }}
+                            </h5>
+                            <p class="mb-1">
+                                <strong>Client:</strong> {{ req.firstName }} {{ req.middleName ?? '' }} {{ req.lastName
+                                }}
+                            </p>
+                            <button class="btn btn-outline-primary btn-sm mt-2"
+                                (click)="viewAppointmentRequestDetails(req)">Details</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+
+        <ng-template #selectedReqBlock>
             <div class="card h-100 shadow-sm">
                 <div class="card-body">
                     <h5 class="card-title">
-                        {{ req.date | date: 'M/d/yy h:mm a' }}
+                        {{ selectedAppointmentRequestDTO.date | date: 'M/d/yy h:mm a' }}
                     </h5>
-                    <p class="mb-1"><strong>Client:</strong>{{ req.firstName }} {{req.middleName ?? ''}}
-                        {{req.lastName}}</p>
-                    <button class="btn btn-outline-primary btn-sm mt-2">Acknowledge</button>
+                    <p class="mb-1">
+                        <strong>Client:</strong> {{ selectedAppointmentRequestDTO.firstName }}
+                        {{ selectedAppointmentRequestDTO.middleName || '—' }}
+                        {{ selectedAppointmentRequestDTO.lastName }}
+                    </p>
+                    <p class="mb-1">
+                        <strong>Phone Number:</strong> {{ selectedAppointmentRequestDTO.phoneNumber}}
+                    </p>
+                    <p class="mb-1">
+                        <strong>Flexible:</strong> {{ selectedAppointmentRequestDTO.flexible ? 'Yes' : 'No'}}
+                    </p>
+                    <p class="mb-1">
+                        <strong>Notes:</strong> {{ selectedAppointmentRequestDTO.comments}}
+                    </p>
+                    <button class="btn btn-outline-primary btn-sm mt-2"
+                        (click)="cancelViewAppointmentRequestDetails()">Back</button>
+                    <button class="btn btn-outline-primary btn-sm mt-2">Delete</button>
                 </div>
             </div>
+        </ng-template>
+    </ng-container>
+
+
+    <ng-template>
+        <div class="card h-100 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">
+                    {{ selectedAppointmentRequestDTO.date | date: 'M/d/yy h:mm a' }}
+                </h5>
+                <p class="mb-1"><strong>Client:</strong> {{ selectedAppointmentRequestDTO.firstName }} {{
+                    selectedAppointmentRequestDTO.middleName || '—' }} {{ selectedAppointmentRequestDTO.lastName }}</p>
+                <p class="mb-1"><strong>Notes:</strong> {{ selectedAppointmentRequestDTO.comments }}</p>
+                <button class="btn btn-outline-primary btn-sm mt-2">Edit</button>
+            </div>
         </div>
-    </div>
+    </ng-template>
 </div>
 
 <!-- Edit/Add Mode -->
