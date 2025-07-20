@@ -213,6 +213,24 @@ export class AppointmentsComponent implements OnInit {
     this.loading = false;
   }
 
+  acknowledgeAppointmentRequestDetails() {
+    this.loading = true;
+
+    this.appointmentService
+      .acknowledgeAppointmentRequestsAsync(this.selectedAppointmentRequestDTO)
+      .subscribe((result) => {
+        if (!result) {
+          this.loading = false;
+          return;
+        }
+        this.appointmentRequests = this.appointmentRequests.filter(
+          req => req.appointmentRequestId !== this.selectedAppointmentRequestDTO.appointmentRequestId
+        );
+        this.selectedAppointmentRequest = false;
+        this.loading = false;
+      });
+  }
+
   isEditable(): boolean {
     return this.originalStatus === 0 || this.originalStatus === 1;
   }

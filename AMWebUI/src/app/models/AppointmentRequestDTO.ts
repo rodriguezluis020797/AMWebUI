@@ -1,6 +1,7 @@
 import { BaseDTO } from "./BaseDTO";
 
 export class AppointmentRequestDTO extends BaseDTO {
+    appointmentRequestId: string;
     providerId: string;
     firstName: string;
     middleName?: string;
@@ -16,6 +17,7 @@ export class AppointmentRequestDTO extends BaseDTO {
 
     constructor() {
         super();
+        this.appointmentRequestId = '';
         this.providerId = '';
         this.firstName = '';
         this.middleName = '';

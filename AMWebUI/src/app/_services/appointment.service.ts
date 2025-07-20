@@ -50,6 +50,23 @@ export class AppointmentService {
       );
   }
 
+  acknowledgeAppointmentRequestsAsync(dto: AppointmentRequestDTO): Observable<AppointmentRequestDTO | null> {
+    return this.http.post<AppointmentRequestDTO>('/api/Appointment/AcknowledgeAllAppointmentRequest', dto, {
+      withCredentials: true,
+    })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          if (error.status === 401) {
+            this.currentStateService.loggedInSubject.next(false);
+            this.router.navigate(['/unauthorized']);
+          } else {
+            this.router.navigate(['/error']);
+          }
+          return of(null);
+        })
+      );
+  }
+
   createAppointmentAsync(dto: AppointmentDTO): Observable<AppointmentDTO | null> {
     return this.http.post<AppointmentDTO>('/api/Appointment/CreateAppointment', dto, {
       withCredentials: true,
