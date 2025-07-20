@@ -18,11 +18,12 @@
                 <p class="mb-1"><strong>Phone Number:</strong> {{ selectedAppointmentRequestDTO.phoneNumber }}</p>
                 <p class="mb-1"><strong>Flexible:</strong> {{ selectedAppointmentRequestDTO.flexible ? 'Yes' : 'No' }}
                 </p>
-                <p class="mb-1"><strong>Notes:</strong> {{ selectedAppointmentRequestDTO.comments }}</p>
+                <p class="mb-1"><strong>Notes:</strong> {{ selectedAppointmentRequestDTO.comments ?
+                    selectedAppointmentRequestDTO.comments : '-'}}</p>
 
                 <div class="d-flex gap-2 mt-3">
                     <button class="btn btn-secondary" (click)="cancelViewAppointmentRequestDetails()">Back</button>
-                    <button class="btn btn-primary"
+                    <button *ngIf="!selectedAppointmentRequestDTO.acknowledged" class="btn btn-primary"
                         (click)="acknowledgeAppointmentRequestDetails()">Acknowledge</button>
                 </div>
             </div>
@@ -77,45 +78,47 @@
         </div>
 
         <ng-container *ngIf="appointmentRequests.length > 0">
-            <div class="row row-cols-1 row-cols-md-2 g-3 mb-4" *ngIf="unacknowledgedRequests.length > 0">
-                <div class="col-12">
-                    <h3>Not Yet Acknowledged</h3>
-                </div>
-                <div class="col" *ngFor="let req of unacknowledgedRequests">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ req.date | date: 'M/d/yy h:mm a' }}</h5>
-                            <p class="mb-1"><strong>Client:</strong> {{ req.firstName }} {{ req.middleName ?? '' }} {{
-                                req.lastName
-                                }}</p>
-                            <button class="btn btn-outline-primary btn-sm mt-2"
-                                (click)="viewAppointmentRequestDetails(req)">Details</button>
+            <!-- Unacknowledged Requests -->
+            <div *ngIf="unacknowledgedRequests.length > 0" class="mb-4">
+                <h3>Not Yet Acknowledged</h3>
+                <div class="row row-cols-1 row-cols-md-2 g-3">
+                    <div class="col" *ngFor="let req of unacknowledgedRequests">
+                        <div class="card h-100 d-flex flex-column shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ req.date | date: 'M/d/yy h:mm a' }}</h5>
+                                <p class="mb-1"><strong>Client:</strong> {{ req.firstName }} {{ req.middleName ?? '' }}
+                                    {{
+                                    req.lastName }}</p>
+                                <div class="mt-auto">
+                                    <button class="btn btn-outline-primary btn-sm mt-2"
+                                        (click)="viewAppointmentRequestDetails(req)">Details</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
-
-
-            <div class="row row-cols-1 row-cols-md-2 g-3" *ngIf="acknowledgedRequests.length > 0">
-                <div class="col-12">
-                    <h3>Acknowledged</h3>
-                </div>
-                <div class="col" *ngFor="let req of acknowledgedRequests">
-                    <div class="card h-100 shadow-sm">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ req.date | date: 'M/d/yy h:mm a' }}</h5>
-                            <p class="mb-1"><strong>Client:</strong> {{ req.firstName }} {{ req.middleName ?? '' }} {{
-                                req.lastName
-                                }}</p>
-                            <button class="btn btn-outline-primary btn-sm mt-2"
-                                (click)="viewAppointmentRequestDetails(req)">Details</button>
+            <!-- Acknowledged Requests -->
+            <div *ngIf="acknowledgedRequests.length > 0">
+                <h3>Acknowledged</h3>
+                <div class="row row-cols-1 row-cols-md-2 g-3">
+                    <div class="col" *ngFor="let req of acknowledgedRequests">
+                        <div class="card h-100 d-flex flex-column shadow-sm">
+                            <div class="card-body">
+                                <h5 class="card-title">{{ req.date | date: 'M/d/yy h:mm a' }}</h5>
+                                <p class="mb-1"><strong>Client:</strong> {{ req.firstName }} {{ req.middleName ?? '' }}
+                                    {{
+                                    req.lastName }}</p>
+                                <div class="mt-auto">
+                                    <button class="btn btn-outline-primary btn-sm mt-2"
+                                        (click)="viewAppointmentRequestDetails(req)">Details</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
         </ng-container>
     </ng-container>
 

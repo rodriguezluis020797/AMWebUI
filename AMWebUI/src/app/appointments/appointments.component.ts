@@ -231,9 +231,14 @@ export class AppointmentsComponent implements OnInit {
           this.loading = false;
           return;
         }
-        this.appointmentRequests = this.appointmentRequests.filter(
-          req => req.appointmentRequestId !== this.selectedAppointmentRequestDTO.appointmentRequestId
+        const match = this.appointmentRequests.find(
+          x => x.appointmentRequestId === this.selectedAppointmentRequestDTO.appointmentRequestId
         );
+
+        if (match) {
+          match.acknowledged = true; // or any property you want to modify
+        }
+
         this.selectedAppointmentRequest = false;
         this.loading = false;
       });
