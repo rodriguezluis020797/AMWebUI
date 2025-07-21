@@ -30,6 +30,7 @@ export class ProviderDTO extends BaseDTO {
   linkedInURL: string | undefined;
   youTubeURL: string | undefined;
   tikTokURL: string | undefined;
+  providerGuid: string;
 
   constructor() {
     super();
@@ -60,5 +61,6 @@ export class ProviderDTO extends BaseDTO {
     this.linkedInURL = '';
     this.youTubeURL = '';
     this.tikTokURL = '';
+    this.providerGuid = '';
   }
 }

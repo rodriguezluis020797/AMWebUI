@@ -15,6 +15,13 @@
 
     <!-- Display Mode -->
     <ng-container *ngIf="!editProvider; else editMode">
+      <div class="mb-3">
+        <strong>Public Profile: </strong>
+        <a [href]="'http://localhost:4200/provider-public-view?guid=' + dto.providerGuid" target="_blank">
+          http://localhost:4200/provider-public-view?guid={{ dto.providerGuid }}
+        </a>
+      </div>
+
       <div class="mb-3"><strong>First Name:</strong> {{ dto.firstName }}</div>
       <div class="mb-3"><strong>Middle Name:</strong> {{ dto.middleName || '—' }}</div>
       <div class="mb-3"><strong>Last Name:</strong> {{ dto.lastName }}</div>
