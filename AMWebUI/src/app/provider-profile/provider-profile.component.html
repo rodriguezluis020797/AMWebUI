@@ -32,6 +32,25 @@
       <div class="mb-3"><strong>Country:</strong> {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}</div>
       <div class="mb-3"><strong>Time Zone:</strong> {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}</div>
 
+      <!-- Social Media Display -->
+      <div class="mb-3">
+        <strong>Social Media:</strong>
+        <ul class="list-unstyled mt-2">
+          <li *ngIf="dto.instagramURL"><a [href]="'https://instagram.com/' + dto.instagramURL"
+              target="_blank">Instagram</a></li>
+          <li *ngIf="dto.facebookURL"><a [href]="'https://facebook.com/' + dto.facebookURL" target="_blank">Facebook</a>
+          </li>
+          <li *ngIf="dto.xURL"><a [href]="'https://twitter.com/' + dto.xURL" target="_blank">X (formerly Twitter)</a>
+          </li>
+          <li *ngIf="dto.linkedInURL"><a [href]="'https://linkedin.com/in/' + dto.linkedInURL"
+              target="_blank">LinkedIn</a></li>
+          <li *ngIf="dto.youTubeURL"><a [href]="'https://youtube.com/' + dto.youTubeURL" target="_blank">YouTube</a>
+          </li>
+          <li *ngIf="dto.tikTokURL"><a [href]="'https://www.tiktok.com/@' + dto.tikTokURL" target="_blank">TikTok</a>
+          </li>
+        </ul>
+      </div>
+
       <div class="mb-3">
         <strong>Availability:</strong>
         <ul class="list-unstyled mb-0">
@@ -156,10 +175,78 @@
             </div>
           </div>
         </div>
+
+        <!-- Social Media Edit -->
+        <div class="mb-3">
+          <label class="form-label">Social Media Handles (usernames only)</label>
+          <p class="text-muted">Provide only your usernames — not full links.</p>
+
+          <div class="mb-2">
+            <label for="instagramURL" class="form-label">Instagram</label>
+            <input id="instagramURL" name="instagramURL" type="text" [(ngModel)]="editDTO.instagramURL"
+              class="form-control" placeholder="e.g. yourhandle" />
+            <div *ngIf="editDTO.instagramURL" class="small text-muted mt-1">
+              Preview: <a [href]="'https://instagram.com/' + editDTO.instagramURL" target="_blank">
+                {{ 'https://instagram.com/' + editDTO.instagramURL }}</a>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label for="facebookURL" class="form-label">Facebook</label>
+            <input id="facebookURL" name="facebookURL" type="text" [(ngModel)]="editDTO.facebookURL"
+              class="form-control" placeholder="e.g. your.handle" />
+            <div *ngIf="editDTO.facebookURL" class="small text-muted mt-1">
+              Preview: <a [href]="'https://facebook.com/' + editDTO.facebookURL" target="_blank">
+                {{ 'https://facebook.com/' + editDTO.facebookURL }}</a>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label for="xURL" class="form-label">X (formerly Twitter)</label>
+            <input id="xURL" name="xURL" type="text" [(ngModel)]="editDTO.xURL" class="form-control"
+              placeholder="e.g. yourhandle" />
+            <div *ngIf="editDTO.xURL" class="small text-muted mt-1">
+              Preview: <a [href]="'https://twitter.com/' + editDTO.xURL" target="_blank">
+                {{ 'https://twitter.com/' + editDTO.xURL }}</a>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label for="linkedInURL" class="form-label">LinkedIn</label>
+            <input id="linkedInURL" name="linkedInURL" type="text" [(ngModel)]="editDTO.linkedInURL"
+              class="form-control" placeholder="e.g. your-name" />
+            <div *ngIf="editDTO.linkedInURL" class="small text-muted mt-1">
+              Preview: <a [href]="'https://linkedin.com/in/' + editDTO.linkedInURL" target="_blank">
+                {{ 'https://linkedin.com/in/' + editDTO.linkedInURL }}</a>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label for="youTubeURL" class="form-label">YouTube</label>
+            <input id="youTubeURL" name="youTubeURL" type="text" [(ngModel)]="editDTO.youTubeURL" class="form-control"
+              placeholder="e.g. yourchannel" />
+            <div *ngIf="editDTO.youTubeURL" class="small text-muted mt-1">
+              Preview: <a [href]="'https://youtube.com/' + editDTO.youTubeURL" target="_blank">
+                {{ 'https://youtube.com/' + editDTO.youTubeURL }}</a>
+            </div>
+          </div>
+
+          <div class="mb-2">
+            <label for="tikTokURL" class="form-label">TikTok</label>
+            <input id="tikTokURL" name="tikTokURL" type="text" [(ngModel)]="editDTO.tikTokURL" class="form-control"
+              placeholder="e.g. yourhandle" />
+            <div *ngIf="editDTO.tikTokURL" class="small text-muted mt-1">
+              Preview: <a [href]="'https://www.tiktok.com/@' + editDTO.tikTokURL" target="_blank">
+                {{ 'https://www.tiktok.com/@' + editDTO.tikTokURL }}</a>
+            </div>
+          </div>
+        </div>
+
         <div class="d-flex flex-wrap gap-3 mt-4">
           <button type="submit" [disabled]="profileForm.invalid || loading" class="btn btn-success">Save</button>
           <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
         </div>
+
         <div class="d-flex flex-wrap gap-3 mt-4">
           <a routerLink="/reset-email" class="btn btn-link p-0">Update E-Mail</a>
           <a routerLink="/update-password" class="btn btn-link p-0">Update Password</a>
