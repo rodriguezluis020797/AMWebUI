@@ -31,29 +31,38 @@
                         </div>
                         <div class="card-footer bg-white border-top">
                             <div class="d-flex justify-content-around flex-wrap text-center py-2">
-                                <a href="https://facebook.com" class="text-decoration-none text-dark" target="_blank">
+                                <a *ngIf="providerDto.facebookURL"
+                                    [href]="'https://facebook.com/' + providerDto.facebookURL"
+                                    class="text-decoration-none text-dark" target="_blank">
                                     <i class="bi bi-facebook fs-3"></i>
                                 </a>
-                                <a href="https://instagram.com" class="text-decoration-none text-dark" target="_blank">
+                                <a *ngIf="providerDto.instagramURL"
+                                    [href]="'https://instagram.com/' + providerDto.instagramURL"
+                                    class="text-decoration-none text-dark" target="_blank">
                                     <i class="bi bi-instagram fs-3"></i>
                                 </a>
-                                <a href="https://twitter.com" class="text-decoration-none text-dark" target="_blank">
+                                <a *ngIf="providerDto.xURL" [href]="'https://twitter.com/' + providerDto.xURL"
+                                    class="text-decoration-none text-dark" target="_blank">
                                     <i class="bi bi-twitter-x fs-3"></i>
                                 </a>
-                                <a href="https://linkedin.com" class="text-decoration-none text-dark" target="_blank">
+                                <a *ngIf="providerDto.linkedInURL"
+                                    [href]="'https://linkedin.com/in/' + providerDto.linkedInURL"
+                                    class="text-decoration-none text-dark" target="_blank">
                                     <i class="bi bi-linkedin fs-3"></i>
                                 </a>
-                                <a href="https://youtube.com" class="text-decoration-none text-dark" target="_blank">
+                                <a *ngIf="providerDto.youTubeURL"
+                                    [href]="'https://youtube.com/' + providerDto.youTubeURL"
+                                    class="text-decoration-none text-dark" target="_blank">
                                     <i class="bi bi-youtube fs-3"></i>
                                 </a>
-                                <a href="https://www.tiktok.com" class="text-decoration-none text-dark" target="_blank">
+                                <a *ngIf="providerDto.tikTokURL"
+                                    [href]="'https://www.tiktok.com/@' + providerDto.tikTokURL"
+                                    class="text-decoration-none text-dark" target="_blank">
                                     <i class="bi bi-tiktok fs-3"></i>
                                 </a>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
                 <div class="col-12 col-md-6">
                     <div class="card h-100">

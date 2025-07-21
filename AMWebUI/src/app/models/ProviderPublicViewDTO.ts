@@ -10,6 +10,12 @@ export class PoviderPublicViewDTO extends BaseDTO {
     providerReviews: ProviderReviewDTO[];
     availabilities: ProviderAvailabilityDTO[];
     services: ServiceDTO[];
+    facebookURL: string | undefined;
+    instagramURL: string | undefined;
+    xURL: string | undefined;
+    linkedInURL: string | undefined;
+    youTubeURL: string | undefined;
+    tikTokURL: string | undefined;
 
     constructor() {
         super();
@@ -19,5 +25,11 @@ export class PoviderPublicViewDTO extends BaseDTO {
         this.providerReviews = [];
         this.availabilities = [];
         this.services = [];
+        this.facebookURL = '';
+        this.instagramURL = '';
+        this.xURL = '';
+        this.linkedInURL = '';
+        this.youTubeURL = '';
+        this.tikTokURL = '';
     }
 }

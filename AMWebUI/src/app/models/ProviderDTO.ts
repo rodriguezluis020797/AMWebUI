@@ -24,6 +24,12 @@ export class ProviderDTO extends BaseDTO {
   accountStatus: AccountStatusEnum;
   description: string;
   availabilities: ProviderAvailabilityDTO[];
+  facebookURL: string | undefined;
+  instagramURL: string | undefined;
+  xURL: string | undefined;
+  linkedInURL: string | undefined;
+  youTubeURL: string | undefined;
+  tikTokURL: string | undefined;
 
   constructor() {
     super();
@@ -48,5 +54,11 @@ export class ProviderDTO extends BaseDTO {
     this.accountStatus = AccountStatusEnum.Unknown;
     this.description = '';
     this.availabilities = [];
+    this.facebookURL = '';
+    this.instagramURL = '';
+    this.xURL = '';
+    this.linkedInURL = '';
+    this.youTubeURL = '';
+    this.tikTokURL = '';
   }
 }
