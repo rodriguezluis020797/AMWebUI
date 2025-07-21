@@ -224,8 +224,6 @@ export class AppointmentsComponent implements OnInit {
       .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
-
-
   acknowledgeAppointmentRequestDetails() {
     this.loading = true;
 
