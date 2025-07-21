@@ -1,6 +1,12 @@
-<ng-container *ngIf="!loading; else loadingScreen">
-  <div class="container py-4">
-    <h2 class="mb-4">{{ editProvider ? 'Edit Details' : 'Details' }}</h2>
+<!-- Loading Screen -->
+<div *ngIf="loading" class="login-container">
+  <am-loading-screen></am-loading-screen>
+</div>
+
+<!-- Profile Content -->
+<div *ngIf="!loading">
+  <div class="container py-4" style="max-width: 600px;">
+    <h2 class="mb-4">{{ editProvider ? 'Edit Profile' : 'Your Profile' }}</h2>
 
     <!-- Error Message -->
     <div *ngIf="editDTO.errorMessage && editProvider" class="alert alert-danger">
@@ -9,57 +15,46 @@
 
     <!-- Display Mode -->
     <ng-container *ngIf="!editProvider; else editMode">
-      <h4 class="mb-3 text-muted">Personal Details</h4>
+      <div class="mb-3"><strong>Business Name:</strong> {{ dto.businessName }}</div>
+      <div class="mb-3"><strong>Description:</strong> {{ dto.description || '—' }}</div>
 
-      <div class="row g-3 mb-3">
-        <div *ngFor="let field of [
-            { label: 'Business Name', value: dto.businessName },
-            { label: 'Business Description', value: dto.description || '—' },
-            { label: 'First Name', value: dto.firstName },
-            { label: 'Middle Name', value: dto.middleName || '—' },
-            { label: 'Last Name', value: dto.lastName },
-            { label: 'E-Mail', value: dto.eMail },
-            { label: 'Address Line 1', value: dto.addressLine1 },
-            { label: 'Address Line 2', value: dto.addressLine2 || '—' },
-            { label: 'City', value: dto.city },
-            { label: 'Zip Code', value: dto.zipCode }
-          ]" class="col-12 col-md-6">
-          <div><strong>{{ field.label }}:</strong> {{ field.value }}</div>
-        </div>
+      <div class="mb-3"><strong>First Name:</strong> {{ dto.firstName }}</div>
+      <div class="mb-3"><strong>Middle Name:</strong> {{ dto.middleName || '—' }}</div>
+      <div class="mb-3"><strong>Last Name:</strong> {{ dto.lastName }}</div>
+      <div class="mb-3"><strong>E-Mail:</strong> {{ dto.eMail }}</div>
 
-        <div class="col-12 col-md-6"><strong>Country:</strong> {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}
-        </div>
-        <div class="col-12 col-md-6"><strong>State:</strong> {{ getEnumLabel(StateCodeEnum, dto.stateCode) }}</div>
-        <div class="col-12 col-md-6"><strong>Time Zone:</strong> {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}
-        </div>
+      <div class="mb-3"><strong>Address Line 1:</strong> {{ dto.addressLine1 }}</div>
+      <div class="mb-3"><strong>Address Line 2:</strong> {{ dto.addressLine2 || '—' }}</div>
+      <div class="mb-3"><strong>City:</strong> {{ dto.city }}</div>
+      <div class="mb-3"><strong>Zip Code:</strong> {{ dto.zipCode }}</div>
 
-        <div class="col-12 mt-3">
-          <strong>Availability:</strong>
-          <ul class="list-unstyled mb-0">
-            <li *ngFor="let availability of dto.availabilities"
-              class="d-flex justify-content-between align-items-center py-1 border-bottom">
-              <span>{{ availability.dayOfWeek | dayOfTheWeek }}</span>
-              <span class="text-muted" [ngClass]="{'text-danger': !availability.available}">
-                {{ availability.available ? (availability.startTime + ' – ' + availability.endTime) : 'Unavailable' }}
-              </span>
-            </li>
-          </ul>
-        </div>
+      <div class="mb-3"><strong>State:</strong> {{ getEnumLabel(StateCodeEnum, dto.stateCode) }}</div>
+      <div class="mb-3"><strong>Country:</strong> {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}</div>
+      <div class="mb-3"><strong>Time Zone:</strong> {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}</div>
+
+      <div class="mb-3">
+        <strong>Availability:</strong>
+        <ul class="list-unstyled mb-0">
+          <li *ngFor="let availability of dto.availabilities" class="border-bottom py-1 d-flex justify-content-between">
+            <span>{{ availability.dayOfWeek | dayOfTheWeek }}</span>
+            <span class="text-muted" [ngClass]="{ 'text-danger': !availability.available }">
+              {{ availability.available ? (availability.startTime + ' – ' + availability.endTime) : 'Unavailable' }}
+            </span>
+          </li>
+        </ul>
       </div>
 
-      <div class="d-flex flex-wrap gap-2 mb-3">
+      <div class="d-grid gap-2 mt-4">
         <button class="btn btn-primary" (click)="edit()">Edit</button>
-        <a class="btn btn-outline-secondary" [href]="dto.payEngineInfoUrl" target="_blank" rel="noopener noreferrer">
-          Payment & Invoices
-        </a>
+        <a class="btn btn-outline-secondary" [href]="dto.payEngineInfoUrl" target="_blank">Payment & Invoices</a>
       </div>
 
-      <div *ngIf="dto.accountStatus === AccountStatusEnum.Active" class="mt-3">
+      <div *ngIf="dto.accountStatus === AccountStatusEnum.Active" class="mt-4">
         <p><strong>Next Billing Date:</strong> {{ dto.nextBillingDate | date: 'MM/dd/yyyy' }}</p>
         <a role="button" class="text-danger" (click)="cancelSubscription()">Cancel Subscription</a>
       </div>
 
-      <div *ngIf="dto.accountStatus !== AccountStatusEnum.Active" class="mt-3">
+      <div *ngIf="dto.accountStatus !== AccountStatusEnum.Active" class="mt-4">
         <p *ngIf="dto.errorMessage" class="text-danger">{{ dto.errorMessage }}</p>
         <p><strong>Final Date of Service:</strong> {{ dto.nextBillingDate | date: 'MM/dd/yyyy' }}</p>
         <a role="button" (click)="reActivateSubscription()">Reactivate Service</a>
@@ -68,66 +63,83 @@
 
     <!-- Edit Mode -->
     <ng-template #editMode>
-      <form>
-        <div class="row g-3 mb-3">
-          <div *ngFor="let input of [
-              { id: 'businessName', label: 'Business Name', model: editDTO.businessName },
-              { id: 'description', label: 'Business Description', model: editDTO.description, isTextArea: true },
-              { id: 'firstName', label: 'First Name', model: editDTO.firstName },
-              { id: 'middleName', label: 'Middle Name', model: editDTO.middleName },
-              { id: 'lastName', label: 'Last Name', model: editDTO.lastName },
-              { id: 'addressLine1', label: 'Address Line 1', model: editDTO.addressLine1 },
-              { id: 'addressLine2', label: 'Address Line 2', model: editDTO.addressLine2 },
-              { id: 'city', label: 'City', model: editDTO.city },
-              { id: 'zipCode', label: 'Zip Code', model: editDTO.zipCode }
-            ]" class="col-12 col-md-6">
-            <label [for]="input.id" class="form-label">{{ input.label }}</label>
-
-            <textarea *ngIf="input.isTextArea" [id]="input.id" class="form-control" [(ngModel)]="input.model"
-              [name]="input.id" rows="4" required></textarea>
-
-            <input *ngIf="!input.isTextArea" type="text" [id]="input.id" class="form-control" [(ngModel)]="input.model"
-              [name]="input.id" required />
-          </div>
+      <form (ngSubmit)="editSave()" #profileForm="ngForm" novalidate>
+        <div class="mb-3">
+          <label for="businessName" class="form-label">Business Name</label>
+          <input id="businessName" name="businessName" type="text" [(ngModel)]="editDTO.businessName"
+            class="form-control" required placeholder="Business Name" />
         </div>
 
-        <p class="small text-muted">Address used only for billing and tax purposes.</p>
-
-        <div class="row g-3 mb-3">
-          <div class="col-md-4">
-            <label class="form-label">Country</label>
-            <select class="form-select" [(ngModel)]="editDTO.countryCode" name="countryCode"
-              (change)="onCountryChange()">
-              <option *ngFor="let opt of countryCodeOptions" [value]="opt.key">{{ opt.label }}</option>
-            </select>
-          </div>
-
-          <div class="col-md-4">
-            <label class="form-label">State</label>
-            <select class="form-select" [(ngModel)]="editDTO.stateCode" name="stateCode">
-              <option *ngFor="let opt of stateOptions" [value]="opt.key">{{ getEditLabel(opt.label) }}</option>
-            </select>
-          </div>
-
-          <div class="col-md-4">
-            <label class="form-label">Time Zone</label>
-            <select class="form-select" [(ngModel)]="editDTO.timeZoneCode" name="timeZoneCode">
-              <option *ngFor="let opt of timeZoneOptions" [value]="opt.key">{{ opt.label }}</option>
-            </select>
-          </div>
+        <div class="mb-3">
+          <label for="description" class="form-label">Business Description</label>
+          <textarea id="description" name="description" [(ngModel)]="editDTO.description" rows="4" class="form-control"
+            placeholder="Business Description"></textarea>
         </div>
 
-        <!-- Availability editing UI -->
+        <div class="mb-3">
+          <label for="firstName" class="form-label">First Name</label>
+          <input id="firstName" name="firstName" type="text" [(ngModel)]="editDTO.firstName" class="form-control"
+            required placeholder="First Name" />
+        </div>
+
+        <div class="mb-3">
+          <label for="middleName" class="form-label">Middle Name</label>
+          <input id="middleName" name="middleName" type="text" [(ngModel)]="editDTO.middleName" class="form-control"
+            placeholder="Middle Name" />
+        </div>
+
+        <div class="mb-3">
+          <label for="lastName" class="form-label">Last Name</label>
+          <input id="lastName" name="lastName" type="text" [(ngModel)]="editDTO.lastName" class="form-control" required
+            placeholder="Last Name" />
+        </div>
+
+        <div class="mb-3">
+          <label for="addressLine1" class="form-label">Address Line 1</label>
+          <input id="addressLine1" name="addressLine1" type="text" [(ngModel)]="editDTO.addressLine1"
+            class="form-control" required placeholder="Address Line 1" />
+        </div>
+
+        <div class="mb-3">
+          <label for="addressLine2" class="form-label">Address Line 2</label>
+          <input id="addressLine2" name="addressLine2" type="text" [(ngModel)]="editDTO.addressLine2"
+            class="form-control" placeholder="Address Line 2" />
+        </div>
+
+        <div class="mb-3">
+          <label for="city" class="form-label">City</label>
+          <input id="city" name="city" type="text" [(ngModel)]="editDTO.city" class="form-control" required
+            placeholder="City" />
+        </div>
+
+        <div class="mb-3">
+          <label for="zipCode" class="form-label">Zip Code</label>
+          <input id="zipCode" name="zipCode" type="text" [(ngModel)]="editDTO.zipCode" class="form-control" required
+            placeholder="Zip Code" />
+        </div>
+
+        <div class="mb-3">
+          <label for="stateCode" class="form-label">State</label>
+          <select id="stateCode" name="stateCode" [(ngModel)]="editDTO.stateCode" class="form-select" required>
+            <option *ngFor="let opt of stateOptions" [ngValue]="opt.key">{{ getEditLabel(opt.label) }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="timeZoneCode" class="form-label">Time Zone</label>
+          <select id="timeZoneCode" name="timeZoneCode" [(ngModel)]="editDTO.timeZoneCode" class="form-select" required>
+            <option *ngFor="let opt of timeZoneOptions" [ngValue]="opt.key">{{ opt.label }}</option>
+          </select>
+        </div>
+
+        <!-- Availability -->
         <div class="mb-3">
           <label class="form-label">Availability</label>
-
           <div *ngFor="let day of daysOfWeek; let i = index" class="mb-2 p-2 border rounded">
             <div class="form-check form-switch">
               <input class="form-check-input" type="checkbox" id="available-{{ i }}"
                 [(ngModel)]="editDTO.availabilities[i].available" name="available-{{ i }}" />
-              <label class="form-check-label" for="available-{{ i }}">
-                {{ dayNames[i] }}
-              </label>
+              <label class="form-check-label" for="available-{{ i }}">{{ dayNames[i] }}</label>
             </div>
 
             <div *ngIf="editDTO.availabilities[i].available" class="row mt-2">
@@ -144,17 +156,15 @@
             </div>
           </div>
         </div>
-
-        <div class="d-flex flex-wrap gap-2 mb-3">
+        <div class="d-flex flex-wrap gap-3 mt-4">
+          <button type="submit" [disabled]="profileForm.invalid || loading" class="btn btn-success">Save</button>
+          <button type="button" class="btn btn-outline-secondary" (click)="cancelEdit()">Cancel</button>
+        </div>
+        <div class="d-flex flex-wrap gap-3 mt-4">
           <a routerLink="/reset-email" class="btn btn-link p-0">Update E-Mail</a>
           <a routerLink="/update-password" class="btn btn-link p-0">Update Password</a>
         </div>
 
-        <div class="d-flex gap-2">
-          <button type="button" class="btn btn-success" (click)="editSave()">Save</button>
-          <button type="button" class="btn btn-outline-secondary" *ngIf="!disableCancel"
-            (click)="cancelEdit()">Cancel</button>
-        </div>
       </form>
     </ng-template>
   </div>
@@ -169,8 +179,4 @@
     [message]="'Your subscription will be reactivated right away. If your last billing cycle has ended, your default payment method will be charged automatically.'"
     (confirm)="onReActivateSubscription($event)">
   </am-delete-entity>
-</ng-container>
-
-<ng-template #loadingScreen>
-  <am-loading-screen></am-loading-screen>
-</ng-template>
+</div>
