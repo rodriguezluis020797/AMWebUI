@@ -11,6 +11,7 @@
     color: #2D3748 !important;
     margin-right: 1rem;
     transition: color 0.2s ease;
+    cursor: pointer;
 }
 
 .nav-link:hover {

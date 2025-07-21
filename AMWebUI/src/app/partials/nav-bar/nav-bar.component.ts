@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { IdentityService } from '../../_services/identity.service';
 import { CurrentStateService } from '../../_services/current-state.service';
-import { link } from 'fs';
 import { AccountStatusEnum } from '../../models/Enums';
 
 @Component({
@@ -41,13 +40,23 @@ export class NavBarComponent implements OnInit {
     this.currentStateService.accountStatus$.subscribe((status) => {
       this.accountStatus = status;
     });
+
+    // Optional: auto-close menu on route change
+    this.router.events.subscribe(() => {
+      this.isMenuOpen = false;
+    });
   }
 
   toggleMenu() {
     this.isMenuOpen = !this.isMenuOpen;
   }
 
-  logOut() {
+  onNavItemClick() {
+    this.isMenuOpen = false;
+  }
+
+  onLogoutClick() {
+    this.isMenuOpen = false;
     this.identityService.logoutAsync().subscribe((result) => {
       if (result) {
         this.currentStateService.loggedInSubject.next(false);

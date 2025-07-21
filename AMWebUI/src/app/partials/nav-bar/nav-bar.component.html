@@ -12,16 +12,16 @@
 
         <ng-container *ngIf="accountStatus === AccountStatusEnum.Active">
           <li class="nav-item" *ngFor="let item of activeAccountNavItems">
-            <a [routerLink]="item.link" class="nav-link">{{ item.label }}</a>
+            <a [routerLink]="item.link" class="nav-link" (click)="onNavItemClick()">{{ item.label }}</a>
           </li>
         </ng-container>
 
         <li class="nav-item">
-          <a [routerLink]="'/provider-profile'" class="nav-link">Profile</a>
+          <a [routerLink]="'/provider-profile'" class="nav-link" (click)="onNavItemClick()">Profile</a>
         </li>
 
         <li class="nav-item">
-          <a (click)="logOut()" class="nav-link" style="cursor: pointer">Logout</a>
+          <a (click)="onLogoutClick()" class="nav-link" style="cursor: pointer">Logout</a>
         </li>
       </ul>
     </div>
