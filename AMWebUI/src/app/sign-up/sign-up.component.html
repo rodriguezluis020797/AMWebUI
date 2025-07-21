@@ -8,8 +8,16 @@
   <div *ngIf="!signUpSuccessful; else successTemplate" class="container py-4" style="max-width: 600px;">
     <h2>Sign Up</h2>
 
-    <div *ngIf="result.errorMessage" class="alert alert-danger">
-      {{ result.errorMessage }}
+    <div class="mb-3">
+      <label for="firstName" class="form-label">First Name</label>
+      <input id="firstName" name="firstName" type="text" [(ngModel)]="dto.firstName" class="form-control" required
+        placeholder="First Name" />
+    </div>
+
+    <div class="mb-3">
+      <label for="lastName" class="form-label">Last Name</label>
+      <input id="lastName" name="lastName" type="text" [(ngModel)]="dto.lastName" class="form-control" required
+        placeholder="Last Name" />
     </div>
 
     <form (ngSubmit)="submit()" #signUpForm="ngForm" novalidate>
@@ -26,6 +34,76 @@
         <input id="businessName" name="businessName" type="text" [(ngModel)]="dto.businessName" class="form-control"
           required placeholder="Business Name" />
       </div>
+
+      <div class="mb-3">
+        <label class="form-label">Social Media Handles (usernames only)</label>
+        <p class="text-muted">Provide only your usernames — not full links. These will be used to link to your public
+          profiles. If you leave a field blank, that platform simply won’t appear as an option for your clients.</p>
+
+        <div class="mb-2">
+          <label for="instagramURL" class="form-label">Instagram</label>
+          <input id="instagramURL" name="instagramURL" type="text" [(ngModel)]="dto.instagramURL" class="form-control"
+            placeholder="e.g. yourhandle" />
+          <div *ngIf="dto.instagramURL" class="small text-muted mt-1">
+            Preview: <a [href]="'https://instagram.com/' + dto.instagramURL" target="_blank">{{ 'https://instagram.com/'
+              +
+              dto.instagramURL }}</a>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label for="facebookURL" class="form-label">Facebook</label>
+          <input id="facebookURL" name="facebookURL" type="text" [(ngModel)]="dto.facebookURL" class="form-control"
+            placeholder="e.g. your.handle" />
+          <div *ngIf="dto.facebookURL" class="small text-muted mt-1">
+            Preview: <a [href]="'https://facebook.com/' + dto.facebookURL" target="_blank">{{ 'https://facebook.com/' +
+              dto.facebookURL }}</a>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label for="xURL" class="form-label">X (formerly Twitter)</label>
+          <input id="xURL" name="xURL" type="text" [(ngModel)]="dto.xURL" class="form-control"
+            placeholder="e.g. yourhandle" />
+          <div *ngIf="dto.xURL" class="small text-muted mt-1">
+            Preview: <a [href]="'https://twitter.com/' + dto.xURL" target="_blank">{{ 'https://twitter.com/' + dto.xURL
+              }}</a>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label for="linkedInURL" class="form-label">LinkedIn</label>
+          <input id="linkedInURL" name="linkedInURL" type="text" [(ngModel)]="dto.linkedInURL" class="form-control"
+            placeholder="e.g. your-name" />
+          <div *ngIf="dto.linkedInURL" class="small text-muted mt-1">
+            Preview: <a [href]="'https://linkedin.com/in/' + dto.linkedInURL" target="_blank">{{
+              'https://linkedin.com/in/' +
+              dto.linkedInURL }}</a>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label for="youTubeURL" class="form-label">YouTube</label>
+          <input id="youTubeURL" name="youTubeURL" type="text" [(ngModel)]="dto.youTubeURL" class="form-control"
+            placeholder="e.g. yourchannel" />
+          <div *ngIf="dto.youTubeURL" class="small text-muted mt-1">
+            Preview: <a [href]="'https://youtube.com/' + dto.youTubeURL" target="_blank">{{ 'https://youtube.com/' +
+              dto.youTubeURL }}</a>
+          </div>
+        </div>
+
+        <div class="mb-2">
+          <label for="tikTokURL" class="form-label">TikTok</label>
+          <input id="tikTokURL" name="tikTokURL" type="text" [(ngModel)]="dto.tikTokURL" class="form-control"
+            placeholder="e.g. yourhandle" />
+          <div *ngIf="dto.tikTokURL" class="small text-muted mt-1">
+            Preview: <a [href]="'https://www.tiktok.com/@' + dto.tikTokURL" target="_blank">{{
+              'https://www.tiktok.com/@' +
+              dto.tikTokURL }}</a>
+          </div>
+        </div>
+      </div>
+
 
       <div class="mb-3">
         <label for="description" class="form-label">Business Description</label>
@@ -62,20 +140,6 @@
             </div>
           </div>
         </div>
-      </div>
-
-
-
-      <div class="mb-3">
-        <label for="firstName" class="form-label">First Name</label>
-        <input id="firstName" name="firstName" type="text" [(ngModel)]="dto.firstName" class="form-control" required
-          placeholder="First Name" />
-      </div>
-
-      <div class="mb-3">
-        <label for="lastName" class="form-label">Last Name</label>
-        <input id="lastName" name="lastName" type="text" [(ngModel)]="dto.lastName" class="form-control" required
-          placeholder="Last Name" />
       </div>
 
       <div class="mb-3">
@@ -129,6 +193,10 @@
             {{ opt.label }}
           </option>
         </select>
+      </div>
+
+      <div *ngIf="result.errorMessage" class="alert alert-danger">
+        {{ result.errorMessage }}
       </div>
 
       <div class="d-grid gap-2 mt-4">
