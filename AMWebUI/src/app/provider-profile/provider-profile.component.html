@@ -15,41 +15,36 @@
 
     <!-- Display Mode -->
     <ng-container *ngIf="!editProvider; else editMode">
-      <div class="mb-3"><strong>Business Name:</strong> {{ dto.businessName }}</div>
-      <div class="mb-3"><strong>Description:</strong> {{ dto.description || '—' }}</div>
-
       <div class="mb-3"><strong>First Name:</strong> {{ dto.firstName }}</div>
       <div class="mb-3"><strong>Middle Name:</strong> {{ dto.middleName || '—' }}</div>
       <div class="mb-3"><strong>Last Name:</strong> {{ dto.lastName }}</div>
+
       <div class="mb-3"><strong>E-Mail:</strong> {{ dto.eMail }}</div>
 
-      <div class="mb-3"><strong>Address Line 1:</strong> {{ dto.addressLine1 }}</div>
-      <div class="mb-3"><strong>Address Line 2:</strong> {{ dto.addressLine2 || '—' }}</div>
-      <div class="mb-3"><strong>City:</strong> {{ dto.city }}</div>
-      <div class="mb-3"><strong>Zip Code:</strong> {{ dto.zipCode }}</div>
-
-      <div class="mb-3"><strong>State:</strong> {{ getEnumLabel(StateCodeEnum, dto.stateCode) }}</div>
-      <div class="mb-3"><strong>Country:</strong> {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}</div>
-      <div class="mb-3"><strong>Time Zone:</strong> {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}</div>
+      <div class="mb-3"><strong>Business Name:</strong> {{ dto.businessName }}</div>
 
       <!-- Social Media Display -->
       <div class="mb-3">
         <strong>Social Media:</strong>
         <ul class="list-unstyled mt-2">
           <li *ngIf="dto.instagramURL"><a [href]="'https://instagram.com/' + dto.instagramURL"
-              target="_blank">Instagram</a></li>
+              target="_blank">Instagram</a>
+          </li>
           <li *ngIf="dto.facebookURL"><a [href]="'https://facebook.com/' + dto.facebookURL" target="_blank">Facebook</a>
           </li>
           <li *ngIf="dto.xURL"><a [href]="'https://twitter.com/' + dto.xURL" target="_blank">X (formerly Twitter)</a>
           </li>
           <li *ngIf="dto.linkedInURL"><a [href]="'https://linkedin.com/in/' + dto.linkedInURL"
-              target="_blank">LinkedIn</a></li>
+              target="_blank">LinkedIn</a>
+          </li>
           <li *ngIf="dto.youTubeURL"><a [href]="'https://youtube.com/' + dto.youTubeURL" target="_blank">YouTube</a>
           </li>
           <li *ngIf="dto.tikTokURL"><a [href]="'https://www.tiktok.com/@' + dto.tikTokURL" target="_blank">TikTok</a>
           </li>
         </ul>
       </div>
+
+      <div class="mb-3"><strong>Description:</strong> {{ dto.description || '—' }}</div>
 
       <div class="mb-3">
         <strong>Availability:</strong>
@@ -62,6 +57,15 @@
           </li>
         </ul>
       </div>
+
+      <div class="mb-3"><strong>Address Line 1:</strong> {{ dto.addressLine1 }}</div>
+      <div class="mb-3"><strong>Address Line 2:</strong> {{ dto.addressLine2 || '—' }}</div>
+      <div class="mb-3"><strong>City:</strong> {{ dto.city }}</div>
+      <div class="mb-3"><strong>Zip Code:</strong> {{ dto.zipCode }}</div>
+
+      <div class="mb-3"><strong>State:</strong> {{ getEnumLabel(StateCodeEnum, dto.stateCode) }}</div>
+      <div class="mb-3"><strong>Country:</strong> {{ getEnumLabel(CountryCodeEnum, dto.countryCode) }}</div>
+      <div class="mb-3"><strong>Time Zone:</strong> {{ getEnumLabel(TimeZoneCodeEnum, dto.timeZoneCode) }}</div>
 
       <div class="d-grid gap-2 mt-4">
         <button class="btn btn-primary" (click)="edit()">Edit</button>
