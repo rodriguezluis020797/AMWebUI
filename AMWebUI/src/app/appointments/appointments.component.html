@@ -80,7 +80,6 @@
         <ng-container *ngIf="appointmentRequests.length > 0">
             <!-- Unacknowledged Requests -->
             <div *ngIf="unacknowledgedRequests.length > 0" class="mb-4">
-                <h3>Not Yet Acknowledged</h3>
                 <div class="row row-cols-1 row-cols-md-2 g-3">
                     <div class="col" *ngFor="let req of unacknowledgedRequests">
                         <div class="card h-100 d-flex flex-column shadow-sm">
@@ -89,6 +88,7 @@
                                 <p class="mb-1"><strong>Client:</strong> {{ req.firstName }} {{ req.middleName ?? '' }}
                                     {{
                                     req.lastName }}</p>
+                                <p class="mb-1"><strong>Not Yet Acknowledged</strong></p>
                                 <div class="mt-auto">
                                     <button class="btn btn-outline-primary btn-sm mt-2"
                                         (click)="viewAppointmentRequestDetails(req)">Details</button>
@@ -101,7 +101,6 @@
 
             <!-- Acknowledged Requests -->
             <div *ngIf="acknowledgedRequests.length > 0">
-                <h3>Acknowledged</h3>
                 <div class="row row-cols-1 row-cols-md-2 g-3">
                     <div class="col" *ngFor="let req of acknowledgedRequests">
                         <div class="card h-100 d-flex flex-column shadow-sm">
@@ -110,6 +109,7 @@
                                 <p class="mb-1"><strong>Client:</strong> {{ req.firstName }} {{ req.middleName ?? '' }}
                                     {{
                                     req.lastName }}</p>
+                                <p class="mb-1"><strong>Acknowledged</strong></p>
                                 <div class="mt-auto">
                                     <button class="btn btn-outline-primary btn-sm mt-2"
                                         (click)="viewAppointmentRequestDetails(req)">Details</button>

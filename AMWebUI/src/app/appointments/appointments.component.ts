@@ -213,12 +213,17 @@ export class AppointmentsComponent implements OnInit {
   }
 
   get unacknowledgedRequests() {
-    return this.appointmentRequests.filter(r => !r.acknowledged);
+    return this.appointmentRequests
+      .filter(r => !r.acknowledged)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
 
   get acknowledgedRequests() {
-    return this.appointmentRequests.filter(r => r.acknowledged);
+    return this.appointmentRequests
+      .filter(r => r.acknowledged)
+      .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
   }
+
 
 
   acknowledgeAppointmentRequestDetails() {
