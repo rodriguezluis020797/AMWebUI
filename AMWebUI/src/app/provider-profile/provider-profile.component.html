@@ -83,17 +83,6 @@
     <!-- Edit Mode -->
     <ng-template #editMode>
       <form (ngSubmit)="editSave()" #profileForm="ngForm" novalidate>
-        <div class="mb-3">
-          <label for="businessName" class="form-label">Business Name</label>
-          <input id="businessName" name="businessName" type="text" [(ngModel)]="editDTO.businessName"
-            class="form-control" required placeholder="Business Name" />
-        </div>
-
-        <div class="mb-3">
-          <label for="description" class="form-label">Business Description</label>
-          <textarea id="description" name="description" [(ngModel)]="editDTO.description" rows="4" class="form-control"
-            placeholder="Business Description"></textarea>
-        </div>
 
         <div class="mb-3">
           <label for="firstName" class="form-label">First Name</label>
@@ -114,66 +103,9 @@
         </div>
 
         <div class="mb-3">
-          <label for="addressLine1" class="form-label">Address Line 1</label>
-          <input id="addressLine1" name="addressLine1" type="text" [(ngModel)]="editDTO.addressLine1"
-            class="form-control" required placeholder="Address Line 1" />
-        </div>
-
-        <div class="mb-3">
-          <label for="addressLine2" class="form-label">Address Line 2</label>
-          <input id="addressLine2" name="addressLine2" type="text" [(ngModel)]="editDTO.addressLine2"
-            class="form-control" placeholder="Address Line 2" />
-        </div>
-
-        <div class="mb-3">
-          <label for="city" class="form-label">City</label>
-          <input id="city" name="city" type="text" [(ngModel)]="editDTO.city" class="form-control" required
-            placeholder="City" />
-        </div>
-
-        <div class="mb-3">
-          <label for="zipCode" class="form-label">Zip Code</label>
-          <input id="zipCode" name="zipCode" type="text" [(ngModel)]="editDTO.zipCode" class="form-control" required
-            placeholder="Zip Code" />
-        </div>
-
-        <div class="mb-3">
-          <label for="stateCode" class="form-label">State</label>
-          <select id="stateCode" name="stateCode" [(ngModel)]="editDTO.stateCode" class="form-select" required>
-            <option *ngFor="let opt of stateOptions" [ngValue]="opt.key">{{ getEditLabel(opt.label) }}</option>
-          </select>
-        </div>
-
-        <div class="mb-3">
-          <label for="timeZoneCode" class="form-label">Time Zone</label>
-          <select id="timeZoneCode" name="timeZoneCode" [(ngModel)]="editDTO.timeZoneCode" class="form-select" required>
-            <option *ngFor="let opt of timeZoneOptions" [ngValue]="opt.key">{{ opt.label }}</option>
-          </select>
-        </div>
-
-        <!-- Availability -->
-        <div class="mb-3">
-          <label class="form-label">Availability</label>
-          <div *ngFor="let day of daysOfWeek; let i = index" class="mb-2 p-2 border rounded">
-            <div class="form-check form-switch">
-              <input class="form-check-input" type="checkbox" id="available-{{ i }}"
-                [(ngModel)]="editDTO.availabilities[i].available" name="available-{{ i }}" />
-              <label class="form-check-label" for="available-{{ i }}">{{ dayNames[i] }}</label>
-            </div>
-
-            <div *ngIf="editDTO.availabilities[i].available" class="row mt-2">
-              <div class="col">
-                <label for="startTime-{{ i }}" class="form-label">Start Time</label>
-                <input id="startTime-{{ i }}" name="startTime-{{ i }}" type="time" class="form-control"
-                  [(ngModel)]="editDTO.availabilities[i].startTime" />
-              </div>
-              <div class="col">
-                <label for="endTime-{{ i }}" class="form-label">End Time</label>
-                <input id="endTime-{{ i }}" name="endTime-{{ i }}" type="time" class="form-control"
-                  [(ngModel)]="editDTO.availabilities[i].endTime" />
-              </div>
-            </div>
-          </div>
+          <label for="businessName" class="form-label">Business Name</label>
+          <input id="businessName" name="businessName" type="text" [(ngModel)]="editDTO.businessName"
+            class="form-control" required placeholder="Business Name" />
         </div>
 
         <!-- Social Media Edit -->
@@ -240,6 +172,75 @@
                 {{ 'https://www.tiktok.com/@' + editDTO.tikTokURL }}</a>
             </div>
           </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="description" class="form-label">Business Description</label>
+          <textarea id="description" name="description" [(ngModel)]="editDTO.description" rows="4" class="form-control"
+            placeholder="Business Description"></textarea>
+        </div>
+
+        <!-- Availability -->
+        <div class="mb-3">
+          <label class="form-label">Availability</label>
+          <div *ngFor="let day of daysOfWeek; let i = index" class="mb-2 p-2 border rounded">
+            <div class="form-check form-switch">
+              <input class="form-check-input" type="checkbox" id="available-{{ i }}"
+                [(ngModel)]="editDTO.availabilities[i].available" name="available-{{ i }}" />
+              <label class="form-check-label" for="available-{{ i }}">{{ dayNames[i] }}</label>
+            </div>
+
+            <div *ngIf="editDTO.availabilities[i].available" class="row mt-2">
+              <div class="col">
+                <label for="startTime-{{ i }}" class="form-label">Start Time</label>
+                <input id="startTime-{{ i }}" name="startTime-{{ i }}" type="time" class="form-control"
+                  [(ngModel)]="editDTO.availabilities[i].startTime" />
+              </div>
+              <div class="col">
+                <label for="endTime-{{ i }}" class="form-label">End Time</label>
+                <input id="endTime-{{ i }}" name="endTime-{{ i }}" type="time" class="form-control"
+                  [(ngModel)]="editDTO.availabilities[i].endTime" />
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="addressLine1" class="form-label">Address Line 1</label>
+          <input id="addressLine1" name="addressLine1" type="text" [(ngModel)]="editDTO.addressLine1"
+            class="form-control" required placeholder="Address Line 1" />
+        </div>
+
+        <div class="mb-3">
+          <label for="addressLine2" class="form-label">Address Line 2</label>
+          <input id="addressLine2" name="addressLine2" type="text" [(ngModel)]="editDTO.addressLine2"
+            class="form-control" placeholder="Address Line 2" />
+        </div>
+
+        <div class="mb-3">
+          <label for="city" class="form-label">City</label>
+          <input id="city" name="city" type="text" [(ngModel)]="editDTO.city" class="form-control" required
+            placeholder="City" />
+        </div>
+
+        <div class="mb-3">
+          <label for="zipCode" class="form-label">Zip Code</label>
+          <input id="zipCode" name="zipCode" type="text" [(ngModel)]="editDTO.zipCode" class="form-control" required
+            placeholder="Zip Code" />
+        </div>
+
+        <div class="mb-3">
+          <label for="stateCode" class="form-label">State</label>
+          <select id="stateCode" name="stateCode" [(ngModel)]="editDTO.stateCode" class="form-select" required>
+            <option *ngFor="let opt of stateOptions" [ngValue]="opt.key">{{ getEditLabel(opt.label) }}</option>
+          </select>
+        </div>
+
+        <div class="mb-3">
+          <label for="timeZoneCode" class="form-label">Time Zone</label>
+          <select id="timeZoneCode" name="timeZoneCode" [(ngModel)]="editDTO.timeZoneCode" class="form-select" required>
+            <option *ngFor="let opt of timeZoneOptions" [ngValue]="opt.key">{{ opt.label }}</option>
+          </select>
         </div>
 
         <div class="d-flex flex-wrap gap-3 mt-4">
