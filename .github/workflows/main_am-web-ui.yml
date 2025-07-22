@@ -23,7 +23,7 @@ jobs:
       - name: npm install, build, and test
         run: |
           npm install
-          npm run build -- --configuration production
+          npm run build -- --configuration AMWebUI
         working-directory: AMWebUI
 
       - name: Upload artifact for deployment job
