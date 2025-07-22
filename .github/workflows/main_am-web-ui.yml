@@ -27,7 +27,7 @@ jobs:
         working-directory: AMWebUI
 
       - name: Copy web.config to build output
-        run: cp AMWebUI/web.config AMWebUI/dist/amweb-ui/web.config
+        run: cp AMWebUI/src/web.config AMWebUI/dist/amweb-ui/web.config
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
