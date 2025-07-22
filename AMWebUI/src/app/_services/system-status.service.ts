@@ -4,8 +4,6 @@ import { catchError, Observable, of } from 'rxjs';
 import { HttpErrorHandlerService } from './http-error-handler.service';
 import { HttpStatusCodeEnum } from '../models/Enums';
 import { Router } from '@angular/router';
-import { environment } from '../../environments/environment';
-import { console } from 'inspector';
 
 @Injectable({
   providedIn: 'root',
@@ -18,7 +16,7 @@ export class SystemStatusService {
 
   fullSystemCheckAsync(): Observable<HttpResponse<any> | null> {
     return this.http
-      .get<any>(`${environment.apiBaseUrl}/SystemStatus/FullSystemCheck`, {
+      .get<any>('/api/SystemStatus/FullSystemCheck', {
         observe: 'response',
       })
       .pipe(
