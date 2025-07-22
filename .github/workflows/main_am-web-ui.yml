@@ -3,7 +3,7 @@ name: Build and deploy Angular app to Azure Web App - am-web-ui
 on:
   push:
     branches:
-      - main
+      - web
   workflow_dispatch:
 
 jobs:
